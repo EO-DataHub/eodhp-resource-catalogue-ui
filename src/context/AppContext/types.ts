@@ -6,7 +6,7 @@ export interface AppState {
 
 export interface AppAction {
   type: string;
-  payload?: any;
+  payload?: any // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface AppContextType {
