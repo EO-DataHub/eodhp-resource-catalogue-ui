@@ -1,15 +1,21 @@
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
 import { BrowserRouter } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
-import App from "./App.js";
+import App from "./App";
 
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error('Failed to find the root element');
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<>
-  <BrowserRouter>
-    <AppProvider>
-      <App />
-    </AppProvider>
-  </BrowserRouter>
-</>
+const root = ReactDOM.createRoot(rootElement);
+
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );

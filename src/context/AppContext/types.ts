@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface AppState {
   headerTitle: string;
 }
@@ -8,8 +10,12 @@ export interface AppAction {
 }
 
 export interface AppContextType {
-  state: AppState;
-  setHeaderTitle: (title: string) => void;
+  state: {
+    headerTitle: string;
+  };
+  actions: {
+    setHeaderTitle: (title: string) => void;
+  };
 }
 
 export interface AppProviderProps {

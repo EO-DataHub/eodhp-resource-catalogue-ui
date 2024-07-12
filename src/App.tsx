@@ -1,8 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import Main from "./pages/Main/Main";
+import Main from "./pages/MapViewer";
+import React from "react";
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Main />} />

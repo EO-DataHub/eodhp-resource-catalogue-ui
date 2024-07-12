@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { AppState, AppAction, AppContextType, AppProviderProps } from './types';
+import { AppState, AppAction, AppContextType, AppProviderProps } from "./types";
 
 const initialState: AppState = {
   headerTitle: "EODHP DataHub",
@@ -9,7 +9,6 @@ const reducer = (state: AppState, action: AppAction): AppState => {
   switch (action.type) {
     case "SET_HEADER_TITLE":
       return { ...state, headerTitle: action.payload };
-
     default:
       return state;
   }
@@ -17,7 +16,9 @@ const reducer = (state: AppState, action: AppAction): AppState => {
 
 const AppContext = createContext<AppContextType>({
   state: initialState,
-  setHeaderTitle: () => {},
+  actions: {
+    setHeaderTitle: () => {},
+  },
 });
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
@@ -28,8 +29,12 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   };
 
   const value = {
-    state,
-    setHeaderTitle,
+    state: {
+      headerTitle: state.headerTitle,
+    },
+    actions: {
+      setHeaderTitle,
+    },
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
