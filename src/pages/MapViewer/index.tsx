@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import Button from "../../components/Button";
+import "./styles.scss";
 
 const Main = () => {
   const { state, actions } = useContext(AppContext);

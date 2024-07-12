@@ -1,10 +1,10 @@
 import React from 'react';
 import { ButtonProps } from './types';
-import './styles.css';
+import './styles.scss';
 
 const Button: React.FC<ButtonProps> = ({ className, onClick, children }) => {
   return (
-    <button className={className} onClick={onClick}>
+    <button className={`button ${className}`} onClick={onClick}>
       {children}
     </button>
   );
