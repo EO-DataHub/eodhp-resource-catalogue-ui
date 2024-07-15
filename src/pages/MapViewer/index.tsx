@@ -3,7 +3,7 @@ import { AppContext } from "../../context/AppContext";
 import Button from "../../components/Button";
 import "./styles.scss";
 
-const Main = () => {
+const MapViewer = () => {
   const { state, actions } = useContext(AppContext);
   const { headerTitle } = state;
   const { setHeaderTitle } = actions;
@@ -21,4 +21,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MapViewer;

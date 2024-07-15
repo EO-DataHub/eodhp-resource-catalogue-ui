@@ -1,0 +1,22 @@
+.filter-body .multi-select-filter {
+  padding: 0 0.4rem;
+
+  .filter-options {
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      cursor: pointer;
+
+      input[type="checkbox"] {
+        margin-right: 1rem;
+      }
+
+      .filter-option-label {
+        font-size: 1rem;
+      }
+    }
+  }
+
+}
