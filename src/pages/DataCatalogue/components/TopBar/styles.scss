@@ -1,0 +1,74 @@
+.top-bar {
+  display: flex;
+  flex-direction: column;
+
+  &__controls {
+    display: flex;
+  }
+
+  &__searchbox-container {
+    background-color: blue;
+    flex: 4;
+    position: relative;
+    height: 2rem;
+
+
+    input {
+      width: 100%;
+      height: 100%;
+      padding: 0.5rem;
+    }
+
+    button {
+      position: absolute;
+      right: 1rem;
+      top: 0.1rem;
+
+      padding: 0.25rem 2rem;
+      background-color: #4c72ba;
+      color: white;
+      font-weight: bold;
+
+    }
+  }
+
+  &__actions-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      color: black;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.25rem;
+    position: relative;
+
+    .pagination {
+      display: flex;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .pagination li {
+      cursor: pointer;
+      padding: 8px;
+      border: 1px solid #ccc;
+      margin-right: 4px;
+      user-select: none;
+    }
+    
+    .pagination li.selected {
+      background-color: #ccc;
+      color: #fff;
+    }
+  }
+}

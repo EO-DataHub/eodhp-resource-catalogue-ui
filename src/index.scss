@@ -12,12 +12,13 @@
 
   .left-sidebar-container {
     flex: 1;
-    background-color: red;
     border-right: 1px solid black;
+    max-width: 300px;
   }
 
   .main-content-container {
     flex: 4;
-    background-color: blue;
+    background-color: rgb(255, 255, 255);
+    padding-left: 3rem;
   }
 }

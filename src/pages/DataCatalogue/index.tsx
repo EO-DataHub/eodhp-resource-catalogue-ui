@@ -1,7 +1,9 @@
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
-import Button from "../../components/Button";
 import "./styles.scss";
+import TopBar from "./components/TopBar";
+import DataCatalogueTable from "./components/DataCatalogueTable";
+
 
 const DataCatalogue = () => {
   const { state, actions } = useContext(AppContext);
@@ -10,7 +12,8 @@ const DataCatalogue = () => {
 
   return (
     <div className="data-catalogue">
-      Main Content (Data Catalogue)
+      <TopBar />
+      <DataCatalogueTable />
     </div>
   );
 };
