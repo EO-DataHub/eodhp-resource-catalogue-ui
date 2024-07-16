@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.scss";
 import { BrowserRouter } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
+import { FilterProvider } from "./context/FilterContext";
 import App from "./App";
 
 const rootElement = document.getElementById("root");
@@ -14,7 +15,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AppProvider>
-        <App />
+        <FilterProvider>
+          <App />
+        </FilterProvider>
       </AppProvider>
     </BrowserRouter>
   </React.StrictMode>

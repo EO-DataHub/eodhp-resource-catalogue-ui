@@ -1,11 +1,33 @@
+@import "styles/main";
+
 .filter-sidebar {
+  position: relative;
+  padding: 0.25rem;
+  height: 100%;
+  background-color: $sidebar-background;
 
   .filter-body {
     margin: 1rem 0;
 
     .filter {
-      padding: 1rem 0;
+      padding: 0.5rem 0;
       border-bottom: 1px solid #000000;
+    }
+  }
+
+  .filter-footer {
+    position: absolute;
+    bottom: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    button {
+      padding: 0.25rem 2rem;
+      border: 1px solid #000000;
+      background-color: white;
+      color: black;
+      cursor: pointer;
     }
   }
 

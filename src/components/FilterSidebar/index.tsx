@@ -1,40 +1,27 @@
+import { useContext } from "react";
 import MultiSelectFilter from "./components/MultiSelectFilter";
-import { FilterData } from "./types";
+import TemporalFilter from "./components/TemporalFilter";
 import './styles.scss'
+import { FilterContext } from "@/context/FilterContext";
+import { FilterData } from "@/context/FilterContext/types";
 
-const exampleFilterData: FilterData[] = [
-  {
-    id: 1,
-    name: "Filter 1",
-    options: [
-      { id: 1, name: "Option 1" },
-      { id: 2, name: "Option 2" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Filter 2",
-    options: [
-      { id: 1, name: "Option 1" },
-      { id: 2, name: "Option 2" },
-      { id: 3, name: "Option 3" },
-      { id: 4, name: "Option 4" },
-      { id: 5, name: "Option 5" },
-      { id: 6, name: "Option 6" },
-    ],
-  },
-  {
-    id: 3,
-    name: "Filter 3",
-    options: [
-      { id: 1, name: "Option 1" },
-      { id: 2, name: "Option 2" },
-      { id: 3, name: "Option 3" },
-    ],
-  },
-];
 
-const FilterSidebar: React.FC = () => {
+const FilterSidebar: React.FC = (): React.ReactNode => {
+  const { state } = useContext(FilterContext);
+  const { filterOptions: filterOptions } = state;
+
+
+  const renderFilterComponent = (filter: FilterData) => {
+    switch (filter.type) {
+      case "multi-select":
+        return <MultiSelectFilter filterData={filter} />;
+      case "date-range":
+        return <TemporalFilter filterData={filter} />;
+      default:
+        return null;
+    }
+  }
+
   return (
     <div className="filter-sidebar">
       <div className="filter-header">
@@ -42,15 +29,20 @@ const FilterSidebar: React.FC = () => {
       </div>
 
       <div className="filter-body">
-        {exampleFilterData.map((filter) => (
+        {filterOptions?.map((filter: FilterData) => (
           <div key={filter.id} className="filter">
-            <MultiSelectFilter filterData={filter} />
+            {renderFilterComponent(filter)}
           </div>
         ))}
       </div>
 
+      <div className="filter-footer">
+        <button>Reset</button>
+      </div>
+
     </div>
   );
-}
+
+};
 
 export default FilterSidebar;
