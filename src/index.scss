@@ -15,6 +15,12 @@
     flex: 1;
     border-right: 2px solid black;
     max-width: 300px;
+    transition: max-width 0.5s;
+
+    &-closed {
+      max-width: 0;
+      overflow: hidden;
+    }
   }
 
   .main-content-container {

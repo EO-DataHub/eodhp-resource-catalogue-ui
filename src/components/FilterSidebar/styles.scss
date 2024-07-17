@@ -30,5 +30,33 @@
       cursor: pointer;
     }
   }
+}
 
+.filter-collapse-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.filter-collapse-open {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
