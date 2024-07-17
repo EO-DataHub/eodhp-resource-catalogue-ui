@@ -1,7 +1,10 @@
 import React from "react";
 
 export interface FilterState {
-  headerTitle: string;
+  filterOptions: FilterData[];
+  activeFilters: {
+    textQuery: string;
+  };
 }
 
 export interface FilterAction {

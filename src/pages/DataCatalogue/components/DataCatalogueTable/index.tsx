@@ -1,72 +1,56 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { DataSet } from "./types"
 import './styles.scss'
-
-
-const loremText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised..."
-
-const defaultData: DataSet[] = [
-  {
-    id: 1,
-    title: 'Sea ice concentration daily gridded data from 1978 to present derived from observations',
-    description: loremText,
-    lastUpdated: '2022-07-01',
-    thumbnailUrl: 'placeholders/terraclimate.png',
-    dataType: 'Dataset',
-  },
-  {
-    id: 2,
-    title: 'Temperature and precipitation data for global land areas from 1950 to present',
-    description: loremText,
-    lastUpdated: '2022-07-02',
-    thumbnailUrl: 'placeholders/landsat.png',
-    dataType: 'Dataset',
-  },
-  {
-    id: 3,
-    title: 'Air quality index data for major cities around the world',
-    description: loremText,
-    lastUpdated: '2022-07-03',
-    thumbnailUrl: 'placeholders/sentinel-2.png',
-    dataType: 'Dataset',
-  },
-  {
-    id: 4,
-    title: 'Satellite imagery data for monitoring deforestation in the Amazon rainforest',
-    description: loremText,
-    lastUpdated: '2022-07-04',
-    thumbnailUrl: 'placeholders/hgb.png',
-    dataType: 'Dataset',
-  },
-];
+import { CatalogueContext } from '../../../../context/CatalogueContext';
+import { FilterContext } from '../../../../context/FilterContext';
 
 
 const DataCatalogueTable = () => {
-  const [data, setData] = useState(defaultData);
+  const { state } = useContext(CatalogueContext);
+  const { collectionSearchResults, activePage } = state;
+
+  const { state: FilterState } = useContext(FilterContext);
+  const { activeFilters } = FilterState;
+
+  // Function that gets the current page and the number of items per page and returns the items to be displayed
+  const getItems = () => {
+    const itemsPerPage = 6; // TODO: Move to context and make it configurable
+    const start = (activePage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return collectionSearchResults?.collections?.slice(start, end) || [];
+  }
 
   return (
     <div className="data-catalogue-table">
-      {defaultData.map(row => {
+      <div className="data-catalogue-table__query">
+        {activeFilters.textQuery && <p>Search results of "{activeFilters.textQuery}"</p>}
+      </div>
+      {getItems().map(row => {
         return (
           <div key={row.id} className="data-catalogue-table__row">
             <div className="data-catalogue-table__row-content">
               <div className="data-catalogue-table__row-information">
-                <h3>{row.title}</h3>
+                <h3>{row.title || row.id}</h3>
                 <p>{row.description}</p>
                 <p>Updated {row.lastUpdated}</p>
               </div>
-              <div className="data-catalogue-table__row-thumnail">
+              <div className="data-catalogue-table__row-thumbnail">
                 <img src={row.thumbnailUrl} alt="Thumbnail" />
               </div>
             </div>
             <div className="data-catalogue-table__row-type">
               <span>
-                {row.dataType}
+                {row.type}
               </span>
             </div>
           </div>
         )
       }
+      )}
+      {collectionSearchResults?.collections?.length === 0 && (
+        <div className="data-catalogue-table__no-results">
+          <p>No results found for "{activeFilters.textQuery}"</p>
+        </div>
       )}
     </div>
   );

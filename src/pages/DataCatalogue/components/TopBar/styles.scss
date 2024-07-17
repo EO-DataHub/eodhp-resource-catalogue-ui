@@ -1,9 +1,12 @@
 .top-bar {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   &__controls {
     display: flex;
+    width: 100%;
   }
 
   &__searchbox-container {
@@ -21,13 +24,14 @@
 
     button {
       position: absolute;
-      right: 1rem;
-      top: 0.1rem;
+      right: 0em;
 
-      padding: 0.25rem 2rem;
+      padding: 0.4rem 2rem;
       background-color: #4c72ba;
+      border: none;
       color: white;
       font-weight: bold;
+      cursor: pointer;
     }
   }
 
@@ -52,24 +56,29 @@
     margin-top: 0.25rem;
     position: relative;
 
-    .pagination {
-      display: flex;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
+    @media (max-width: 1200px) {
+      width: 100px;
     }
-    
-    .pagination li {
-      cursor: pointer;
-      padding: 8px;
-      border: 1px solid #ccc;
-      margin-right: 4px;
-      user-select: none;
+
+    @media (min-width: 1200px) {
+      width: 900px;
     }
-    
-    .pagination li.selected {
-      background-color: #ccc;
-      color: #fff;
+
+    @media (max-width: 900px) {
+      width: 100%;
+    }
+
+
+    // These must be set as important to override the libary's default styles
+    .page-link {
+      color: black!important;
+      font-size: 0.875rem!important;
+    }
+
+    .active > .page-link {
+      background-color: #4c72ba!important;
+      border-color: #4c72ba!important;
+      color: white!important;
     }
   }
 }

@@ -9,34 +9,47 @@ export const exampleFilterData: FilterData[] = [
   },
   {
     id: 1,
-    name: "Filter 1",
+    name: "Product Type",
     type: "multi-select",
     options: [
-      { id: 1, name: "Option 1" },
-      { id: 2, name: "Option 2" },
+      { id: 1, name: "Satellite Imagery" },
+      { id: 2, name: "Aerial Imagery" },
+      { id: 3, name: "Lidar" },
+      { id: 4, name: "Radar" },
+      { id: 5, name: "Thermal Imagery" },
+      { id: 6, name: "Multispectral Imagery" },
     ],
   },
   {
     id: 2,
-    name: "Filter 2",
+    name: "License",
     type: "multi-select",
     options: [
-      { id: 1, name: "Option 1" },
-      { id: 2, name: "Option 2" },
-      { id: 3, name: "Option 3" },
-      { id: 4, name: "Option 4" },
-      { id: 5, name: "Option 5" },
-      { id: 6, name: "Option 6" },
+      { id: 1, name: "CC-BY" },
+      { id: 2, name: "Proprietary" },
+      { id: 3, name: "Open Data" },
+
     ],
   },
   {
     id: 3,
-    name: "Filter 3",
+    name: "Service Type",
     type: "multi-select",
     options: [
-      { id: 1, name: "Option 1" },
-      { id: 2, name: "Option 2" },
-      { id: 3, name: "Option 3" },
+      { id: 1, name: "Commercial" },
+      { id: 2, name: "Research" },
+      { id: 3, name: "Government" },
+      { id: 4, name: "Community" },
     ],
   },
+  {
+    id: 4,
+    name: "Data Type",
+    type: "multi-select",
+    options: [
+      { id: 1, name: "Notebooks" },
+      { id: 2, name: "Datasets" },
+      { id: 3, name: "Workflows" },
+    ]
+  }
 ];

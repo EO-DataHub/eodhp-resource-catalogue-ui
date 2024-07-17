@@ -1,7 +1,9 @@
 .data-catalogue-table {
+  position: relative;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   font-size: 0.85rem;
+  border-top: 1px solid black;
 
   table {
     width: 100%;
@@ -21,11 +23,11 @@
 
   &__row {
     display: flex;
-    padding: 0.5rem;
+    padding: 0.5rem 0;
     cursor: pointer;
 
     &:hover {
-      background-color: #f5f5f5;
+      background-color: #f5f5f5!important;
     }
 
     &:nth-child(odd) {
@@ -50,7 +52,7 @@
       }
     }
 
-    &-thumnail {
+    &-thumbnail {
       flex: 1;
       justify-content: center;
       align-items: center;
@@ -81,5 +83,23 @@
       }
     }
 
+  }
+
+  &__query {
+    position: absolute;
+    top: -1.2rem;
+    left: 0;
+    font-size: 0.9rem;
+
+    @media (max-width: 900px) {
+      display: none;
+    }
+  }
+
+  &__no-results {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    font-size: 1rem;
   }
 }

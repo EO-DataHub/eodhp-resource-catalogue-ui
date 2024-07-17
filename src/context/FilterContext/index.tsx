@@ -3,21 +3,20 @@ import { FilterState, FilterAction, FilterContextType, FilterProviderProps, Filt
 import { exampleFilterData } from "./placeholderData";
 
 const initialState: FilterState = {
-  headerTitle: "EODHP DataHub",
   filterOptions: exampleFilterData,
+  activeFilters: {
+    textQuery: "",
+  }
 };
 
-interface FilterState {
-  headerTitle: string;
-  filterOptions: FilterData[];
-}
+
 
 const reducer = (state: FilterState, action: FilterAction): FilterState => {
   switch (action.type) {
-    case "SET_HEADER_TITLE":
-      return { ...state, headerTitle: action.payload };
     case "SET_FILTER_OPTIONS":
       return { ...state, filterOptions: action.payload };
+    case "SET_ACTIVE_FILTERS":
+      return { ...state, activeFilters: action.payload };
     default:
       return state;
   }
@@ -25,41 +24,44 @@ const reducer = (state: FilterState, action: FilterAction): FilterState => {
 
 interface FilterContextType {
   state: {
-    headerTitle: string;
+    filterOptions: FilterData[];
+    activeFilters: {
+      textQuery: string;
+    };
   };
   actions: {
-    setHeaderTitle: (title: string) => void;
     setFilterOptions: (options: any) => void;
+    setActiveFilters: (filters: any) => void;
   };
 }
 
 const FilterContext = createContext<FilterContextType>({
   state: initialState,
   actions: {
-    setHeaderTitle: () => {},
-    setFilterOptions: () => {},
+    setFilterOptions: () => { },
+    setActiveFilters: () => { },
   },
 });
 
 const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setHeaderTitle = (payload: string) => {
-    dispatch({ type: "SET_HEADER_TITLE", payload });
-  };
-
   const setFilterOptions = (payload: any) => {
     dispatch({ type: "SET_FILTER_OPTIONS", payload });
   }
 
+  const setActiveFilters = (payload: any) => {
+    dispatch({ type: "SET_ACTIVE_FILTERS", payload });
+  }
+
   const value = {
     state: {
-      headerTitle: state.headerTitle,
       filterOptions: state.filterOptions,
+      activeFilters: state.activeFilters
     },
     actions: {
-      setHeaderTitle,
       setFilterOptions,
+      setActiveFilters,
     },
   };
 
