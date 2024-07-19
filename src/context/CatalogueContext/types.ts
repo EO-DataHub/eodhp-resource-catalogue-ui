@@ -1,13 +1,6 @@
 import React from "react";
+import { Collection } from "typings/stac";
 
-export interface Collection {
-  id: string;
-  title: string;
-  description: string;
-  lastUpdated: string;
-  thumbnailUrl: string;
-  type: string;
-}
 
 export interface CatalogueState {
   collectionSearchResults: Collection[];

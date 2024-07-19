@@ -1,10 +1,10 @@
-import { StacCollectionsResponse } from './types';
+import { Collection } from "typings/stac"
+import { StacCollectionsResponse } from "./types";
 
 export const getStacCollections = async (
   searchQuery: string = '',
   limit: number = 99999,
-  page: number = 1 // TODO: Implement
-): Promise<StacCollectionsResponse> => {
+): Promise<Collection[]> => {
   const url = 'https://test.eodatahub.org.uk/api/catalogue/stac/collections?limit=' + limit + '&q=' + searchQuery;;
   try {
     const response = await fetch(url); // Will use axios in the future
@@ -13,7 +13,7 @@ export const getStacCollections = async (
     }
     const data: StacCollectionsResponse = await response.json();
 
-    // For each data.collections add a thumbnailUrl
+    // For each data.collections add a thumbnailUrl, none of collections in the response have these fields
     data.collections.forEach(collection => {
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
@@ -26,13 +26,13 @@ export const getStacCollections = async (
 }
 
 // Temporary function to return random image
-const getRandomImage = () => {
+const getRandomImage = (): string => {
   const images = ['terraclimate.png', 'landsat.png', 'sentinel-2.png', 'hgb.png'];
   return '/placeholders/' + images[Math.floor(Math.random() * images.length)];
 }
 
 // Temporary function to return random last updated date
-const getRandomDate = () => {
+const getRandomDate = (): string => {
   const date = new Date();
   date.setDate(date.getDate() - Math.floor(Math.random() * 100));
   return date.toISOString().split('T')[0];

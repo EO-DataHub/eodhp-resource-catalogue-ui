@@ -1,4 +1,4 @@
-import { FilterData } from "../../types";
+import { FilterData } from "@/context/FilterContext/types";
 import './styles.scss'
 
 const MultiSelectFilter: React.FC<{ filterData: FilterData }> = ({ filterData }) => {

@@ -4,9 +4,8 @@ import {
   CatalogueAction,
   CatalogueContextType,
   CatalogueProviderProps,
-  Collection,
 } from "./types";
-import { StacCollection } from "../../services/stac/types";
+import { Collection } from "typings/stac";
 import { getStacCollections } from "../../services/stac";
 
 const initialState: CatalogueState = {

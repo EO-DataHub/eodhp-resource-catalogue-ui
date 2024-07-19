@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { FilterState, FilterAction, FilterContextType, FilterProviderProps, FilterData } from "./types";
+import { FilterState, FilterAction, FilterContextType, FilterProviderProps } from "./types";
 import { exampleFilterData } from "./placeholderData";
 
 const initialState: FilterState = {
@@ -21,19 +21,6 @@ const reducer = (state: FilterState, action: FilterAction): FilterState => {
       return state;
   }
 };
-
-interface FilterContextType {
-  state: {
-    filterOptions: FilterData[];
-    activeFilters: {
-      textQuery: string;
-    };
-  };
-  actions: {
-    setFilterOptions: (options: any) => void;
-    setActiveFilters: (filters: any) => void;
-  };
-}
 
 const FilterContext = createContext<FilterContextType>({
   state: initialState,

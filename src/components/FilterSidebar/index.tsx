@@ -1,14 +1,19 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import MultiSelectFilter from "./components/MultiSelectFilter";
 import TemporalFilter from "./components/TemporalFilter";
 import './styles.scss'
 import { FilterContext } from "@/context/FilterContext";
 import { FilterData } from "@/context/FilterContext/types";
 import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
+import { useApp } from "@/context/AppContext";
 
-const FilterSidebar: React.FC = ({ isFilterOpen, setIsFilterOpen }): React.ReactNode => {
-  const { state } = useContext(FilterContext);
-  const { filterOptions: filterOptions } = state;
+
+const FilterSidebar: React.FC = () => {
+  const { actions: AppActions } = useApp();
+  const { setFilterSidebarOpen } = AppActions;
+
+  const { state: FilterState } = useContext(FilterContext);
+  const { filterOptions: filterOptions } = FilterState;
 
 
   const renderFilterComponent = (filter: FilterData) => {
@@ -44,7 +49,7 @@ const FilterSidebar: React.FC = ({ isFilterOpen, setIsFilterOpen }): React.React
       </div>
 
       <div className="filter-collapse-close"
-        onClick={() => setIsFilterOpen(!isFilterOpen)}
+        onClick={() => setFilterSidebarOpen(false)}
       >
         <TbLayoutSidebarLeftCollapseFilled />
       </div>

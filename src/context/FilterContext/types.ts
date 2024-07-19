@@ -14,13 +14,16 @@ export interface FilterAction {
 
 export interface FilterContextType {
   state: {
-    headerTitle: string;
+    filterOptions: FilterData[];
+    activeFilters: {
+      textQuery: string;
+    };
   };
   actions: {
-    setHeaderTitle: (title: string) => void;
+    setFilterOptions: (options: any) => void;
+    setActiveFilters: (filters: any) => void;
   };
 }
-
 export interface FilterProviderProps {
   children: React.ReactNode;
 }
