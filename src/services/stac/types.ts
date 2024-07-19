@@ -1,10 +1,9 @@
-// In your types.ts
 export interface StacCollection {
   id: string;
   title: string;
   description: string;
-  updated: string;
-  thumbnail: string;
+  lastUpdated: string;
+  thumbnailUrl: string;
   type: string;
 }
 

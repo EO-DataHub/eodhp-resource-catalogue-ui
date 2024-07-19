@@ -52,19 +52,8 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const fetchInitialCollections = async () => {
-      console.log("Fetching initial collections");
       try {
-        const response = await getStacCollections("");
-        const collections: Collection[] = response.collections.map(
-          (col: StacCollection) => ({
-            id: col.id,
-            title: col.title,
-            description: col.description,
-            lastUpdated: col.updated,
-            thumbnailUrl: col.thumbnail,
-            type: col.type,
-          })
-        );
+        const collections: Collection[] = await getStacCollections("");
         setCollectionSearchResults(collections);
       } catch (error) {
         console.error("Error fetching initial collections:", error);

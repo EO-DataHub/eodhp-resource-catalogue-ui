@@ -1,22 +1,25 @@
-import { useContext, useEffect, useState } from 'react';
-import { DataSet } from "./types"
+
+import React, { useContext } from 'react';
 import './styles.scss'
 import { FilterContext } from '../../../../context/FilterContext';
 import { useCatalogue } from '../../../../context/CatalogueContext';
 
-const DataCatalogueTable = () => {
+const itemsPerPage = 6; // TODO: Move to context and make it configurable
+
+const DataCatalogueTable: React.FC = () => {
   const { state: CatalogueState } = useCatalogue();
   const { collectionSearchResults, activePage } = CatalogueState;
 
   const { state: FilterState } = useContext(FilterContext);
   const { activeFilters } = FilterState;
 
-  // Function that gets the current page and the number of items per page and returns the items to be displayed
+  // Get the current page and the number of items per page and returns the items to be displayed
   const getItems = () => {
-    const itemsPerPage = 6; // TODO: Move to context and make it configurable
     const start = (activePage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return collectionSearchResults?.collections?.slice(start, end) || [];
+
+    console.log('collectionSearchResults:', collectionSearchResults);
+    return collectionSearchResults?.slice(start, end) || [];
   }
 
   return (
@@ -46,7 +49,7 @@ const DataCatalogueTable = () => {
         )
       }
       )}
-      {collectionSearchResults?.collections?.length === 0 && (
+      {collectionSearchResults?.length === 0 && (
         <div className="data-catalogue-table__no-results">
           <p>No results found for "{activeFilters.textQuery}"</p>
         </div>

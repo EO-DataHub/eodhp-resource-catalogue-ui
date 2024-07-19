@@ -10,7 +10,6 @@ export interface Collection {
 }
 
 export interface CatalogueState {
-  headerTitle: string;
   collectionSearchResults: Collection[];
   textQuery: string;
   activePage: number;

@@ -18,7 +18,7 @@ export const getStacCollections = async (
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
     });
-    return data;
+    return data.collections;
   } catch (error) {
     console.error('Error fetching STAC collections:', error);
     throw error;

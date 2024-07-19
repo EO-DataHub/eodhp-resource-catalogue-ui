@@ -1,17 +1,16 @@
 import { FaMap } from "react-icons/fa";
-import ReactPaginate from 'react-paginate';
 import './styles.scss';
-import { CatalogueContext } from "../../../../context/CatalogueContext";
-import { useContext, useEffect } from "react";
+import { useCatalogue } from "../../../../context/CatalogueContext";
+import { useContext } from "react";
 import { getStacCollections } from "../../../../services/stac";
 import { FilterContext } from "../../../../context/FilterContext";
 import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
 
 const TopBar: React.FC = () => {
-  const { state, actions } = useContext(CatalogueContext);
-  const { collectionSearchResults, textQuery, activePage } = state;
-  const { setCollectionSearchResults, setTextQuery, setActivePage } = actions;
+  const { state: CatalogueState, actions: CatalogueActions } = useCatalogue();
+  const { collectionSearchResults, textQuery, activePage } = CatalogueState;
+  const { setCollectionSearchResults, setTextQuery, setActivePage } = CatalogueActions;
 
   const { state: FilterState, actions: FilterActions } = useContext(FilterContext);
   const { activeFilters } = FilterState;
@@ -39,8 +38,7 @@ const TopBar: React.FC = () => {
             if (e.key === 'Enter') {
               handleClick();
             }
-          }
-          } />
+          }} />
 
           <button className="top-bar__searchbox-button" onClick={() => handleClick()}>
             Search
@@ -56,13 +54,10 @@ const TopBar: React.FC = () => {
         <ResponsivePagination
           current={activePage}
           // for the total we need to divide the total number of collections by the number of items per page and then round up
-          total={Math.ceil(collectionSearchResults?.collections?.length / 6)}
+          total={Math.ceil(collectionSearchResults?.length / 6)}
           onPageChange={(e) => {
-            console.log('Page ::', e)
             setActivePage(e)
-          }
-          }
-
+          }}
         />
       </div>
     </div>
