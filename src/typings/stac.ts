@@ -1,3 +1,4 @@
+// This will need to be extended to match Collection spec https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md
 export interface Collection {
   id: string;
   title: string;
@@ -6,3 +7,5 @@ export interface Collection {
   thumbnailUrl?: string;
   type: string;
 }
+
+// Item, Catalog, Workflow etc. will be added here as needed

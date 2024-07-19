@@ -50,7 +50,7 @@ const TopBar: React.FC = () => {
         <ResponsivePagination
           current={activePage}
           // for the total we need to divide the total number of collections by the number of items per page and then round up
-          total={Math.ceil(collectionSearchResults?.length / 6)}
+          total={Math.ceil(collectionSearchResults?.length / 6) || 1}
           onPageChange={(e) => {
             setActivePage(e)
           }}

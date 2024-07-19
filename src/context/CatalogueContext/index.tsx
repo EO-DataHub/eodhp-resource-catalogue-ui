@@ -61,7 +61,7 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
     if (!state.collectionSearchResults.length) {
       fetchInitialCollections();
     }
-  }, [state.collectionSearchResults.length]);
+  }, []);
 
   const value = {
     state,

@@ -1,3 +1,5 @@
+@import "styles/main";
+
 .top-bar {
   display: flex;
   flex-direction: column;
@@ -11,7 +13,6 @@
 
   &__searchbox-container {
     width: 95%;
-    background-color: blue;
     position: relative;
     height: 2rem;
 
@@ -27,7 +28,7 @@
       right: 0em;
 
       padding: 0.4rem 2rem;
-      background-color: #4c72ba;
+      background-color: $secondary-colour;
       border: none;
       color: white;
       font-weight: bold;
@@ -76,8 +77,8 @@
     }
 
     .active > .page-link {
-      background-color: #4c72ba!important;
-      border-color: #4c72ba!important;
+      background-color: $secondary-colour!important;
+      border-color: $secondary-colour!important;
       color: white!important;
     }
   }

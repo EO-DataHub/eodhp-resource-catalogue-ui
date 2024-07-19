@@ -16,15 +16,13 @@ const DataCatalogueTable: React.FC = () => {
   const getItems = () => {
     const start = (activePage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-
-    console.log('collectionSearchResults:', collectionSearchResults);
     return collectionSearchResults?.slice(start, end) || [];
   }
 
   return (
     <div className="data-catalogue-table">
       <div className="data-catalogue-table__query">
-        {activeFilters.textQuery && <p>Search results of "{activeFilters.textQuery}"</p>}
+        {activeFilters.textQuery && <p>Search results for "{activeFilters.textQuery}"</p>}
       </div>
       {getItems().map(row => {
         return (

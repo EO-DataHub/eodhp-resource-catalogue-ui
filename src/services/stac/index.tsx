@@ -5,7 +5,7 @@ export const getStacCollections = async (
   searchQuery: string = '',
   limit: number = 99999,
 ): Promise<Collection[]> => {
-  const url = 'https://test.eodatahub.org.uk/api/catalogue/stac/collections?limit=' + limit + '&q=' + searchQuery;
+  const url = import.meta.env.VITE_COLLECTION_ENDPOINT + limit + '&q=' + searchQuery;
   try {
     const response = await fetch(url); // Will use axios in the future
     if (!response.ok) {
@@ -13,7 +13,7 @@ export const getStacCollections = async (
     }
     const data: StacCollectionsResponse = await response.json();
 
-    // For each data.collections add a thumbnailUrl, none of collections in the response have these fields
+    // In preperation for thumbnailUrl and lastUpdated to be added upstream
     data.collections.forEach(collection => {
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
