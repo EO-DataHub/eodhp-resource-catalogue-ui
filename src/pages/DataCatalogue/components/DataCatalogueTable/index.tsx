@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { DataSet } from "./types"
 import './styles.scss'
-import { CatalogueContext } from '../../../../context/CatalogueContext';
 import { FilterContext } from '../../../../context/FilterContext';
-
+import { useCatalogue } from '../../../../context/CatalogueContext';
 
 const DataCatalogueTable = () => {
-  const { state } = useContext(CatalogueContext);
-  const { collectionSearchResults, activePage } = state;
+  const { state: CatalogueState } = useCatalogue();
+  const { collectionSearchResults, activePage } = CatalogueState;
 
   const { state: FilterState } = useContext(FilterContext);
   const { activeFilters } = FilterState;

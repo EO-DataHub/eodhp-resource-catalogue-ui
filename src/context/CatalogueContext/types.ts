@@ -1,27 +1,30 @@
 import React from "react";
 
+export interface Collection {
+  id: string;
+  title: string;
+  description: string;
+  lastUpdated: string;
+  thumbnailUrl: string;
+  type: string;
+}
+
 export interface CatalogueState {
   headerTitle: string;
-  collectionSearchResults: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
+  collectionSearchResults: Collection[];
   textQuery: string;
   activePage: number;
 }
 
-export interface CatalogueAction {
-  type: string;
-  payload?: any // eslint-disable-line @typescript-eslint/no-explicit-any
-}
+export type CatalogueAction =
+  | { type: "SET_COLLECTION_SEARCH_RESULTS"; payload: Collection[] }
+  | { type: "SET_TEXT_QUERY"; payload: string }
+  | { type: "SET_ACTIVE_PAGE"; payload: number };
 
 export interface CatalogueContextType {
-  state: {
-    headerTitle: string;
-    collectionSearchResults: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
-    textQuery: string;
-    activePage: number;
-  };
+  state: CatalogueState;
   actions: {
-    setHeaderTitle: (title: string) => void;
-    setCollectionSearchResults: (query: string) => void;
+    setCollectionSearchResults: (collections: Collection[]) => void;
     setTextQuery: (query: string) => void;
     setActivePage: (page: number) => void;
   };

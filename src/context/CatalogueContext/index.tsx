@@ -1,82 +1,102 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { CatalogueState, CatalogueAction, CatalogueContextType, CatalogueProviderProps } from "./types";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+import {
+  CatalogueState,
+  CatalogueAction,
+  CatalogueContextType,
+  CatalogueProviderProps,
+  Collection,
+} from "./types";
+import { StacCollection } from "../../services/stac/types";
 import { getStacCollections } from "../../services/stac";
-import { FilterContext } from "../FilterContext";
 
 const initialState: CatalogueState = {
   collectionSearchResults: [],
   textQuery: "",
   activePage: 1,
-
 };
 
-const reducer = (state: CatalogueState, action: CatalogueAction): CatalogueState => {
+const reducer = (
+  state: CatalogueState,
+  action: CatalogueAction
+): CatalogueState => {
   switch (action.type) {
     case "SET_COLLECTION_SEARCH_RESULTS":
       return { ...state, collectionSearchResults: action.payload };
     case "SET_TEXT_QUERY":
       return { ...state, textQuery: action.payload };
-    case "ACTIVE_PAGE":
+    case "SET_ACTIVE_PAGE":
       return { ...state, activePage: action.payload };
     default:
       return state;
   }
 };
 
-const CatalogueContext = createContext<CatalogueContextType>({
-  state: initialState,
-  actions: {
-    setCollectionSearchResults: () => { },
-    setTextQuery: () => { },
-    setActivePage: () => { },
-  },
-});
+const CatalogueContext = createContext<CatalogueContextType | undefined>(
+  undefined
+);
 
 const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-
-  const setCollectionSearchResults = async (payload: string) => {
-    dispatch({ type: "SET_COLLECTION_SEARCH_RESULTS", payload });
-  }
-
-  const setTextQuery = (payload: string) => {
-    dispatch({ type: "SET_TEXT_QUERY", payload });
+  const setCollectionSearchResults = (collections: Collection[]) => {
+    dispatch({ type: "SET_COLLECTION_SEARCH_RESULTS", payload: collections });
   };
 
-  const setActivePage = (payload: number) => {
-    dispatch({ type: "ACTIVE_PAGE", payload });
-  }
+  const setTextQuery = (query: string) => {
+    dispatch({ type: "SET_TEXT_QUERY", payload: query });
+  };
+
+  const setActivePage = (page: number) => {
+    dispatch({ type: "SET_ACTIVE_PAGE", payload: page });
+  };
 
   useEffect(() => {
     const fetchInitialCollections = async () => {
-      console.log('Fetching initial collections');
+      console.log("Fetching initial collections");
       try {
-        const data = await getStacCollections('');
-        setCollectionSearchResults(data);
+        const response = await getStacCollections("");
+        const collections: Collection[] = response.collections.map(
+          (col: StacCollection) => ({
+            id: col.id,
+            title: col.title,
+            description: col.description,
+            lastUpdated: col.updated,
+            thumbnailUrl: col.thumbnail,
+            type: col.type,
+          })
+        );
+        setCollectionSearchResults(collections);
       } catch (error) {
-        console.error('Error fetching initial collections:', error);
+        console.error("Error fetching initial collections:", error);
       }
     };
-    fetchInitialCollections();
-  }, []);
-
-
+    if (!state.collectionSearchResults.length) {
+      fetchInitialCollections();
+    }
+  }, [state.collectionSearchResults.length]);
 
   const value = {
-    state: {
-      collectionSearchResults: state.collectionSearchResults,
-      textQuery: state.textQuery,
-      activePage: state.activePage,
-    },
+    state,
     actions: {
       setCollectionSearchResults,
       setTextQuery,
-      setActivePage,  
+      setActivePage,
     },
   };
 
-  return <CatalogueContext.Provider value={value}>{children}</CatalogueContext.Provider>;
+  return (
+    <CatalogueContext.Provider value={value}>
+      {children}
+    </CatalogueContext.Provider>
+  );
 };
 
-export { CatalogueContext, CatalogueProvider };
+const useCatalogue = () => {
+  const context = useContext(CatalogueContext);
+  if (!context) {
+    throw new Error("useCatalogue must be used within a CatalogueProvider");
+  }
+  return context;
+};
+
+export { CatalogueContext, CatalogueProvider, useCatalogue };
