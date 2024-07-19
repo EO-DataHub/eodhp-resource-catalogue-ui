@@ -1,6 +1,6 @@
-import { FilterContext } from '@/context/FilterContext';
 import { useCatalogue } from '@/hooks/useCatalogue';
-import React, { useContext } from 'react';
+import { useFilters } from '@/hooks/useFilters';
+import React, { useMemo } from 'react';
 import './styles.scss';
 
 const itemsPerPage = 6; // TODO: Move to context and make it configurable
@@ -9,22 +9,23 @@ const DataCatalogueTable: React.FC = () => {
   const { state: CatalogueState } = useCatalogue();
   const { collectionSearchResults, activePage } = CatalogueState;
 
-  const { state: FilterState } = useContext(FilterContext);
+  const { state: FilterState } = useFilters();
   const { activeFilters } = FilterState;
 
-  // Get the current page and the number of items per page and returns the items to be displayed
-  const getItems = () => {
+
+  const items = useMemo(() => {
     const start = (activePage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     return collectionSearchResults?.slice(start, end) || [];
   }
+    , [collectionSearchResults, activePage]);
 
   return (
     <div className="data-catalogue-table">
       <div className="data-catalogue-table__query">
         {activeFilters.textQuery && <p>Search results for "{activeFilters.textQuery}"</p>}
       </div>
-      {getItems().map(row => {
+      {items.map(row => {
         return (
           <div key={row.id} className="data-catalogue-table__row">
             <div className="data-catalogue-table__row-content">

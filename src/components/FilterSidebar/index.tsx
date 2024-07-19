@@ -1,7 +1,6 @@
-import { FilterContext } from "@/context/FilterContext";
 import { FilterData } from "@/context/FilterContext/types";
 import { useApp } from "@/hooks/useApp";
-import { useContext } from "react";
+import { useFilters } from "@/hooks/useFilters";
 import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import MultiSelectFilter from "./components/MultiSelectFilter";
 import TemporalFilter from "./components/TemporalFilter";
@@ -11,7 +10,7 @@ const FilterSidebar: React.FC = () => {
   const { actions: AppActions } = useApp();
   const { setFilterSidebarOpen } = AppActions;
 
-  const { state: FilterState } = useContext(FilterContext);
+  const { state: FilterState } = useFilters();
   const { filterOptions: filterOptions } = FilterState;
 
   const renderFilterComponent = (filter: FilterData) => {

@@ -1,7 +1,6 @@
-import { FilterContext } from "@/context/FilterContext";
 import { useCatalogue } from "@/hooks/useCatalogue";
+import { useFilters } from "@/hooks/useFilters";
 import { getStacCollections } from "@/services/stac";
-import { useContext } from "react";
 import { FaMap } from "react-icons/fa";
 import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
@@ -12,7 +11,7 @@ const TopBar: React.FC = () => {
   const { collectionSearchResults, textQuery, activePage } = CatalogueState;
   const { setCollectionSearchResults, setTextQuery, setActivePage } = CatalogueActions;
 
-  const { state: FilterState, actions: FilterActions } = useContext(FilterContext);
+  const { state: FilterState, actions: FilterActions } = useFilters();
   const { activeFilters } = FilterState;
   const { setActiveFilters } = FilterActions;
 
