@@ -12,7 +12,6 @@ const DataCatalogueTable: React.FC = () => {
   const { state: FilterState } = useFilters();
   const { activeFilters } = FilterState;
 
-
   const items = useMemo(() => {
     const start = (activePage - 1) * itemsPerPage;
     const end = start + itemsPerPage;

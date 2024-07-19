@@ -61,7 +61,7 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
     if (!state.collectionSearchResults.length) {
       fetchInitialCollections();
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = {
     state,
