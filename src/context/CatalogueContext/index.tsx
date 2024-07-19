@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import {
   CatalogueState,
   CatalogueAction,
@@ -79,12 +79,5 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
   );
 };
 
-const useCatalogue = () => {
-  const context = useContext(CatalogueContext);
-  if (!context) {
-    throw new Error("useCatalogue must be used within a CatalogueProvider");
-  }
-  return context;
-};
 
-export { CatalogueContext, CatalogueProvider, useCatalogue };
+export { CatalogueContext, CatalogueProvider };

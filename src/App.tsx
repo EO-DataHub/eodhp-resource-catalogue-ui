@@ -2,7 +2,7 @@ import DataCatalogue from "./pages/DataCatalogue";
 import React from "react";
 import FilterSidebar from "./components/FilterSidebar";
 import { TbLayoutSidebarRightCollapseFilled } from "react-icons/tb";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "@/hooks/useApp";
 
 const App: React.FC = () => {
   const { state: AppState, actions: AppActions } = useApp();

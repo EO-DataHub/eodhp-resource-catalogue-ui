@@ -1,6 +1,6 @@
 import { FaMap } from "react-icons/fa";
 import './styles.scss';
-import { useCatalogue } from "../../../../context/CatalogueContext";
+import { useCatalogue } from "@/hooks/useCatalogue";
 import { useContext } from "react";
 import { getStacCollections } from "../../../../services/stac";
 import { FilterContext } from "../../../../context/FilterContext";

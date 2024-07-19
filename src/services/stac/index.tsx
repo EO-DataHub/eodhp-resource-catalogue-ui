@@ -5,7 +5,7 @@ export const getStacCollections = async (
   searchQuery: string = '',
   limit: number = 99999,
 ): Promise<Collection[]> => {
-  const url = 'https://test.eodatahub.org.uk/api/catalogue/stac/collections?limit=' + limit + '&q=' + searchQuery;;
+  const url = 'https://test.eodatahub.org.uk/api/catalogue/stac/collections?limit=' + limit + '&q=' + searchQuery;
   try {
     const response = await fetch(url); // Will use axios in the future
     if (!response.ok) {

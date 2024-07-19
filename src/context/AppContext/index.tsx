@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useReducer } from "react";
 import {
   AppState,
   AppAction,
@@ -48,12 +48,4 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   );
 };
 
-const useApp = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useApp must be used within a AppProvider");
-  }
-  return context;
-};
-
-export { AppContext, AppProvider, useApp };
+export { AppContext, AppProvider };

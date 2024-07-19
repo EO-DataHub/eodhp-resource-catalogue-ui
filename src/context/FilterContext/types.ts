@@ -7,21 +7,16 @@ export interface FilterState {
   };
 }
 
-export interface FilterAction {
-  type: string;
-  payload?: any // eslint-disable-line @typescript-eslint/no-explicit-any
-}
+export type FilterAction =
+  | { type: "SET_FILTER_OPTIONS"; payload: FilterData[] }
+  | { type: "SET_ACTIVE_FILTERS"; payload: { textQuery: string } };
+
 
 export interface FilterContextType {
-  state: {
-    filterOptions: FilterData[];
-    activeFilters: {
-      textQuery: string;
-    };
-  };
+  state: FilterState;
   actions: {
-    setFilterOptions: (options: any) => void;
-    setActiveFilters: (filters: any) => void;
+    setFilterOptions: (options: FilterData[]) => void;
+    setActiveFilters: (filters: { textQuery: string }) => void;
   };
 }
 export interface FilterProviderProps {
@@ -38,4 +33,8 @@ export interface FilterData {
 export interface FilterOption {
   id: number;
   name: string;
+}
+
+export interface FilterActiveFilters {
+  textQuery: string;
 }

@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import './styles.scss'
 import { FilterContext } from '../../../../context/FilterContext';
-import { useCatalogue } from '../../../../context/CatalogueContext';
+import { useCatalogue } from '@/hooks/useCatalogue';
 
 const itemsPerPage = 6; // TODO: Move to context and make it configurable
 

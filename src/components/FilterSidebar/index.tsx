@@ -5,7 +5,7 @@ import './styles.scss'
 import { FilterContext } from "@/context/FilterContext";
 import { FilterData } from "@/context/FilterContext/types";
 import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "@/hooks/useApp";
 
 
 const FilterSidebar: React.FC = () => {

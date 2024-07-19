@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { FilterState, FilterAction, FilterContextType, FilterProviderProps } from "./types";
+import { FilterState, FilterAction, FilterContextType, FilterProviderProps, FilterData, FilterActiveFilters } from "./types";
 import { exampleFilterData } from "./placeholderData";
 
 const initialState: FilterState = {
@@ -8,7 +8,6 @@ const initialState: FilterState = {
     textQuery: "",
   }
 };
-
 
 
 const reducer = (state: FilterState, action: FilterAction): FilterState => {
@@ -22,22 +21,16 @@ const reducer = (state: FilterState, action: FilterAction): FilterState => {
   }
 };
 
-const FilterContext = createContext<FilterContextType>({
-  state: initialState,
-  actions: {
-    setFilterOptions: () => { },
-    setActiveFilters: () => { },
-  },
-});
+const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
 const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setFilterOptions = (payload: any) => {
+  const setFilterOptions = (payload: FilterData[]) => {
     dispatch({ type: "SET_FILTER_OPTIONS", payload });
   }
 
-  const setActiveFilters = (payload: any) => {
+  const setActiveFilters = (payload: FilterActiveFilters) => {
     dispatch({ type: "SET_ACTIVE_FILTERS", payload });
   }
 
@@ -54,5 +47,6 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
 
   return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>;
 };
+
 
 export { FilterContext, FilterProvider };
