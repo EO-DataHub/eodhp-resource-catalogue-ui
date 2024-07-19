@@ -12,7 +12,6 @@ const App: React.FC = () => {
   return (
     <>
       <div className="main">
-
         <div className={`left-sidebar-container ${filterSidebarOpen ? "left-sidebar-container-open" : "left-sidebar-container-closed"}`}>
           <FilterSidebar/>
         </div>
@@ -25,7 +24,6 @@ const App: React.FC = () => {
             </div>
           )
         }
-
         <div className="main-content-container">
           <DataCatalogue />
         </div>

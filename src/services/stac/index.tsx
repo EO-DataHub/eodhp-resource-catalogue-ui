@@ -1,11 +1,15 @@
 import { Collection } from "typings/stac"
 import { StacCollectionsResponse } from "./types";
 
+// There's two ways to go about this:
+// 1. As seen below, retrieve every single collection matching the query and then paginate on the client side
+// 2. Or, retrieve a limited number of collections and paginate on the server side
+// The latter requires more network requests, however it's more efficient for large datasets
 export const getStacCollections = async (
   searchQuery: string = '',
   limit: number = 99999,
 ): Promise<Collection[]> => {
-  const url = 'https://test.eodatahub.org.uk/api/catalogue/stac/collections?limit=' + limit + '&q=' + searchQuery;
+  const url = `${import.meta.env.VITE_COLLECTION_ENDPOINT}?limit=${limit}&q=${searchQuery}`;
   try {
     const response = await fetch(url); // Will use axios in the future
     if (!response.ok) {
