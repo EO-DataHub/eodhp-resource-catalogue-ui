@@ -1,8 +1,7 @@
-
-import React, { useContext } from 'react';
-import './styles.scss'
-import { FilterContext } from '../../../../context/FilterContext';
+import { FilterContext } from '@/context/FilterContext';
 import { useCatalogue } from '@/hooks/useCatalogue';
+import React, { useContext } from 'react';
+import './styles.scss';
 
 const itemsPerPage = 6; // TODO: Move to context and make it configurable
 
@@ -57,6 +56,5 @@ const DataCatalogueTable: React.FC = () => {
     </div>
   );
 }
-
 
 export default DataCatalogueTable;

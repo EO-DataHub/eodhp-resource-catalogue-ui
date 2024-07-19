@@ -1,5 +1,5 @@
 import { FilterData } from "@/context/FilterContext/types";
-import './styles.scss'
+import './styles.scss';
 
 const TemporalFilter: React.FC<{ filterData: FilterData }> = ({ filterData }) => {
   return (

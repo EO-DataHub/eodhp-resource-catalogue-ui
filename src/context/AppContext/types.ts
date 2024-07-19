@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export interface AppState {
   filterSidebarOpen: boolean;
 }

@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import MultiSelectFilter from "./components/MultiSelectFilter";
-import TemporalFilter from "./components/TemporalFilter";
-import './styles.scss'
 import { FilterContext } from "@/context/FilterContext";
 import { FilterData } from "@/context/FilterContext/types";
-import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
 import { useApp } from "@/hooks/useApp";
-
+import { useContext } from "react";
+import { TbLayoutSidebarLeftCollapseFilled } from "react-icons/tb";
+import MultiSelectFilter from "./components/MultiSelectFilter";
+import TemporalFilter from "./components/TemporalFilter";
+import './styles.scss';
 
 const FilterSidebar: React.FC = () => {
   const { actions: AppActions } = useApp();
@@ -14,7 +13,6 @@ const FilterSidebar: React.FC = () => {
 
   const { state: FilterState } = useContext(FilterContext);
   const { filterOptions: filterOptions } = FilterState;
-
 
   const renderFilterComponent = (filter: FilterData) => {
     switch (filter.type) {

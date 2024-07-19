@@ -1,5 +1,5 @@
-import { useContext } from "react";
 import { CatalogueContext } from "@/context/CatalogueContext";
+import { useContext } from "react";
 
 export const useCatalogue = () => {
   const context = useContext(CatalogueContext);

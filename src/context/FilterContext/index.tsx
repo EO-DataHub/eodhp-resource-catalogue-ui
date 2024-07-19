@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import { FilterState, FilterAction, FilterContextType, FilterProviderProps, FilterData, FilterActiveFilters } from "./types";
 import { exampleFilterData } from "./placeholderData";
+import { FilterAction, FilterActiveFilters, FilterContextType, FilterData, FilterProviderProps, FilterState } from "./types";
 
 const initialState: FilterState = {
   filterOptions: exampleFilterData,
@@ -8,7 +8,6 @@ const initialState: FilterState = {
     textQuery: "",
   }
 };
-
 
 const reducer = (state: FilterState, action: FilterAction): FilterState => {
   switch (action.type) {
@@ -47,6 +46,5 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
 
   return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>;
 };
-
 
 export { FilterContext, FilterProvider };

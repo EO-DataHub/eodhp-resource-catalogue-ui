@@ -1,12 +1,12 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import { getStacCollections } from "@/services/stac";
+import React, { createContext, useEffect, useReducer } from "react";
+import { Collection } from "typings/stac";
 import {
-  CatalogueState,
   CatalogueAction,
   CatalogueContextType,
   CatalogueProviderProps,
+  CatalogueState,
 } from "./types";
-import { Collection } from "typings/stac";
-import { getStacCollections } from "../../services/stac";
 
 const initialState: CatalogueState = {
   collectionSearchResults: [],
@@ -78,6 +78,5 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
     </CatalogueContext.Provider>
   );
 };
-
 
 export { CatalogueContext, CatalogueProvider };

@@ -11,7 +11,6 @@ export type FilterAction =
   | { type: "SET_FILTER_OPTIONS"; payload: FilterData[] }
   | { type: "SET_ACTIVE_FILTERS"; payload: { textQuery: string } };
 
-
 export interface FilterContextType {
   state: FilterState;
   actions: {

@@ -1,11 +1,10 @@
 import React, { createContext, useReducer } from "react";
 import {
-  AppState,
   AppAction,
   AppContextType,
   AppProviderProps,
+  AppState,
 } from "./types";
-
 
 const initialState: AppState = {
   filterSidebarOpen: true,

@@ -1,7 +1,6 @@
-import "./styles.scss";
-import TopBar from "./components/TopBar";
 import DataCatalogueTable from "./components/DataCatalogueTable";
-
+import TopBar from "./components/TopBar";
+import "./styles.scss";
 
 const DataCatalogue = () => {
   return (

@@ -1,11 +1,11 @@
-import { FaMap } from "react-icons/fa";
-import './styles.scss';
+import { FilterContext } from "@/context/FilterContext";
 import { useCatalogue } from "@/hooks/useCatalogue";
+import { getStacCollections } from "@/services/stac";
 import { useContext } from "react";
-import { getStacCollections } from "../../../../services/stac";
-import { FilterContext } from "../../../../context/FilterContext";
+import { FaMap } from "react-icons/fa";
 import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
+import './styles.scss';
 
 const TopBar: React.FC = () => {
   const { state: CatalogueState, actions: CatalogueActions } = useCatalogue();
@@ -16,7 +16,7 @@ const TopBar: React.FC = () => {
   const { activeFilters } = FilterState;
   const { setActiveFilters } = FilterActions;
 
-  const handleClick = async () => {
+  const handleClick = async (): Promise<void> => {
     try {
       const data = await getStacCollections(textQuery);
       setActiveFilters({
@@ -31,7 +31,6 @@ const TopBar: React.FC = () => {
 
   return (
     <div className="top-bar">
-
       <div className="top-bar__controls">
         <div className="top-bar__searchbox-container">
           <input type="text" placeholder="Search" value={textQuery} onChange={(e) => setTextQuery(e.target.value)} onKeyDown={(e) => {
@@ -39,17 +38,14 @@ const TopBar: React.FC = () => {
               handleClick();
             }
           }} />
-
           <button className="top-bar__searchbox-button" onClick={() => handleClick()}>
             Search
           </button>
-
         </div>
         <div className="top-bar__actions-container">
           <FaMap />
         </div>
       </div>
-
       <div className="top-bar__pagination">
         <ResponsivePagination
           current={activePage}

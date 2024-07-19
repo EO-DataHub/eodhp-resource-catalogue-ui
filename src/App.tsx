@@ -9,7 +9,6 @@ const App: React.FC = () => {
   const { filterSidebarOpen } = AppState;
   const { setFilterSidebarOpen } = AppActions;
 
-
   return (
     <>
       <div className="main">
