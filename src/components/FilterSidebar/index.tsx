@@ -27,7 +27,7 @@ const FilterSidebar: React.FC = () => {
   return (
     <>
       <div className={`filter-sidebar`}>
-        <div className="filter-header">
+        <div className="filter-title">
           <h4>Filter By</h4>
         </div>
 

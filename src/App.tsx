@@ -24,7 +24,7 @@ const App: React.FC = () => {
             </div>
           )
         }
-        <div className="main-content-container">
+        <div className={`main-content-container ${!filterSidebarOpen ? "main-content-container-full" : ""}`}>
           <DataCatalogue />
         </div>
       </div>

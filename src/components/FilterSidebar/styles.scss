@@ -2,22 +2,23 @@
 
 .filter-sidebar {
   position: relative;
-  padding: 0.25rem;
   height: 100%;
   background-color: $sidebar-background;
+
+  .filter-title {
+    padding: 0.5rem 1rem;
+  }
 
   .filter-body {
     margin: 1rem 0;
 
     .filter {
-      padding: 0.5rem 0;
+      padding: 0.5rem 1rem;
       border-bottom: 1px solid #000000;
     }
   }
 
   .filter-footer {
-    position: absolute;
-    bottom: 2rem;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -39,7 +40,7 @@
   cursor: pointer;
 
   svg {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 }
 
@@ -51,7 +52,7 @@
   animation: fadeIn 1s;
 
   svg {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 }
 

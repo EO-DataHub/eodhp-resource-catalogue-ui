@@ -17,7 +17,6 @@
   .left-sidebar-container {
     position: relative;
     flex: 1;
-    border-right: 2px solid black;
     max-width: 300px;
     min-width: 250px;
     transition: max-width 0.5s;
@@ -32,6 +31,10 @@
   .main-content-container {
     flex: 4;
     background-color: rgb(255, 255, 255);
-    padding-left: 3rem;
+
+    &-full {
+      padding-left: 32px;
+      transition: padding-left 1s;
+    }
   }
 }
