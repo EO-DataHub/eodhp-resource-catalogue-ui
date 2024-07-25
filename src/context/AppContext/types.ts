@@ -1,20 +1,16 @@
 import React from "react";
 
 export interface AppState {
-  headerTitle: string;
+  filterSidebarOpen: boolean;
 }
 
-export interface AppAction {
-  type: string;
-  payload?: any // eslint-disable-line @typescript-eslint/no-explicit-any
-}
+export type AppAction =
+  | { type: "SET_FILTER_SIDEBAR_OPEN"; payload: boolean };
 
 export interface AppContextType {
-  state: {
-    headerTitle: string;
-  };
+  state: AppState;
   actions: {
-    setHeaderTitle: (title: string) => void;
+    setFilterSidebarOpen: (isOpen: boolean) => void;
   };
 }
 

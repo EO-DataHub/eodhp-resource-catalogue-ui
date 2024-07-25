@@ -1,9 +1,12 @@
-export interface StacCollection {
-  id: string;
-  title: string;
-  description: string;
+import { Collection } from 'typings/stac';
+
+interface Link {
+  href: string;
+  rel: string;
+  type: string;
 }
 
 export interface StacCollectionsResponse {
-  collections: StacCollection[];
+  collections: Collection[];
+  links: Link[];
 }

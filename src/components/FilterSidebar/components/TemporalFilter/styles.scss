@@ -1,0 +1,22 @@
+.filter-body .temporal-filter {
+  .filter-options {
+    padding: 0.25rem;
+
+    .date-picker-container {
+      box-sizing: border-box;
+      margin: 0.25rem 0;
+      display: flex;
+      width: 100%;
+
+      label {
+        flex: 1;
+      }
+
+      .date-picker {
+        flex: 2;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+      }
+    }
+  }
+}

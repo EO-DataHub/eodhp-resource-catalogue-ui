@@ -1,15 +1,34 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-
-import Main from "./pages/MapViewer";
+import DataCatalogue from "./pages/DataCatalogue";
 import React from "react";
+import FilterSidebar from "./components/FilterSidebar";
+import { TbLayoutSidebarRightCollapseFilled } from "react-icons/tb";
+import { useApp } from "@/hooks/useApp";
 
 const App: React.FC = () => {
+  const { state: AppState, actions: AppActions } = useApp();
+  const { filterSidebarOpen } = AppState;
+  const { setFilterSidebarOpen } = AppActions;
+
   return (
-    <Routes>
-      <Route path="/" element={<Main />} />
-      <Route path="/status" element={<h1>Status</h1>} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+    <>
+      <div className="main">
+        <div className={`left-sidebar-container ${filterSidebarOpen ? "left-sidebar-container-open" : "left-sidebar-container-closed"}`}>
+          <FilterSidebar/>
+        </div>
+        {
+          !filterSidebarOpen && (
+            <div className="filter-collapse-open"
+              onClick={() => setFilterSidebarOpen(true)}
+            >
+              <TbLayoutSidebarRightCollapseFilled />
+            </div>
+          )
+        }
+        <div className={`main-content-container ${!filterSidebarOpen ? "main-content-container-full" : ""}`}>
+          <DataCatalogue />
+        </div>
+      </div>
+    </>
   );
 };
 
