@@ -11,7 +11,14 @@ export const getStacCollections = async (
 ): Promise<Collection[]> => {
   const url = `${import.meta.env.VITE_COLLECTION_ENDPOINT}?limit=${limit}&q=${searchQuery}`;
   try {
-    const response = await fetch(url); // Will use axios in the future
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    });
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
