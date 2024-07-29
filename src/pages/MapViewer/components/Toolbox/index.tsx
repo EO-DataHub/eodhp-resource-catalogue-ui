@@ -4,6 +4,7 @@ import { CiCalendarDate } from "react-icons/ci";
 import { IoTimeOutline } from "react-icons/io5";
 import { CiCloudOn } from "react-icons/ci";
 import { TbAxisX } from "react-icons/tb";
+import { useMap } from 'react-leaflet';
 
 const PLACEHOLDER_DATAPOINTS = [
   {
@@ -54,8 +55,14 @@ const PLACEHOLDER_ITEMS_GROUP = [
 const PLACEHOLDER_ITEMS = [...PLACEHOLDER_ITEMS_GROUP, ...PLACEHOLDER_ITEMS_GROUP, ...PLACEHOLDER_ITEMS_GROUP, ...PLACEHOLDER_ITEMS_GROUP];
 
 const Toolbox: React.FC = () => {
+
+  const map = useMap();
+
   return (
-    <div className="toolbox">
+    <div className="toolbox"
+      onMouseDown={() => map.dragging.disable()}
+      onMouseUp={() => map.dragging.enable()}
+    >
       <div className="toolbox__window-actions">
         <button className="toolbox__window-action">_</button>
         <button className="toolbox__window-action">X</button>

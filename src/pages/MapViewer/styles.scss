@@ -25,3 +25,11 @@
     z-index: 9999;
   }
 }
+
+.map-viewer .draggable * {
+  pointer-events: auto;
+}
+
+.map-viewer .draggable {
+  pointer-events: none;
+}

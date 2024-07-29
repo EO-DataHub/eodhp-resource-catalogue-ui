@@ -10,7 +10,7 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
   const map = useMap();
 
   const handleAddPlaceholderLayer = () => {
-    const placeholderPolygon : GeoJSON.FeatureCollection = {
+    const placeholderPolygon: GeoJSON.FeatureCollection = {
       "type": "FeatureCollection",
       "features": [
         {
@@ -53,7 +53,7 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
 
   return (
     <div className="toolbox-item"
-      onClick={handleAddPlaceholderLayer}
+      onMouseUp={handleAddPlaceholderLayer}
     >
       <div className="toolbox-item__left">
         <img src={thumbnail} alt="thumbnail" />
