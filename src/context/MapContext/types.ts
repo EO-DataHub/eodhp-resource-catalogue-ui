@@ -1,16 +1,18 @@
 import React from "react";
 
+export type Center = [number, number];
+
 export interface MapState {
-  map: any;
+  center: Center;
 }
 
 export type MapAction =
-  | { type: "SET_MAP"; payload: any };
+  | { type: "SET_CENTER"; payload: Center };
 
 export interface MapContextType {
   state: MapState;
   actions: {
-    setMap: (map: any) => void;
+    setCenter: (center: Center) => void;
   };
 }
 

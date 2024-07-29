@@ -8,7 +8,7 @@ import './styles.scss';
 import { useApp } from "@/hooks/useApp";
 
 const TopBar: React.FC = () => {
-  const { state: AppState, actions: AppActions } = useApp();
+  const { actions: AppActions } = useApp();
   const { setActiveContent } = AppActions;
 
   const { state: CatalogueState, actions: CatalogueActions } = useCatalogue();

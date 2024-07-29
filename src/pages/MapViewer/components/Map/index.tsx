@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import './styles.scss'
 import { TileLayer } from 'react-leaflet'
 

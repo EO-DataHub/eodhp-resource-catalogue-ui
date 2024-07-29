@@ -4,10 +4,11 @@ import {
   MapContextType,
   MapProviderProps,
   MapState,
+  Center
 } from "./types";
 
 const initialState: MapState = {
-  map: null,
+  center: [0, 0],
 };
 
 const reducer = (
@@ -15,10 +16,10 @@ const reducer = (
   action: MapAction
 ): MapState => {
   switch (action.type) {
-    case "SET_MAP":
+    case "SET_CENTER":
       return {
         ...state,
-        map: action.payload,
+        center: action.payload,
       };
   }
 };
@@ -33,8 +34,8 @@ const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
   const value = {
     state,
     actions: {
-      setMap: (map: any) => {
-        dispatch({ type: "SET_MAP", payload: map });
+      setCenter: (center: Center) => {
+        dispatch({ type: "SET_CENTER", payload: center });
       },
     }
   };
