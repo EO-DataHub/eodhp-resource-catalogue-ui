@@ -6,6 +6,7 @@ import { AppProvider } from "./context/AppContext";
 import { FilterProvider } from "./context/FilterContext";
 import App from "./App";
 import { CatalogueProvider } from "./context/CatalogueContext";
+import { MapProvider } from "./context/MapContext";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error('Failed to find the root element');
@@ -18,7 +19,9 @@ root.render(
       <AppProvider>
         <CatalogueProvider>
           <FilterProvider>
-            <App />
+            <MapProvider>
+              <App />
+            </MapProvider>
           </FilterProvider>
         </CatalogueProvider>
       </AppProvider>

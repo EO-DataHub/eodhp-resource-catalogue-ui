@@ -36,13 +36,15 @@
       flex-direction: row;
       margin-bottom: 2px;
       font-size: 1.2rem;
+      align-items: center;
 
       &-icon {
-        margin-right: 0.5em;
         font-size: 1.2em;
+        align-self: center;
       }
 
       &-text {
+        margin-left: 0.875rem;
         font-size: 0.875em;
         align-self: center;
       }

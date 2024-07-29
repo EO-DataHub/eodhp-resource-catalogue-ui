@@ -6,11 +6,14 @@ import Draggable from 'react-draggable'
 import Toolbox from "./components/Toolbox";
 // eslint-disable-next-line
 import L from 'leaflet'
+import { useMapSettings } from "@/hooks/useMapSettings";
 
 const MapViewer = () => {
+  const { state } = useMapSettings();
+  const { center } = state;
   return (
     <div className="map-viewer">
-      <MapContainer center={[51.505, -0.09]} zoom={13} >
+      <MapContainer center={center} zoom={13} >
         <Draggable
           defaultPosition={{ x: 0, y: 0 }}
         >

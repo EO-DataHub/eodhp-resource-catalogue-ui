@@ -8,7 +8,7 @@ import {
 } from "./types";
 
 const initialState: MapState = {
-  center: [0, 0],
+  center: [51.505, -0.09],
 };
 
 const reducer = (

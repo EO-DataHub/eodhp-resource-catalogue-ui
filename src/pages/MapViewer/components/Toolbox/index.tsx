@@ -5,6 +5,7 @@ import { IoTimeOutline } from "react-icons/io5";
 import { CiCloudOn } from "react-icons/ci";
 import { TbAxisX } from "react-icons/tb";
 import { useMap } from 'react-leaflet';
+import { useState } from 'react';
 
 const PLACEHOLDER_DATAPOINTS = [
   {
@@ -56,16 +57,21 @@ const PLACEHOLDER_ITEMS = [...PLACEHOLDER_ITEMS_GROUP, ...PLACEHOLDER_ITEMS_GROU
 
 const Toolbox: React.FC = () => {
 
+  const [toolboxVisible, setToolboxVisible] = useState(true);
   const map = useMap();
 
   return (
-    <div className="toolbox"
+    <div className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
       onMouseDown={() => map.dragging.disable()}
       onMouseUp={() => map.dragging.enable()}
     >
       <div className="toolbox__window-actions">
-        <button className="toolbox__window-action">_</button>
-        <button className="toolbox__window-action">X</button>
+        <button className="toolbox__window-action"
+          onClick={() => setToolboxVisible(false)}
+        >_</button>
+        <button className="toolbox__window-action"
+          onClick={() => setToolboxVisible(false)}
+        >X</button>
       </div>
 
       <div className="toolbox__content">
@@ -79,7 +85,7 @@ const Toolbox: React.FC = () => {
         ))}
       </div>
 
-    </div>
+    </div >
   );
 }
 
