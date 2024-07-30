@@ -1,6 +1,7 @@
 .map-viewer {
   height: 100%;
   width: 100%;
+  position: relative;
 
   .leaflet-container {
     height: 100%;
@@ -26,10 +27,21 @@
   }
 }
 
-.map-viewer .draggable * {
-  pointer-events: auto;
-}
+.table-view-icon {
+  position: absolute;
+  top: 15px;
+  right: 12px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
-.map-viewer .draggable {
-  pointer-events: none;
+  svg {
+    align-self: center;
+    font-size: 20px;
+  }
 }

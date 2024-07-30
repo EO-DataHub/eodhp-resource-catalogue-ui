@@ -7,22 +7,34 @@ import Toolbox from "./components/Toolbox";
 // eslint-disable-next-line
 import L from 'leaflet'
 import { useMapSettings } from "@/hooks/useMapSettings";
+import { FaTable } from "react-icons/fa6";
+import { useApp } from "@/hooks/useApp";
+import TimelineFilter from "./components/TimelineFilter";
 
 const MapViewer = () => {
+  const { actions: AppActions } = useApp();
+  const { setActiveContent } = AppActions;
+
   const { state } = useMapSettings();
   const { center } = state;
   return (
     <div className="map-viewer">
       <MapContainer center={center} zoom={13} >
-        <Draggable
-          defaultPosition={{ x: 0, y: 0 }}
-        >
+        <Draggable defaultPosition={{ x: 150, y: 150 }}>
           <div className="draggable">
             <Toolbox />
           </div>
         </Draggable>
         <Map />
+        <TimelineFilter />
       </MapContainer>
+
+      <div className="table-view-icon"
+        onClick={() => setActiveContent("dataCatalogue")}
+      >
+        <FaTable />
+      </div>
+
     </div>
   );
 };
