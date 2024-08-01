@@ -33,3 +33,4 @@ jobs:
   security-scan:
     name: Call Security Scan
     uses: EO-DataHub/github-actions/.github/workflows/security.yaml@main
+
