@@ -3,8 +3,8 @@ import './styles.scss';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { ToolboxItemProps } from './types';
-
 import './leaflet-wmts.js';
+
 const ToolboxItem = (ItemData: ToolboxItemProps) => {
   const { thumbnail, title, dataPoints } = ItemData;
 
@@ -53,18 +53,17 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
   }
 
   const handleAddWMTSLayer = () => {
-    const url = "https://test.eodatahub.org.uk/vs/cache/ows/wmts"
-
-    let options = {
+    const url = "https://test.eodatahub.org.uk/vs/cache/ows/wmts";
+  
+    const options: L.TileLayer.WMTSOptions = {
       tileMatrixSet: 'GoogleMapsCompatible',
       layer: 'LST_COLLECTION__LST_VISUALIZATION',
       time: '2024-06-18T13:22:03Z/2024-07-08T12:40:47Z',
     };
-
-    // @ts-ignore
-    let wmtsLayer = new L.tileLayer.wmts(url, options);
+  
+    const wmtsLayer = L.tileLayer.wmts(url, options);
     wmtsLayer.addTo(map);
-  }
+  };
 
   return (
 
@@ -78,9 +77,8 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
         if (e.shiftKey) {
           handleAddPlaceholderLayer();
         }
-        if (e.ctrlKey) {
+        else if (e.ctrlKey) {
           map.eachLayer((layer) => {
-            // @ts-ignore
             if (layer instanceof L.GeoJSON || layer instanceof L.TileLayer.WMTS) {
               map.removeLayer(layer);
             }

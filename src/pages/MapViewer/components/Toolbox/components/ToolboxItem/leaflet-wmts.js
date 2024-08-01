@@ -1,5 +1,7 @@
 // Leaflet natively does not support WMTS. This is a workaround to make it work.
 // Further discussion needed, may need to switch to OpenLayers, depends on the requirements.
+import L from 'leaflet';
+
 (function () {
   'use strict';
 
@@ -27,7 +29,7 @@
 
       options = L.setOptions(this, options);
 
-      const realRetina = options.detectRetina && retina ? 2 : 1;
+      const realRetina = options.detectRetina && 1;
       const tileSize = this.getTileSize();
       wmtsParams.width = tileSize.x * realRetina;
       wmtsParams.height = tileSize.y * realRetina;
