@@ -10,6 +10,8 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
 
   const map = useMap();
 
+
+  // Temporary proof of concept function
   const handleAddPlaceholderLayer = () => {
     const placeholderPolygon: GeoJSON.FeatureCollection = {
       "type": "FeatureCollection",
@@ -47,20 +49,25 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
         }
       ]
     }
-
     const placeholderLayer = L.geoJSON(placeholderPolygon);
+    placeholderLayer.setStyle({
+      color: 'red',
+      weight: 2,
+      fillOpacity: 0,
+    });
     placeholderLayer.addTo(map);
   }
 
+  // Temporary proof of concept function
   const handleAddWMTSLayer = () => {
     const url = "https://test.eodatahub.org.uk/vs/cache/ows/wmts";
-  
+
     const options: L.TileLayer.WMTSOptions = {
       tileMatrixSet: 'GoogleMapsCompatible',
       layer: 'LST_COLLECTION__LST_VISUALIZATION',
       time: '2024-06-18T13:22:03Z/2024-07-08T12:40:47Z',
     };
-  
+
     const wmtsLayer = L.tileLayer.wmts(url, options);
     wmtsLayer.addTo(map);
   };

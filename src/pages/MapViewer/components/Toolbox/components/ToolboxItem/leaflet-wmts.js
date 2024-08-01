@@ -17,10 +17,8 @@ import L from 'leaflet';
     },
     initialize: function (url, options) {
       this._url = url;
-
       const wmtsParams = L.extend({}, this.defaultWmtsParams);
 
-      // all keys that are not TileLayer options go to WMTS params
       for (const i in options) {
         if (!(i in this.options)) {
           wmtsParams[i] = options[i];
@@ -38,11 +36,8 @@ import L from 'leaflet';
     },
     getTileUrl: function (coords) {
       this.wmtsParams.tileMatrix = this._tileZoom.toString();
-
       const url = L.Util.template(this._url, { s: this._getSubdomain(coords) });
-
       const params = { ...this.wmtsParams, tileRow: coords.y, tileCol: coords.x };
-
       return url + L.Util.getParamString(params);
     },
     setParams: function (params, noRedraw) {
