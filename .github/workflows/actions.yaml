@@ -22,7 +22,10 @@ jobs:
       - name: Copy config
         run: |
           if [ ! -f .pre-commit-config.yaml ]; then
-            curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-python.yaml
+            curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-node.yaml
+          fi   
+          if [ ! -f .stylelintrc.json ]; then
+            curl -o .stylelintrc.json https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.stylelintrc.json
           fi          
 
       - uses: pre-commit/action@v3.0.1
@@ -30,9 +33,5 @@ jobs:
   security-scan:
     name: Call Security Scan
     uses: EO-DataHub/github-actions/.github/workflows/security.yaml@main
-
-  unit-tests:
-    name: Run unit tests
-    uses: EO-DataHub/github-actions/.github/workflows/unit-tests-python.yaml@main
 
 
