@@ -8,7 +8,7 @@ import {
 
 const initialState: AppState = {
   filterSidebarOpen: true,
-  activeContent: "dataCatalogue",
+  activeContent: "map",
 };
 
 const reducer = (
