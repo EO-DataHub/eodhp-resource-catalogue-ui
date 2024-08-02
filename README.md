@@ -10,6 +10,16 @@ First install the dependencies:
 npm install
 ```
 
+Collect the .eslintrc.cjs linting config file:
+
+```commandline
+make setup
+```
+
+It's safe and fast to run `make setup` repeatedly as it will only update these things if
+they have changed.
+
+
 To start the development server:
 
 ```bash
@@ -19,14 +29,5 @@ npm run dev
 To lint your code:
   
 ```bash
-npm run lint
+npm run lint:fix
 ```
-
-# Install via makefile
-
-```commandline
-make setup
-```
-
-It's safe and fast to run `make setup` repeatedly as it will only update these things if
-they have changed.
