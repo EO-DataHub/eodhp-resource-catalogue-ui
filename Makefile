@@ -19,14 +19,8 @@ DOCKERREPO ?= public.ecr.aws/n1b3o1k2/ukeodhp
 # lint:
 #     npm run lint
 
-venv:
-	virtualenv -p python3.11 venv
-	./venv/bin/python -m ensurepip -U
-	./venv/bin/pip3 install pip-tools
-	./venv/bin/pip3 install pre-commit
 
-.git/hooks/pre-commit:
-	curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-node.yaml
+lint-config:
 	curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
 
-setup: venv .git/hooks/pre-commit
+setup: lint-config
