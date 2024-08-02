@@ -1,43 +1,50 @@
 import React, { createContext, useReducer } from "react";
-import { AppState, AppAction, AppContextType, AppProviderProps } from "./types";
+import {
+  AppAction,
+  AppContextType,
+  AppProviderProps,
+  AppState,
+} from "./types";
 
 const initialState: AppState = {
-  headerTitle: "EODHP DataHub",
+  filterSidebarOpen: true,
 };
 
-const reducer = (state: AppState, action: AppAction): AppState => {
+const reducer = (
+  state: AppState,
+  action: AppAction
+): AppState => {
   switch (action.type) {
-    case "SET_HEADER_TITLE":
-      return { ...state, headerTitle: action.payload };
+    case "SET_FILTER_SIDEBAR_OPEN":
+      return { ...state, filterSidebarOpen: action.payload };
     default:
       return state;
   }
 };
 
-const AppContext = createContext<AppContextType>({
-  state: initialState,
-  actions: {
-    setHeaderTitle: () => {},
-  },
-});
+const AppContext = createContext<AppContextType | undefined>(
+  undefined
+);
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setHeaderTitle = (payload: string) => {
-    dispatch({ type: "SET_HEADER_TITLE", payload });
-  };
+  const setFilterSidebarOpen = (isOpen: boolean) => {
+    dispatch({ type: "SET_FILTER_SIDEBAR_OPEN", payload: isOpen });
+  }
 
   const value = {
-    state: {
-      headerTitle: state.headerTitle,
-    },
+    state,
     actions: {
-      setHeaderTitle,
+      setFilterSidebarOpen,
     },
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+    </AppContext.Provider>
+  );
 };
 
 export { AppContext, AppProvider };

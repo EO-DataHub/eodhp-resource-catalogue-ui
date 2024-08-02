@@ -1,24 +1,12 @@
-import { useContext } from "react";
-import { AppContext } from "../../context/AppContext";
-import Button from "../../components/Button";
 import "./styles.scss";
 
-const Main = () => {
-  const { state, actions } = useContext(AppContext);
-  const { headerTitle } = state;
-  const { setHeaderTitle } = actions;
+const MapViewer = () => {
 
   return (
-    <div className="main">
-      <h1 className="main__heading">{headerTitle}</h1>
-      <Button
-        className="main__button"
-        onClick={() => setHeaderTitle("New Title")}
-      >
-        Change Title
-      </Button>
+    <div className="map-viewer">
+      To be implemented.
     </div>
   );
 };
 
-export default Main;
+export default MapViewer;

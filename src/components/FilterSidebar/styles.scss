@@ -1,0 +1,69 @@
+@import "styles/main";
+
+.filter-sidebar {
+  position: relative;
+  height: 100%;
+  background-color: $sidebar-background;
+
+  .filter-title {
+    padding: 0.5rem 1rem;
+  }
+
+  .filter-body {
+    margin: 1rem 0;
+
+    .filter {
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #000000;
+    }
+  }
+
+  .filter-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    button {
+      padding: 0.25rem 2rem;
+      border: 1px solid #000000;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+    }
+  }
+}
+
+.filter-collapse-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+
+  svg {
+    font-size: 24px;
+  }
+}
+
+.filter-collapse-open {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  cursor: pointer;
+  animation: fadeIn 1s;
+
+  svg {
+    font-size: 24px;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
