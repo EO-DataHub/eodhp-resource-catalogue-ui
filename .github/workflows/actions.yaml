@@ -22,12 +22,11 @@ jobs:
 
       - name: Copy config
         run: |
-          if [ ! -f .pre-commit-config.yaml ]; then
-            curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-node.yaml
-          fi
           if [ ! -f .eslintrc.cjs ]; then
             curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
           fi
+
+      - uses: stefanoeb/eslint-action@1.0.2
 
       - name: Install eslint
         run: |
@@ -38,7 +37,7 @@ jobs:
       - name: Eslint
         run: eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0
 
-      - uses: pre-commit/action@v3.0.1
+#      - uses: pre-commit/action@v3.0.1
 
   security-scan:
     name: Call Security Scan
