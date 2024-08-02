@@ -34,20 +34,6 @@ jobs:
           all-files: true
           eslint-args: '--ignore-path=.gitignore --quiet --ext .js,.jsx,.ts,.tsx'
 
-      - name: Install eslint
-        run: |
-          npm install -g eslint@8.57.0
-          npm install -g optionator
-          npm install -g @typescript-eslint/eslint-plugin@latest --save-dev
-      - uses: stefanoeb/eslint-action@1.0.2
-        with:
-          files: src/
-
-      - name: Eslint
-        run: eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0
-
-#      - uses: pre-commit/action@v3.0.1
-
   security-scan:
     name: Call Security Scan
     uses: EO-DataHub/github-actions/.github/workflows/security.yaml@main
