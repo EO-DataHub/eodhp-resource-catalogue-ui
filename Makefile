@@ -19,14 +19,14 @@ DOCKERREPO ?= public.ecr.aws/n1b3o1k2/ukeodhp
 # lint:
 #     npm run lint
 
-husky:
-	npm install husky --save-dev
-	npx husky install
-	npm install stylelint stylelint-config-standard --save-dev
+venv:
+	virtualenv -p python3.11 venv
+	./venv/bin/python -m ensurepip -U
+	./venv/bin/pip3 install pip-tools
+	./venv/bin/pip3 install pre-commit
 
 .git/hooks/pre-commit:
-	npx husky init .husky/pre-commit "npm run lint"
 	curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-node.yaml
-	curl -o .stylelintrc.json https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.stylelintrc.json
+	curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
 
-setup: husky .git/hooks/pre-commit
+setup: venv .git/hooks/pre-commit

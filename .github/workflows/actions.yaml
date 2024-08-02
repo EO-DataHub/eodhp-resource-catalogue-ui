@@ -24,8 +24,8 @@ jobs:
           if [ ! -f .pre-commit-config.yaml ]; then
             curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-node.yaml
           fi   
-          if [ ! -f .stylelintrc.json ]; then
-            curl -o .stylelintrc.json https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.stylelintrc.json
+          if [ ! -f .eslintrc.cjs ]; then
+            curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
           fi          
 
       - uses: pre-commit/action@v3.0.1
