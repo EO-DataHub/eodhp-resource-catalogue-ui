@@ -30,13 +30,13 @@ jobs:
           node-version: 16
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v3
-      - uses: stefanoeb/eslint-action@1.0.2
 
       - name: Install eslint
         run: |
           npm install -g eslint@8.57.0
           npm install -g optionator
           npm install -g @typescript-eslint/eslint-plugin@latest --save-dev
+      - uses: stefanoeb/eslint-action@1.0.2
 
       - name: Eslint
         run: eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0
