@@ -21,3 +21,12 @@ To lint your code:
 ```bash
 npm run lint
 ```
+
+# Install via makefile
+
+```commandline
+make setup
+```
+
+It's safe and fast to run `make setup` repeatedly as it will only update these things if
+they have changed.
