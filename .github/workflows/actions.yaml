@@ -18,15 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
 
       - name: Copy config
         run: |
           if [ ! -f .pre-commit-config.yaml ]; then
             curl -o .pre-commit-config.yaml https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.pre-commit-config-node.yaml
-          fi   
+          fi
           if [ ! -f .eslintrc.cjs ]; then
             curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
-          fi          
+          fi
+
+      - name: Install eslint
+        run: |
+          npm install -g eslint@8.57.0
+          npm install -g optionator
 
       - uses: pre-commit/action@v3.0.1
 
