@@ -45,6 +45,7 @@ jobs:
           npm install stream-browserify
           npm install browserify-zlib
           npm run build
+          cd dist/assets
           for ext in js css; do
               for file in index-*.$ext; do
                   mv "$file" "index.$ext"
