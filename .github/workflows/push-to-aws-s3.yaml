@@ -45,6 +45,12 @@ jobs:
           npm install stream-browserify
           npm install browserify-zlib
           npm run build
+          for ext in js css; do
+              for file in index-*.$ext; do
+                  mv "$file" "index.$ext"
+                  echo "Renamed $file to index.$ext"
+              done
+          done
 
       - name: Setup AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
