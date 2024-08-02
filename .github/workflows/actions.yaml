@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm ci # or yarn install
+      - run: npm ci
       - uses: sibiraj-s/action-eslint@v3
         with:
           all-files: true
