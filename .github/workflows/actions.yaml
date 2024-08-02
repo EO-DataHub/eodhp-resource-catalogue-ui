@@ -30,6 +30,8 @@ jobs:
           node-version: 16
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v3
+        with:
+          working-dir: src
 
       - name: Install eslint
         run: |
