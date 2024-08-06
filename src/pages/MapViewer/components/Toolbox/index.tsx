@@ -6,6 +6,8 @@ import { CiCloudOn } from "react-icons/ci";
 import { TbAxisX } from "react-icons/tb";
 import { useMap } from 'react-leaflet';
 import { useState } from 'react';
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 
 // Placeholder images
 import hgb from "@/assets/placeholders/hgb.png";
@@ -67,10 +69,21 @@ const Toolbox: React.FC = () => {
   const map = useMap();
 
   return (
-    <div className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
+    <div
+      className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
       onMouseDown={() => map.dragging.disable()}
       onMouseUp={() => map.dragging.enable()}
+      data-tooltip-id="my-tooltip"
+      data-tooltip-html={
+        "This is a proof of concept of the Toolbox. These are not the collections currently within our STAC Catalogue. " +
+        "<br/>However, you can still view some LST data served from within our EOX View Server. " +
+        "<br/><br/> <b>Click</b> to add WMTS layer from EOX View Server; " +
+        "<br/> <b>Shift + Click</b> to add placeholder polygon (covers England, so zoom out); " +
+        "<br/> <b>Ctrl + Click</b> to remove all GeoJSON and WMTS layers;"
+      }
     >
+      <Tooltip id="my-tooltip" place="top"/>
+
       <div className="toolbox__window-actions">
         <span className="toolbox__window-action"
           onClick={() => setToolboxVisible(false)}
