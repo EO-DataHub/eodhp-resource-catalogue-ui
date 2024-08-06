@@ -7,6 +7,12 @@ import { TbAxisX } from "react-icons/tb";
 import { useMap } from 'react-leaflet';
 import { useState } from 'react';
 
+// Placeholder images
+import hgb from "@/assets/placeholders/hgb.png";
+import landsat from "@/assets/placeholders/landsat.png";
+import sentinel2 from "@/assets/placeholders/sentinel-2.png";
+import terraclimate from "@/assets/placeholders/terraclimate.png";
+
 const PLACEHOLDER_DATAPOINTS = [
   {
     icon: CiCalendarDate,
@@ -32,22 +38,22 @@ const PLACEHOLDER_DATAPOINTS = [
 
 const PLACEHOLDER_ITEMS_GROUP = [
   {
-    thumbnail: '/placeholders/hgb.png',
+    thumbnail: hgb,
     title: 'HGB',
     dataPoints: PLACEHOLDER_DATAPOINTS
   },
   {
-    thumbnail: '/placeholders/landsat.png',
+    thumbnail: landsat,
     title: 'Landsat',
     dataPoints: PLACEHOLDER_DATAPOINTS
   },
   {
-    thumbnail: '/placeholders/sentinel-2.png',
+    thumbnail: sentinel2,
     title: 'Sentinel-2',
     dataPoints: PLACEHOLDER_DATAPOINTS
   },
   {
-    thumbnail: '/placeholders/terraclimate.png',
+    thumbnail: terraclimate,
     title: 'TerraClimate',
     dataPoints: PLACEHOLDER_DATAPOINTS
   }
@@ -66,12 +72,12 @@ const Toolbox: React.FC = () => {
       onMouseUp={() => map.dragging.enable()}
     >
       <div className="toolbox__window-actions">
-        <button className="toolbox__window-action"
+        <span className="toolbox__window-action"
           onClick={() => setToolboxVisible(false)}
-        >_</button>
-        <button className="toolbox__window-action"
+        >_</span>
+        <span className="toolbox__window-action"
           onClick={() => setToolboxVisible(false)}
-        >X</button>
+        >X</span>
       </div>
 
       <div className="toolbox__content">

@@ -1,6 +1,6 @@
 .toolbox {
-  width: 450px;
-  height: 550px;
+  width: 350px;
+  height: 450px;
   overflow-y: auto;
   background-color: rgba(240, 240, 240, 0.938); // TODO: Find branding colour
   z-index: 99999;
@@ -16,6 +16,13 @@
       cursor: pointer;
       width: 20px;
       height: 20px;
+      border: 1px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px;
+      border-radius: 15%;
+      font-size: 10px;
     }
   }
 

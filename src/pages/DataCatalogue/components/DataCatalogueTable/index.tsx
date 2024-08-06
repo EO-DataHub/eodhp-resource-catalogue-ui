@@ -22,16 +22,16 @@ const DataCatalogueTable: React.FC = () => {
   return (
     <div className="data-catalogue-table">
       <div className="data-catalogue-table__query">
-        {activeFilters.textQuery && <p>Search results for "{activeFilters.textQuery}"</p>}
+        {activeFilters.textQuery && <span>Search results for "{activeFilters.textQuery}"</span>}
       </div>
       {items.map(row => {
         return (
           <div key={row.id} className="data-catalogue-table__row">
             <div className="data-catalogue-table__row-content">
               <div className="data-catalogue-table__row-information">
-                <h3>{row.title || row.id}</h3>
-                <p>{row.description}</p>
-                <p>Updated {row.lastUpdated}</p>
+                <span>{row.title || row.id}</span>
+                <span>{row.description}</span>
+                <span>Updated {row.lastUpdated}</span>
               </div>
               <div className="data-catalogue-table__row-thumbnail">
                 <img src={row.thumbnailUrl} alt="Thumbnail" />
@@ -48,7 +48,7 @@ const DataCatalogueTable: React.FC = () => {
       )}
       {collectionSearchResults?.length === 0 && (
         <div className="data-catalogue-table__no-results">
-          <p>No results found for "{activeFilters.textQuery}"</p>
+          <span>No results found for "{activeFilters.textQuery}"</span>
         </div>
       )}
     </div>

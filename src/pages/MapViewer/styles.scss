@@ -29,15 +29,15 @@
 
 .table-view-icon {
   position: absolute;
-  top: 15px;
+  top: 8.5px;
   right: 12px;
   background-color: white;
-  border-radius: 50%;
+  border-radius: 10%;
   padding: 5px;
   align-items: center;
   display: flex;
   justify-content: center;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;
 
   svg {

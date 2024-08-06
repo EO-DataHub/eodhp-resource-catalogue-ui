@@ -26,16 +26,18 @@
     flex-direction: column;
     margin-left: 10px;
 
-    h3 {
+    &-title {
       text-decoration: underline;
       margin-bottom: 0.25em;
+      font-weight: bold;
+      font-size: 0.875rem;
     }
 
     .toolbox-item__data-point {
       display: flex;
       flex-direction: row;
       margin-bottom: 2px;
-      font-size: 1.2rem;
+      font-size: 1em;
       align-items: center;
 
       &-icon {

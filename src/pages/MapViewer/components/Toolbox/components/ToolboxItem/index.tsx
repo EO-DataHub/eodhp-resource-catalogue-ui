@@ -99,14 +99,14 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
         <img src={thumbnail} alt="thumbnail" />
       </div>
       <div className="toolbox-item__right">
-        <h3>{title}</h3>
+        <span className="toolbox-item__right-title">{title}</span>
         {dataPoints.map((dataPoint, index) => (
           <div key={index} className="toolbox-item__data-point"
           >
             <dataPoint.icon />
-            <p
+            <span
               className="toolbox-item__data-point-text"
-            >{dataPoint.text}</p>
+            >{dataPoint.text}</span>
           </div>
         ))}
       </div>

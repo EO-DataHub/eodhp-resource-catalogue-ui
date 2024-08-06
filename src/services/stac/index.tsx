@@ -1,5 +1,9 @@
 import { Collection } from "typings/stac"
 import { StacCollectionsResponse } from "./types";
+import hgb from "@/assets/placeholders/hgb.png";
+import landsat from "@/assets/placeholders/landsat.png";
+import sentinel2 from "@/assets/placeholders/sentinel-2.png";
+import terraclimate from "@/assets/placeholders/terraclimate.png";
 
 // There's two ways to go about this:
 // 1. As seen below, retrieve every single collection matching the query and then paginate on the client side
@@ -37,9 +41,9 @@ export const getStacCollections = async (
 }
 
 // Temporary function to return random image
-const getRandomImage = (): string => {
-  const images = ['terraclimate.png', 'landsat.png', 'sentinel-2.png', 'hgb.png'];
-  return '/placeholders/' + images[Math.floor(Math.random() * images.length)];
+const getRandomImage = () => {
+  const images = [hgb, landsat, sentinel2, terraclimate];
+  return images[Math.floor(Math.random() * images.length)];
 }
 
 // Temporary function to return random last updated date
