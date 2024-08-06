@@ -10,7 +10,6 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
 
   const map = useMap();
 
-
   // Temporary proof of concept function
   const handleAddPlaceholderLayer = () => {
     const placeholderPolygon: GeoJSON.FeatureCollection = {
