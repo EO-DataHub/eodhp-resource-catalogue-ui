@@ -25,9 +25,6 @@ jobs:
           if [ ! -f .eslintrc.cjs ]; then
             curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
           fi
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - run: npm ci
       - uses: sibiraj-s/action-eslint@v3
         with:
