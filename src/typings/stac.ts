@@ -1,3 +1,4 @@
+
 // This will need to be extended to match Collection spec https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md
 export interface Collection {
   id: string;

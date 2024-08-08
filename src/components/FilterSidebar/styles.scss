@@ -2,11 +2,15 @@
 
 .filter-sidebar {
   position: relative;
+  width: 100%;
   height: 100%;
+  overflow-y: auto;
   background-color: $sidebar-background;
+  height: -webkit-fill-available;
 
   .filter-title {
     padding: 0.5rem 1rem;
+    font-weight: bold;
   }
 
   .filter-body {
@@ -36,7 +40,7 @@
 .filter-collapse-close {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 15px;
   cursor: pointer;
 
   svg {

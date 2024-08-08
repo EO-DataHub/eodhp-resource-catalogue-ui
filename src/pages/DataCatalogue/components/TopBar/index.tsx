@@ -5,8 +5,12 @@ import { FaMap } from "react-icons/fa";
 import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
 import './styles.scss';
+import { useApp } from "@/hooks/useApp";
 
 const TopBar: React.FC = () => {
+  const { actions: AppActions } = useApp();
+  const { setActiveContent } = AppActions;
+
   const { state: CatalogueState, actions: CatalogueActions } = useCatalogue();
   const { collectionSearchResults, textQuery, activePage } = CatalogueState;
   const { setCollectionSearchResults, setTextQuery, setActivePage } = CatalogueActions;
@@ -42,7 +46,10 @@ const TopBar: React.FC = () => {
           </button>
         </div>
         <div className="top-bar__actions-container">
-          <FaMap />
+          <FaMap 
+            className="top-bar__actions-icon"
+            onClick={() => setActiveContent('map')}
+          />
         </div>
       </div>
       <div className="top-bar__pagination">
