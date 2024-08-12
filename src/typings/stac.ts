@@ -5,6 +5,7 @@ export interface Collection {
   title: string;
   description: string;
   lastUpdated?: string;
+  stacUrl: string;
   thumbnailUrl?: string;
   type: string;
 }

@@ -26,7 +26,7 @@ const DataCatalogueTable: React.FC = () => {
       </div>
       {items.map(row => {
         return (
-          <div key={row.id} className="data-catalogue-table__row">
+          <a href={row.stacUrl} className="data-catalogue-table__row" target="_blank">
             <div className="data-catalogue-table__row-content">
               <div className="data-catalogue-table__row-information">
                 <span>{row.title || row.id}</span>
@@ -42,7 +42,7 @@ const DataCatalogueTable: React.FC = () => {
                 {row.type}
               </span>
             </div>
-          </div>
+            </a>
         )
       }
       )}

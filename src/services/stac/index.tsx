@@ -32,12 +32,19 @@ export const getStacCollections = async (
     data.collections.forEach(collection => {
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
+      collection.stacUrl = getStacUrl(collection.id); // Add this line
+
     });
     return data.collections;
   } catch (error) {
     console.error('Error fetching STAC collections:', error);
     throw error;
   }
+}
+
+
+const getStacUrl = (collectionId: string): string => {
+  return `${import.meta.env.VITE_COLLECTION_ENDPOINT}/${collectionId}`;
 }
 
 // Temporary function to return random image
