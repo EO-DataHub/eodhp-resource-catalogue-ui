@@ -42,7 +42,6 @@ export const getStacCollections = async (
   }
 }
 
-
 const getStacUrl = (collectionId: string): string => {
   return `${import.meta.env.VITE_COLLECTION_ENDPOINT}/${collectionId}`;
 }
