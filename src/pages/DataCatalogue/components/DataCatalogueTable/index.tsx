@@ -26,7 +26,7 @@ const DataCatalogueTable: React.FC = () => {
       </div>
       {items.map(row => {
         return (
-          <a href={row.stacUrl} className="data-catalogue-table__row" target="_blank">
+          <a key={row.id} href={row.stacUrl} className="data-catalogue-table__row" target="_blank">
             <div className="data-catalogue-table__row-content">
               <div className="data-catalogue-table__row-information">
                 <span>{row.title || row.id}</span>

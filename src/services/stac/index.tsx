@@ -32,7 +32,7 @@ export const getStacCollections = async (
     data.collections.forEach(collection => {
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
-      collection.stacUrl = getStacUrl(collection.id); // Add this line
+      collection.stacUrl = getStacUrl(collection.id);
 
     });
     return data.collections;
