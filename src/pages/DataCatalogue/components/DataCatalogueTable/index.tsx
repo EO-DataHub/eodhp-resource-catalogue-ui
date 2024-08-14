@@ -1,7 +1,7 @@
-import { useCatalogue } from '@/hooks/useCatalogue';
-import { useFilters } from '@/hooks/useFilters';
-import React, { useMemo } from 'react';
-import './styles.scss';
+import { useCatalogue } from "@/hooks/useCatalogue";
+import { useFilters } from "@/hooks/useFilters";
+import React, { useMemo } from "react";
+import "./styles.scss";
 
 const itemsPerPage = 6; // TODO: Move to context and make it configurable
 
@@ -16,17 +16,24 @@ const DataCatalogueTable: React.FC = () => {
     const start = (activePage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     return collectionSearchResults?.slice(start, end) || [];
-  }
-    , [collectionSearchResults, activePage]);
+  }, [collectionSearchResults, activePage]);
 
   return (
     <div className="data-catalogue-table">
       <div className="data-catalogue-table__query">
-        {activeFilters.textQuery && <span>Search results for "{activeFilters.textQuery}"</span>}
+        {activeFilters.textQuery && (
+          <span>Search results for "{activeFilters.textQuery}"</span>
+        )}
       </div>
-      {items.map(row => {
+      {items.map((row) => {
         return (
-          <a key={row.id} href={row.stacUrl} className="data-catalogue-table__row" target="_blank">
+          <div
+            key={row.id}
+            className="data-catalogue-table__row"
+            onClick={() => {
+              window.open(row.stacUrl, "_blank");
+            }}
+          >
             <div className="data-catalogue-table__row-content">
               <div className="data-catalogue-table__row-information">
                 <span>{row.title || row.id}</span>
@@ -38,14 +45,11 @@ const DataCatalogueTable: React.FC = () => {
               </div>
             </div>
             <div className="data-catalogue-table__row-type">
-              <span>
-                {row.type}
-              </span>
+              <span>{row.type}</span>
             </div>
-            </a>
-        )
-      }
-      )}
+          </div>
+        );
+      })}
       {collectionSearchResults?.length === 0 && (
         <div className="data-catalogue-table__no-results">
           <span>No results found for "{activeFilters.textQuery}"</span>
@@ -53,6 +57,6 @@ const DataCatalogueTable: React.FC = () => {
       )}
     </div>
   );
-}
+};
 
 export default DataCatalogueTable;
