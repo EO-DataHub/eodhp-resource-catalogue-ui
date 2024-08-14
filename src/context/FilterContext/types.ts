@@ -25,7 +25,7 @@ export interface FilterProviderProps {
 export interface FilterData {
   id: number;
   name: string;
-  type: "multi-select" | "date-range";
+  type: "multi-select" | "date-range" | "text-input";
   options?: FilterOption[];
 }
 

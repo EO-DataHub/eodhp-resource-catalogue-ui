@@ -40,4 +40,9 @@
       transition: padding-left 1s;
     }
   }
+
+  label {
+    display: flex;
+    align-items: center;
+  }
 }

@@ -4,11 +4,16 @@ import { FilterData } from "./types";
 export const exampleFilterData: FilterData[] = [
   {
     id: 0,
+    type: 'text-input',
+    name: 'Search',
+  },
+  {
+    id: 1,
     type: "date-range",
     name: "Temporal Extent",
   },
   {
-    id: 1,
+    id: 2,
     name: "Product Type",
     type: "multi-select",
     options: [
@@ -21,7 +26,7 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
-    id: 2,
+    id: 3,
     name: "License",
     type: "multi-select",
     options: [
@@ -32,7 +37,7 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     name: "Service Type",
     type: "multi-select",
     options: [
@@ -43,7 +48,7 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     name: "Data Type",
     type: "multi-select",
     options: [
