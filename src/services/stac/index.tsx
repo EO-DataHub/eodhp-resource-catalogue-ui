@@ -32,7 +32,8 @@ export const getStacCollections = async (
     data.collections.forEach(collection => {
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
-      collection.stacUrl = getStacUrl(collection.id);
+      collection.stacUrl = getStacUrl(collection);
+      console.log("stac url:", collection.stacUrl);
 
     });
     return data.collections;
@@ -42,8 +43,22 @@ export const getStacCollections = async (
   }
 }
 
-const getStacUrl = (collectionId: string): string => {
-  return `${import.meta.env.VITE_COLLECTION_ENDPOINT}/${collectionId}`;
+const getStacUrl = (collection: Collection): string => {
+
+  let stacUrl: string;
+
+  try {
+    collection.links.forEach(link => {
+
+      if (link.rel == 'self') {
+        stacUrl = `${import.meta.env.VITE_STAC_BROWSER}/#/external/${link.href}`;
+      }
+    })
+    return stacUrl;
+  } catch (error) {
+    console.error('Error fetching STAC collection URL: ', error);
+    throw error;
+  }
 }
 
 // Temporary function to return random image
