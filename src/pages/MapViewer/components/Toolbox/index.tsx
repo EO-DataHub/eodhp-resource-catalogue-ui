@@ -73,7 +73,7 @@ const Toolbox: React.FC = () => {
       className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
       onMouseDown={() => map.dragging.disable()}
       onMouseUp={() => map.dragging.enable()}
-      data-tooltip-id="my-tooltip"
+      data-tooltip-id="toolbox"
       data-tooltip-html={
         "This is a proof of concept of the Toolbox. These are not the collections currently within our STAC Catalogue. " +
         "<br/>However, you can still view some LST data served from within our EOX View Server. " +
@@ -82,14 +82,29 @@ const Toolbox: React.FC = () => {
         "<br/> <b>Ctrl + Click</b> to remove all GeoJSON and WMTS layers;"
       }
     >
-      <Tooltip id="my-tooltip" place="top"/>
+      <Tooltip id="toolbox" place="top" />
 
-      <div className="toolbox__window-actions">
+      <div className="toolbox__window-actions"
+
+      >
+        <Tooltip id="window-tooltip" place="bottom" />
         <span className="toolbox__window-action"
           onClick={() => setToolboxVisible(false)}
+          data-tooltip-id="window-tooltip"
+          data-tooltip-html={
+            "As there is no design yet for where the toolbox can 'dock' or minimise too, this will just hide the toolbox." +
+            "<br/>Refresh the page to get it back for now" + 
+            "<br/><br/> Any ideas for where this could clearly go, please let us know!"
+          }
         >_</span>
         <span className="toolbox__window-action"
           onClick={() => setToolboxVisible(false)}
+          data-tooltip-id="window-tooltip"
+          data-tooltip-html={
+            "As there is no design yet for where the toolbox can 'dock' or minimise too, this will just hide the toolbox." +
+            "<br/>Refresh the page to get it back for now" + 
+            "<br/><br/> Any ideas for where this could clearly go, please let us know!"
+          }
         >X</span>
       </div>
 
