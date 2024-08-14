@@ -8,4 +8,5 @@ export interface DataPoint {
   icon: React.FC;
   alt: string;
   text: string;
+  tooltip: string;
 }
