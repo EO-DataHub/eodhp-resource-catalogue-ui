@@ -33,8 +33,6 @@ export const getStacCollections = async (
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
       collection.stacUrl = getStacUrl(collection);
-      console.log("stac url:", collection.stacUrl);
-
     });
     return data.collections;
   } catch (error) {
