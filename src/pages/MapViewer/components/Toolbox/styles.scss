@@ -1,16 +1,17 @@
 .toolbox {
   width: 400px;
   height: 450px;
-  overflow-y: auto;
-  background-color: rgba(240, 240, 240, 0.938); // TODO: Find branding colour
   z-index: 99999;
+  position: relative;
 
   &__window-actions {
     width: 100%;
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    padding: 5px;
+    top: 5px;
+    right: 5px;
+    position: fixed;
 
     .toolbox__window-action {
       cursor: pointer;
@@ -24,6 +25,13 @@
       border-radius: 15%;
       font-size: 10px;
     }
+  }
+
+  &__content {
+    position: relative;
+    margin-top: 27px;
+    overflow-y: auto;
+    height: 100%;
   }
 
   &--hidden {

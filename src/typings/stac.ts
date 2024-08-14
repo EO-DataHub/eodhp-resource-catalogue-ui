@@ -105,6 +105,9 @@ export interface Collection {
    * https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#summaries
    */
   summaries?: Summaries;
+  thumbnailUrl?: string; // This not part of the spec, but is added for convenience.
+  stacUrl?: string; // This not part of the spec, but is added for convenience.
+  lastUpdated?: string; // This not part of the spec, but is added for convenience.
   [k: string]: unknown;
 }
 

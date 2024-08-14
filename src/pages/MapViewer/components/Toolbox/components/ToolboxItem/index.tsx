@@ -4,6 +4,7 @@ import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { ToolboxItemProps } from './types';
 import './leaflet-wmts.js';
+import { beautifyKey } from "utils/genericUtils";
 
 const ToolboxItem = (ItemData: ToolboxItemProps) => {
   const { thumbnail, title, dataPoints } = ItemData;
@@ -99,7 +100,7 @@ const ToolboxItem = (ItemData: ToolboxItemProps) => {
         <img src={thumbnail} alt="thumbnail" />
       </div>
       <div className="toolbox-item__right">
-        <span className="toolbox-item__right-title">{title}</span>
+        <span className="toolbox-item__right-title">{beautifyKey(title)}</span>
         {dataPoints.map((dataPoint, index) => (
           <div key={index} className="toolbox-item__data-point"
           >
