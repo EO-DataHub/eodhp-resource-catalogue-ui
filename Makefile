@@ -15,12 +15,3 @@ DOCKERREPO ?= public.ecr.aws/n1b3o1k2/ukeodhp
 #
 # testonce:
 # 	./venv/bin/pytest
-
-# lint:
-#     npm run lint
-
-
-lint-config:
-	curl -o .eslintrc.cjs https://raw.githubusercontent.com/EO-DataHub/github-actions/main/.eslintrc.cjs
-
-setup: lint-config
