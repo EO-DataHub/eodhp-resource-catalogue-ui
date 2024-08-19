@@ -5,13 +5,16 @@
  *
  * This function is used to parse a date in any format into a string.
  */
-export const parseDate = (date: unknown): string => {
+export const parseDate = (date: unknown, includeTime = false): string => {
   if (
     typeof date === "string" ||
     typeof date === "number" ||
     date instanceof Date
   ) {
-    return new Date(date).toLocaleDateString();
+    return (
+      new Date(date).toLocaleDateString() +
+      (includeTime ? " " + new Date(date).toLocaleTimeString() : "")
+    );
   } else {
     console.error("Invalid date:", date);
     return "N/A";

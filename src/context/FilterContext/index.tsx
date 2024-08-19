@@ -13,6 +13,16 @@ const initialState: FilterState = {
   filterOptions: exampleFilterData,
   activeFilters: {
     textQuery: "",
+    temporal: {
+      start: "",
+      end: "",
+    },
+    bounds: {
+      west: 0,
+      south: 0,
+      east: 0,
+      north: 0,
+    },
   },
 };
 
@@ -40,6 +50,54 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     dispatch({ type: "SET_ACTIVE_FILTERS", payload });
   };
 
+  const setTemporalStartFilter = (end: string) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      temporal: {
+        ...state.activeFilters.temporal,
+        start: end,
+      },
+    });
+  }
+
+  const setTemporalEndFilter = (end: string) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      temporal: {
+        ...state.activeFilters.temporal,
+        end: end,
+      },
+    });
+  }
+
+  const setBoundsFilter = (west: number, south: number, east: number, north: number) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      bounds: {
+        west,
+        south,
+        east,
+        north,
+      },
+    });
+  }
+
+  const resetFilters = () => {
+    setActiveFilters({
+      textQuery: "",
+      temporal: {
+        start: "",
+        end: "",
+      },
+      bounds: {
+        west: 0,
+        south: 0,
+        east: 0,
+        north: 0,
+      },
+    });
+  }
+
   const value = {
     state: {
       filterOptions: state.filterOptions,
@@ -48,6 +106,10 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     actions: {
       setFilterOptions,
       setActiveFilters,
+      setTemporalStartFilter,
+      setTemporalEndFilter,
+      setBoundsFilter,
+      resetFilters,
     },
   };
 

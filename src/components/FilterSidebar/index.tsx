@@ -14,14 +14,30 @@ const FilterSidebar: React.FC = () => {
   const { state: FilterState, actions: FilterActions } = useFilters();
   const { filterOptions: filterOptions, activeFilters: activeFilters } =
     FilterState;
-  const { setActiveFilters } = FilterActions;
+  const {
+    setActiveFilters,
+    setTemporalStartFilter,
+    setTemporalEndFilter,
+    resetFilters,
+  } = FilterActions;
 
   const renderFilterComponent = (filter: FilterData) => {
     switch (filter.type) {
       case "multi-select":
         return <MultiSelectFilter filterData={filter} />;
       case "date-range":
-        return <TemporalFilter filterData={filter} />;
+        return (
+          <TemporalFilter
+            filterData={filter}
+            onStartDateChange={(value: string) => {
+              setTemporalStartFilter(value);
+            }}
+            onEndDateChange={(value: string) => {
+              setTemporalEndFilter(value);
+            }}
+            value={activeFilters.temporal}
+          />
+        );
       case "text-input":
         return (
           <TextFilter
@@ -53,7 +69,13 @@ const FilterSidebar: React.FC = () => {
         </div>
 
         <div className="filter-footer">
-          <button>Reset</button>
+          <button
+            onClick={() => {
+              resetFilters();
+            }}
+          >
+            Reset
+          </button>
         </div>
       </div>
 

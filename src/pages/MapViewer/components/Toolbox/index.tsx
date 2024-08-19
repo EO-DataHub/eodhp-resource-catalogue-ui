@@ -1,19 +1,30 @@
 import "./styles.scss";
-import ToolboxItem from "./components/ToolboxItem";
-
 import { useMap } from "react-leaflet";
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
-import { useMapSettings } from "@/hooks/useMapSettings";
-import { parseCollectionDataPoints } from "@/utils/stacUtils";
-import "react-tooltip/dist/react-tooltip.css";
+import { useToolbox } from "@/hooks/useToolbox";
+import ToolboxCollections from "./components/ToolboxCollections";
+import ToolboxItems from "./components/ToolboxItems";
 
 const Toolbox: React.FC = () => {
   const [toolboxVisible, setToolboxVisible] = useState(true); // TODO: Move to context
+
+  const {
+    state: { activePage },
+  } = useToolbox();
+
   const map = useMap();
-  const { state: MapSettingsState } = useMapSettings();
-  const { toolboxCollectionsResults: toolboxCollectionsResults } =
-    MapSettingsState;
+
+  const renderContent = () => {
+    switch (activePage) {
+      case "collections":
+        return <ToolboxCollections />;
+      case "items":
+        return <ToolboxItems />;
+      default:
+        return <ToolboxCollections />;
+    }
+  };
 
   return (
     <div
@@ -52,16 +63,7 @@ const Toolbox: React.FC = () => {
         </span>
       </div>
 
-      <div className="toolbox__content">
-        {toolboxCollectionsResults.map((collection, index) => (
-          <ToolboxItem
-            key={index}
-            thumbnail={collection.thumbnailUrl}
-            title={collection.title ? collection.title : collection.id}
-            dataPoints={parseCollectionDataPoints(collection)}
-          />
-        ))}
-      </div>
+      <div className="toolbox__content">{renderContent()}</div>
     </div>
   );
 };

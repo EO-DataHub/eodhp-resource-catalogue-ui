@@ -1,7 +1,8 @@
 export interface ToolboxItemProps {
   thumbnail: string;
   title: string;
-  dataPoints: DataPoint[];
+  dataPoints?: DataPoint[];
+  onClick: () => void;
 }
 
 export interface DataPoint {

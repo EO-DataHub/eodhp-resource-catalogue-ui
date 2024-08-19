@@ -2,8 +2,9 @@ import { Collection } from "typings/stac";
 import { CiCalendarDate } from "react-icons/ci";
 import { IoTimeOutline } from "react-icons/io5";
 import { TbAxisX } from "react-icons/tb";
-import { DataPoint } from "@/pages/MapViewer/components/Toolbox/components/ToolboxItem/types";
+import { DataPoint } from "@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types";
 import { parseDate, beautifyKey } from "./genericUtils";
+import { Feature } from "typings/stac";
 
 /**
  * Further discussion needed around this function.
@@ -73,3 +74,27 @@ export const parseCollectionDataPoints = (
   return dataPoints;
 };
 
+export const parseFeatureDataPoints = (feature: Feature): DataPoint[] => {
+  // just return the time
+  const dataPoints: DataPoint[] = [];
+  const { properties } = feature;
+  const { datetime } = properties;
+
+  if (datetime) {
+    dataPoints.push({
+      icon: IoTimeOutline,
+      alt: "Time Icon",
+      text: parseDate(datetime, true),
+      tooltip: "Datetime",
+    });
+  }
+
+  return dataPoints;
+};
+
+export const returnFeatureThumbnail = (feature: Feature): string => {
+  return (
+    feature.links.find((link) => link.rel === "thumbnail")?.href ||
+    "https://via.placeholder.com/110"
+  );
+};
