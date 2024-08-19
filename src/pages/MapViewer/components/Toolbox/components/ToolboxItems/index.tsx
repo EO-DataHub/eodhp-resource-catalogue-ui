@@ -44,7 +44,8 @@ const ToolboxItems = () => {
               title={item.id.toString()}
               thumbnail={returnFeatureThumbnail(item)}
               dataPoints={parseFeatureDataPoints(item)}
-              onClick={() => {
+              onClick={(e) => {
+                // Temporary function to add layer to the map
                 map.eachLayer((layer) => {
                   if (layer instanceof L.GeoJSON) {
                     map.removeLayer(layer);
@@ -57,8 +58,16 @@ const ToolboxItems = () => {
                   fillOpacity: 0,
                 });
                 boundsLayer.addTo(map);
-
                 map.fitBounds(boundsLayer.getBounds());
+
+                if (e.shiftKey) {
+                  const url = item.links.find(
+                    (link) => link.rel === "self"
+                  )?.href;
+                  if (url) {
+                    window.open(url, "_blank");
+                  }
+                }
               }}
             />
           );

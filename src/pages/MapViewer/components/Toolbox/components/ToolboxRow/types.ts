@@ -2,7 +2,7 @@ export interface ToolboxItemProps {
   thumbnail: string;
   title: string;
   dataPoints?: DataPoint[];
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export interface DataPoint {
