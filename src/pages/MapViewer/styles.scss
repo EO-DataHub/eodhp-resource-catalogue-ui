@@ -46,3 +46,17 @@
     font-size: 20px;
   }
 }
+
+.btn-stac-browser {
+  position: absolute;
+  top: 8.5px;
+  right: 50px;
+  background-color: white;
+  border-radius: 10%;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+

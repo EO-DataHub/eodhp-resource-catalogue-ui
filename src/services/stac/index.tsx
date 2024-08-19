@@ -36,7 +36,7 @@ export const getStacCollections = async (
     data.collections.forEach((collection) => {
       collection.thumbnailUrl = getRandomImage();
       collection.lastUpdated = getRandomDate();
-      collection.stacUrl = getStacUrl(collection.id);
+      collection.stacUrl = getStacUrl(collection);
     });
     return data.collections;
   } catch (error) {
@@ -97,10 +97,6 @@ export const getStacItems = async (
   };
 };
 
-const getStacUrl = (collectionId: string): string => {
-  return `${import.meta.env.VITE_STAC_ENDPOINT}/${collectionId}`;
-};
-
 const getStacCatalogUrl = (collection: Collection): string => {
   const selfLink = collection.links.find(link => link.rel === "self");
   if (!selfLink?.href) return '';
@@ -120,6 +116,24 @@ const renderDateInterval = (startDate: string, endDate?: string): string => {
   const formattedStartDate = formatDate(startDate);
   return endDate ? `${formattedStartDate}/${formatDate(endDate)}` : formattedStartDate;
 };
+
+const getStacUrl = (collection: Collection): string => {
+
+  let stacUrl: string;
+
+  try {
+    collection.links.forEach(link => {
+
+      if (link.rel == 'self') {
+        stacUrl = `${import.meta.env.VITE_STAC_BROWSER}/#/external/${link.href}`;
+      }
+    })
+    return stacUrl;
+  } catch (error) {
+    console.error('Error fetching STAC collection URL: ', error);
+    throw error;
+  }
+}
 
 // Temporary function to return random image
 const getRandomImage = () => {

@@ -34,7 +34,9 @@ const MapViewer = () => {
       >
         <FaTable />
       </div>
-
+      <div className="btn-stac-browser" onClick={() => window.open(`${import.meta.env.VITE_STAC_BROWSER}/#/external/${import.meta.env.VITE_COLLECTION_ENDPOINT}`, "_blank")}>
+      STAC Browser
+    </div>
     </div>
   );
 };

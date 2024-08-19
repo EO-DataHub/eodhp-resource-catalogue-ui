@@ -48,6 +48,7 @@ export interface Collection {
    * [CommonMark 0.29](http://commonmark.org/) syntax MAY be used for rich text representation.
    */
   description: string;
+
   /**
    * List of keywords describing the Collection.
    */
@@ -124,6 +125,17 @@ interface SpatialExtentObject {
 interface TemporalExtentObject {
   interval: TemporalExtents;
   [k: string]: unknown;
+  lastUpdated?: string;
+  stacUrl: string;
+  thumbnailUrl?: string;
+  type: string;
+  links: Link[];
+}
+
+// Temporarily added for finding href pointers for STAC browser
+export interface Link {
+  href: string;
+  rel: string;
 }
 
 interface Summaries {
