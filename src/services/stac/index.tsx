@@ -120,10 +120,8 @@ const renderDateInterval = (startDate: string, endDate?: string): string => {
 const getStacUrl = (collection: Collection): string => {
 
   let stacUrl: string;
-
   try {
     collection.links.forEach(link => {
-
       if (link.rel == 'self') {
         stacUrl = `${import.meta.env.VITE_STAC_BROWSER}/#/external/${link.href}`;
       }
