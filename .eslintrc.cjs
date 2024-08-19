@@ -6,7 +6,10 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        map: [['@/*', 'src/*']],
+        map: [
+          ['@/*', 'src/*'],
+          ['msw/browser', './node_modules/msw/browser'],
+        ],
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
       },
     },

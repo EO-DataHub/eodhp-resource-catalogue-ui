@@ -13,6 +13,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // settings: {
+  //   'import/resolver': {
+  //     alias: {
+  //       map: [['msw/browser', './node_modules/msw/browser']],
+  //     },
+  //   },
+  // },
   test: {
     globals: true,
     environment: 'jsdom',
