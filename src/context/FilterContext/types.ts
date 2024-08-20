@@ -25,7 +25,7 @@ export interface FilterProviderProps {
   children: React.ReactNode;
 }
 
-interface Bounds {
+export interface Bounds {
   west: number;
   south: number;
   east: number;

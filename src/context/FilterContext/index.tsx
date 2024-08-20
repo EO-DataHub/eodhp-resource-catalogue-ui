@@ -7,6 +7,7 @@ import {
   FilterData,
   FilterProviderProps,
   FilterState,
+  Bounds,
 } from "./types";
 
 const initialState: FilterState = {
@@ -70,14 +71,14 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     });
   }
 
-  const setBoundsFilter = (west: number, south: number, east: number, north: number) => {
+  const setBoundsFilter = (bounds: Bounds) => {
     setActiveFilters({
       ...state.activeFilters,
       bounds: {
-        west,
-        south,
-        east,
-        north,
+        west: bounds.west,
+        south: bounds.south,
+        east: bounds.east,
+        north: bounds.north,
       },
     });
   }

@@ -14,12 +14,12 @@ const Map = () => {
   useDebounce(
     () => {
       const bounds = map.getBounds();
-      setBoundsFilter(
-        bounds.getWest(),
-        bounds.getSouth(),
-        bounds.getEast(),
-        bounds.getNorth()
-      );
+      setBoundsFilter({
+        west: bounds.getWest(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        north: bounds.getNorth(),
+      });
     },
     300,
     [position]
