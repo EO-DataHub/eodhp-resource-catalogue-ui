@@ -59,7 +59,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         start: end,
       },
     });
-  }
+  };
 
   const setTemporalEndFilter = (end: string) => {
     setActiveFilters({
@@ -69,7 +69,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         end: end,
       },
     });
-  }
+  };
 
   const setBoundsFilter = (bounds: Bounds) => {
     setActiveFilters({
@@ -81,9 +81,9 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         north: bounds.north,
       },
     });
-  }
+  };
 
-  const resetFilters = () => 
+  const resetFilters = () =>
     setActiveFilters({
       textQuery: "",
       temporal: {
@@ -97,7 +97,6 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         north: 0,
       },
     });
-  
 
   const value = {
     state: {
