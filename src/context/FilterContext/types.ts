@@ -1,4 +1,5 @@
 import React from "react";
+import { Bounds, Temporal } from "@/typings/common";
 
 export interface FilterState {
   filterOptions: FilterData[];
@@ -25,20 +26,7 @@ export interface FilterProviderProps {
   children: React.ReactNode;
 }
 
-export interface Bounds {
-  west: number;
-  south: number;
-  east: number;
-  north: number;
-}
-
-interface Temporal {
-  start: string;
-  end: string;
-}
-
 export interface FilterData {
-  id: number;
   name: string;
   type: "multi-select" | "date-range" | "text-input";
   options?: FilterOption[];

@@ -1,4 +1,4 @@
-import { Collection } from "typings/stac";
+import { Collection } from "@/typings/stac";
 import { StacCollectionsResponse } from "./types";
 import hgb from "@/assets/placeholders/hgb.png";
 import landsat from "@/assets/placeholders/landsat.png";
@@ -6,6 +6,7 @@ import sentinel2 from "@/assets/placeholders/sentinel-2.png";
 import terraclimate from "@/assets/placeholders/terraclimate.png";
 import axios from "axios";
 import { FeatureCollection } from "geojson";
+import { formatDateAsISO8601 } from "@/utils/genericUtils";
 
 // There's two ways to go about this:
 // 1. As seen below, retrieve every single collection matching the query and then paginate on the client side
@@ -52,8 +53,6 @@ export const getStacItems = async (
   startDate: string,
   endDate: string
 ): Promise<FeatureCollection> => {
-  console.log("[getStacItems] collection:", collection);
-
   const itemsUrl = `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
 
   const data = {
@@ -111,10 +110,8 @@ const getStacCatalogUrl = (collection: Collection): string => {
 };
 
 const renderDateInterval = (startDate: string, endDate?: string): string => {
-  const formatDate = (date: string) => new Date(date).toISOString().replace(/T.*Z$/, "T00:00:00.000Z");
-
-  const formattedStartDate = formatDate(startDate);
-  return endDate ? `${formattedStartDate}/${formatDate(endDate)}` : formattedStartDate;
+  const formattedStartDate = formatDateAsISO8601(startDate);
+  return endDate ? `${formattedStartDate}/${formatDateAsISO8601(endDate)}` : formattedStartDate;
 };
 
 const getStacUrl = (collection: Collection): string => {

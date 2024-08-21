@@ -21,9 +21,9 @@ const DataCatalogueTable: React.FC = () => {
   return (
     <div className="data-catalogue-table">
       <div className="data-catalogue-table__query">
-        {activeFilters.textQuery && (
+        {activeFilters.textQuery ? (
           <span>Search results for "{activeFilters.textQuery}"</span>
-        )}
+        ) : null }
       </div>
       {items.map((row) => {
         return (

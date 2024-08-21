@@ -1,5 +1,5 @@
 import React from "react";
-import { Collection } from "typings/stac"
+import { Collection } from "@/typings/stac"
 import { FeatureCollection } from "geojson";
 
 export interface ToolboxState {

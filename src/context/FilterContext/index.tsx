@@ -7,8 +7,8 @@ import {
   FilterData,
   FilterProviderProps,
   FilterState,
-  Bounds,
 } from "./types";
+import { Bounds } from "@/typings/common";
 
 const initialState: FilterState = {
   filterOptions: exampleFilterData,
@@ -83,7 +83,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     });
   }
 
-  const resetFilters = () => {
+  const resetFilters = () => 
     setActiveFilters({
       textQuery: "",
       temporal: {
@@ -97,7 +97,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         north: 0,
       },
     });
-  }
+  
 
   const value = {
     state: {

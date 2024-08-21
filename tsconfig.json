@@ -15,15 +15,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "styles/*": [
-        "src/styles/*"
-      ],
-      "typings/*": [
-        "src/typings/*"
-      ],
-      "utils/*": [
-        "src/utils/*"
       ]
     }
   },

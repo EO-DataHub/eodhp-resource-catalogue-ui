@@ -3,17 +3,14 @@ import { FilterData } from "./types";
 // Placeholder for now, this will be dynamically generated based on the data
 export const exampleFilterData: FilterData[] = [
   {
-    id: 0,
     type: 'text-input',
     name: 'Search',
   },
   {
-    id: 1,
     type: "date-range",
     name: "Temporal Extent",
   },
   {
-    id: 2,
     name: "Product Type",
     type: "multi-select",
     options: [
@@ -26,7 +23,6 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
-    id: 3,
     name: "License",
     type: "multi-select",
     options: [
@@ -37,7 +33,6 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
-    id: 4,
     name: "Service Type",
     type: "multi-select",
     options: [
@@ -48,7 +43,6 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
-    id: 5,
     name: "Data Type",
     type: "multi-select",
     options: [

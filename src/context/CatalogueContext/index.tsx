@@ -1,6 +1,6 @@
 import { getStacCollections } from "@/services/stac";
 import React, { createContext, useEffect, useReducer } from "react";
-import { Collection } from "typings/stac";
+import { Collection } from "@/typings/stac";
 import {
   CatalogueAction,
   CatalogueContextType,

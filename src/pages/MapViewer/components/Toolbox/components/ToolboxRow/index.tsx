@@ -1,14 +1,14 @@
 import "./types.js";
 import "./styles.scss";
 import { ToolboxItemProps } from "./types.js";
-import { beautifyKey } from "utils/genericUtils";
+import { titleFromId } from "@/utils/genericUtils";
 
-const ToolboxRow: React.FC<ToolboxItemProps> = ({
+const ToolboxRow = ({
   thumbnail,
   title,
   dataPoints,
   onClick,
-}) => {
+}: ToolboxItemProps) => {
   return (
     <div className="toolbox-row" onMouseUp={onClick}>
       <div className="toolbox-row__left">
@@ -22,9 +22,9 @@ const ToolboxRow: React.FC<ToolboxItemProps> = ({
         />
       </div>
       <div className="toolbox-row__right">
-        <span className="toolbox-row__right-title">{beautifyKey(title)}</span>
-        {dataPoints?.map((dataPoint, index) => (
-          <div key={index} className="toolbox-row__data-point">
+        <span className="toolbox-row__right-title">{titleFromId(title)}</span>
+        {dataPoints?.map((dataPoint) => (
+          <div key={dataPoint.text} className="toolbox-row__data-point">
             <dataPoint.icon />
             <span className="toolbox-row__data-point-text">
               {dataPoint.text}

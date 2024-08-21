@@ -36,10 +36,6 @@ const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
       const fetchData = async () => {
         try {
           const collections = await getStacCollections(activeFilters.textQuery);
-          console.log(
-            "[Detected Input Change] Fetched Collections",
-            collections
-          );
           dispatch({
             type: "SET_TOOLBOX_COLLECTIONS_RESULTS",
             payload: collections,

@@ -5,7 +5,7 @@ import {
   ToolboxProviderProps,
   ToolboxState,
 } from "./types";
-import { Collection } from "typings/stac";
+import { Collection } from "@/typings/stac";
 import { getStacItems } from "@/services/stac";
 
 import { FeatureCollection } from "geojson";
@@ -51,7 +51,6 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
   useEffect(() => {
     const fetchItems = async () => {
       if (state.selectedCollection) {
-        console.log("[ToolboxProvider] activeFilters:", activeFilters);
         try {
           const items = await getStacItems(
             state.selectedCollection,

@@ -23,12 +23,22 @@ export const parseDate = (date: unknown, includeTime = false): string => {
 
 /**
  *
+ * @param date
+ * @returns string
+ * 
+ * This function is used to format a date as an ISO8601 string.
+ */
+export const formatDateAsISO8601 = (date: string) => new Date(date).toISOString().replace(/T.*Z$/, "T00:00:00.000Z");
+
+/**
+ *
  * @param key
  * @returns string
  *
- * This function is used to beautify a key string.
+ * This function converts an ID into a title.
+ * It replaces underscores and hyphens with spaces, and capitalises the first letter of each word.
  */
-export const beautifyKey = (key: string): string => {
+export const titleFromId = (key: string): string => {
   key = key.replace(/_/g, " ").replace(/-/g, " ");
   key = key
     .split(" ")

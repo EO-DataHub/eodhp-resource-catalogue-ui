@@ -14,9 +14,9 @@ const ToolboxCollections: React.FC = () => {
 
   return (
     <div className="toolbox__collections">
-      {toolboxCollectionsResults.map((collection, index) => (
+      {toolboxCollectionsResults.map((collection) => (
         <ToolboxRow
-          key={index}
+          key={collection.id}
           thumbnail={collection.thumbnailUrl}
           title={collection.title ? collection.title : collection.id}
           dataPoints={parseCollectionDataPoints(collection)}

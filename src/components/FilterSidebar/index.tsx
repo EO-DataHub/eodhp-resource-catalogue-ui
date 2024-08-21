@@ -62,18 +62,14 @@ const FilterSidebar: React.FC = () => {
 
         <div className="filter-body">
           {filterOptions?.map((filter: FilterData) => (
-            <div key={filter.id} className="filter">
+            <div key={`fs-${filter.name}`} className="filter">
               {renderFilterComponent(filter)}
             </div>
           ))}
         </div>
 
         <div className="filter-footer">
-          <button
-            onClick={() => {
-              resetFilters();
-            }}
-          >
+          <button onClick={() => resetFilters()}>
             Reset
           </button>
         </div>

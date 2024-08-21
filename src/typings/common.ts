@@ -1,3 +1,5 @@
+// Credit https://github.com/blacha/stac-ts for the STAC typings
+
 export type StacVersion = '1.0.0';
 export type StacExtensions = string[];
 export type StacEntity = 'Collection' | 'Catalog' | 'Item';
@@ -89,4 +91,16 @@ export type StacProvider = {
   roles?: StacRoles[];
   url?: string;
   [k: string]: unknown;
+};
+
+export type Bounds = {
+  west: number;
+  south: number;
+  east: number;
+  north: number;
+};
+
+export type Temporal = {
+  start: string;
+  end: string;
 };

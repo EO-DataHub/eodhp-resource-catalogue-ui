@@ -1,3 +1,5 @@
+// Credit https://github.com/blacha/stac-ts for the STAC typings
+
 export type GeoJSONGeometry =
   | GeoJSONPoint2
   | GeoJSONLineString2
