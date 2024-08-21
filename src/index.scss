@@ -1,4 +1,4 @@
-@import 'styles/main.scss';
+@import '@/styles/main.scss';
 
 * {
   margin: 0;
@@ -39,5 +39,10 @@
       padding-left: 32px;
       transition: padding-left 1s;
     }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
   }
 }

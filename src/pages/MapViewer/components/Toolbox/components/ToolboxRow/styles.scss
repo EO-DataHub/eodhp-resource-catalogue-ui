@@ -1,23 +1,31 @@
-@import "styles/main";
+@import "@/styles/main";
 
-.toolbox-item {
+.toolbox-row {
   display: flex;
   flex-direction: row;
   padding: 10px;
   cursor: pointer;
+  align-items: center;
 
   &:hover {
     background-color: $hover-colour;
   }
 
   &__left {
-    max-width: 45%;
-    max-height: 200px;
+    width: 120px;
+    height: -webkit-fill-available;
+    max-height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     img {
-      width: 100%;
-      height: 100%;
+      height: 100px;
+      width: 100px;
+      // height: -webkit-fill-available;
       border:  1px solid black;
+      object-fit: cover;
     }
   }
 
@@ -25,20 +33,22 @@
     display: flex;
     flex-direction: column;
     margin-left: 10px;
+    width: calc(100% - 145px);
 
     &-title {
       text-decoration: underline;
       margin-bottom: 0.25em;
       font-weight: bold;
       font-size: 0.875rem;
+      word-wrap: break-word;
+      overflow: hidden;
     }
 
-    .toolbox-item__data-point {
+    .toolbox-row__data-point {
       display: flex;
       flex-direction: row;
       margin-bottom: 2px;
       font-size: 1em;
-      align-items: center;
 
       &-icon {
         font-size: 1.2em;

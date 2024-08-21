@@ -1,12 +1,30 @@
 import React, { createContext, useReducer } from "react";
 import { exampleFilterData } from "./placeholderData";
-import { FilterAction, FilterActiveFilters, FilterContextType, FilterData, FilterProviderProps, FilterState } from "./types";
+import {
+  FilterAction,
+  FilterActiveFilters,
+  FilterContextType,
+  FilterData,
+  FilterProviderProps,
+  FilterState,
+} from "./types";
+import { Bounds } from "@/typings/common";
 
 const initialState: FilterState = {
   filterOptions: exampleFilterData,
   activeFilters: {
     textQuery: "",
-  }
+    temporal: {
+      start: "",
+      end: "",
+    },
+    bounds: {
+      west: 0,
+      south: 0,
+      east: 0,
+      north: 0,
+    },
+  },
 };
 
 const reducer = (state: FilterState, action: FilterAction): FilterState => {
@@ -27,24 +45,77 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
 
   const setFilterOptions = (payload: FilterData[]) => {
     dispatch({ type: "SET_FILTER_OPTIONS", payload });
-  }
+  };
 
   const setActiveFilters = (payload: FilterActiveFilters) => {
     dispatch({ type: "SET_ACTIVE_FILTERS", payload });
-  }
+  };
+
+  const setTemporalStartFilter = (end: string) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      temporal: {
+        ...state.activeFilters.temporal,
+        start: end,
+      },
+    });
+  };
+
+  const setTemporalEndFilter = (end: string) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      temporal: {
+        ...state.activeFilters.temporal,
+        end: end,
+      },
+    });
+  };
+
+  const setBoundsFilter = (bounds: Bounds) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      bounds: {
+        west: bounds.west,
+        south: bounds.south,
+        east: bounds.east,
+        north: bounds.north,
+      },
+    });
+  };
+
+  const resetFilters = () =>
+    setActiveFilters({
+      textQuery: "",
+      temporal: {
+        start: "",
+        end: "",
+      },
+      bounds: {
+        west: 0,
+        south: 0,
+        east: 0,
+        north: 0,
+      },
+    });
 
   const value = {
     state: {
       filterOptions: state.filterOptions,
-      activeFilters: state.activeFilters
+      activeFilters: state.activeFilters,
     },
     actions: {
       setFilterOptions,
       setActiveFilters,
+      setTemporalStartFilter,
+      setTemporalEndFilter,
+      setBoundsFilter,
+      resetFilters,
     },
   };
 
-  return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>;
+  return (
+    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
+  );
 };
 
 export { FilterContext, FilterProvider };

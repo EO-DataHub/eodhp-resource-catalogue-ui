@@ -1,4 +1,4 @@
-import { Collection } from 'typings/stac';
+import { Collection } from '@/typings/stac';
 
 interface Link {
   href: string;

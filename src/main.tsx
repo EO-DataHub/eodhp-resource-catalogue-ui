@@ -7,9 +7,10 @@ import { FilterProvider } from "./context/FilterContext";
 import App from "./App";
 import { CatalogueProvider } from "./context/CatalogueContext";
 import { MapProvider } from "./context/MapContext";
+import { ToolboxProvider } from "./context/ToolboxContext";
 
 const rootElement = document.getElementById("root");
-if (!rootElement) throw new Error('Failed to find the root element');
+if (!rootElement) throw new Error("Failed to find the root element");
 
 const root = ReactDOM.createRoot(rootElement);
 
@@ -20,7 +21,9 @@ root.render(
         <CatalogueProvider>
           <FilterProvider>
             <MapProvider>
-              <App />
+              <ToolboxProvider>
+                <App />
+              </ToolboxProvider>
             </MapProvider>
           </FilterProvider>
         </CatalogueProvider>

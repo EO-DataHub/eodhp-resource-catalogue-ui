@@ -1,16 +1,22 @@
 .toolbox {
-  width: 350px;
+  width: 400px;
   height: 450px;
-  overflow-y: auto;
-  background-color: rgba(240, 240, 240, 0.938); // TODO: Find branding colour
   z-index: 99999;
+  position: relative;
+
+  &-content-container {
+    height: 100%;
+    box-sizing: border-box;
+  }
 
   &__window-actions {
     width: 100%;
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    padding: 5px;
+    top: 5px;
+    right: 5px;
+    position: fixed;
 
     .toolbox__window-action {
       cursor: pointer;
@@ -26,7 +32,34 @@
     }
   }
 
+  &__content {
+    position: relative;
+    margin-top: 27px;
+    height: 100%;
+  }
+
   &--hidden {
     display: none;
+  }
+
+  &__header {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 99999;
+    cursor: grab;
+
+    &-title {
+      display: flex;
+      align-items: flex-end;
+      font-weight: bold;
+      justify-content: center;
+    }
+
+    &-back {
+      cursor: pointer;
+    }
   }
 }

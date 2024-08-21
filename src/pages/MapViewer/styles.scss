@@ -24,6 +24,7 @@
   .draggable {
     position: absolute;
     z-index: 9999;
+    background-color: rgba(240, 240, 240, 0.9); // TODO: Find branding colour
   }
 }
 
@@ -49,13 +50,20 @@
 .btn-stac-browser {
   position: absolute;
   top: 8.5px;
-  right: 50px;
-  background-color: white;
-  border-radius: 10%;
-  padding: 5px;
+  right: 55px;
   align-items: center;
   display: flex;
   justify-content: center;
-  border: 4px solid rgba(0, 0, 0, 0.2);
+  padding: 2px;
+  height: 34px;
+  width: 34px;
 
+  img {
+    align-self: center;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 10%;
+  }
 }
