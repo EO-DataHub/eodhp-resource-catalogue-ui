@@ -41,7 +41,7 @@ const MapViewer = () => {
         onClick={() =>
           window.open(
             `${import.meta.env.VITE_STAC_BROWSER}/#/external/${
-              import.meta.env.VITE_COLLECTION_ENDPOINT
+              import.meta.env.VITE_STAC_ENDPOINT
             }`,
             "_blank"
           )
