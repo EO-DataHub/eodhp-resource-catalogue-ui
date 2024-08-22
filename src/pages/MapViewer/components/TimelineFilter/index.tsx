@@ -1,13 +1,7 @@
-
-import './styles.scss'
+import './styles.scss';
 
 const TimelineFilter = () => {
-
-  return (
-    <div className="map-timeline">
-      {/* Timeline component */}
-    </div>
-  )
-}
+  return <div className="map-timeline">{/* Timeline component */}</div>;
+};
 
 export default TimelineFilter;

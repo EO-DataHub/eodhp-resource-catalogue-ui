@@ -1,4 +1,4 @@
-import "./styles.scss";
+import './styles.scss';
 
 const TextFilter: React.FC<{
   placeholder: string;
@@ -8,10 +8,10 @@ const TextFilter: React.FC<{
   return (
     <div className="text-filter">
       <input
-        type="text"
         placeholder={placeholder}
-        onChange={(e) => onFilterChange(e.target.value)}
+        type="text"
         value={value}
+        onChange={(e) => onFilterChange(e.target.value)}
       />
     </div>
   );

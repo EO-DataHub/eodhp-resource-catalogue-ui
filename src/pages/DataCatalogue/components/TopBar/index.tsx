@@ -1,11 +1,13 @@
-import { useCatalogue } from "@/hooks/useCatalogue";
-import { useFilters } from "@/hooks/useFilters";
-import { getStacCollections } from "@/services/stac";
-import { FaMap } from "react-icons/fa";
+import { FaMap } from 'react-icons/fa';
 import ResponsivePagination from 'react-responsive-pagination';
+
+import { useApp } from '@/hooks/useApp';
+import { useCatalogue } from '@/hooks/useCatalogue';
+import { useFilters } from '@/hooks/useFilters';
+import { getStacCollections } from '@/services/stac';
+
 import 'react-responsive-pagination/themes/classic.css';
 import './styles.scss';
-import { useApp } from "@/hooks/useApp";
 
 const TopBar: React.FC = () => {
   const { actions: AppActions } = useApp();
@@ -24,32 +26,35 @@ const TopBar: React.FC = () => {
       const data = await getStacCollections(textQuery);
       setActiveFilters({
         ...activeFilters,
-        textQuery
+        textQuery,
       });
       setCollectionSearchResults(data);
     } catch (error) {
       console.error('Error fetching collections:', error);
     }
-  }
+  };
 
   return (
     <div className="top-bar">
       <div className="top-bar__controls">
         <div className="top-bar__searchbox-container">
-          <input type="text" placeholder="Search" value={textQuery} onChange={(e) => setTextQuery(e.target.value)} onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleClick();
-            }
-          }} />
+          <input
+            placeholder="Search"
+            type="text"
+            value={textQuery}
+            onChange={(e) => setTextQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleClick();
+              }
+            }}
+          />
           <button className="top-bar__searchbox-button" onClick={() => handleClick()}>
             Search
           </button>
         </div>
         <div className="top-bar__actions-container">
-          <FaMap 
-            className="top-bar__actions-icon"
-            onClick={() => setActiveContent('map')}
-          />
+          <FaMap className="top-bar__actions-icon" onClick={() => setActiveContent('map')} />
         </div>
       </div>
       <div className="top-bar__pagination">
@@ -58,13 +63,12 @@ const TopBar: React.FC = () => {
           // for the total we need to divide the total number of collections by the number of items per page and then round up
           total={Math.ceil(collectionSearchResults?.length / 6) || 1}
           onPageChange={(e) => {
-            setActivePage(e)
+            setActivePage(e);
           }}
         />
       </div>
     </div>
-  )
-
-}
+  );
+};
 
 export default TopBar;

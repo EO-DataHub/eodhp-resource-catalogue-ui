@@ -1,4 +1,4 @@
-import { FilterData } from "@/context/FilterContext/types";
+import { FilterData } from '@/context/FilterContext/types';
 import './styles.scss';
 
 const MultiSelectFilter: React.FC<{ filterData: FilterData }> = ({ filterData }) => {
@@ -10,13 +10,13 @@ const MultiSelectFilter: React.FC<{ filterData: FilterData }> = ({ filterData })
       <div className="filter-options">
         {filterData?.options?.map((option) => (
           <div key={option.id} className="filter-option">
-            <input type="checkbox" id={option.name} name={option.name} value={option.name} />
+            <input id={option.name} name={option.name} type="checkbox" value={option.name} />
             <label htmlFor={option.name}>{option.name}</label>
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
 
 export default MultiSelectFilter;

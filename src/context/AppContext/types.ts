@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface AppState {
   filterSidebarOpen: boolean;
@@ -6,8 +6,8 @@ export interface AppState {
 }
 
 export type AppAction =
-  | { type: "SET_FILTER_SIDEBAR_OPEN"; payload: boolean }
-  | { type: "SET_ACTIVE_CONTENT"; payload: string };
+  | { type: 'SET_FILTER_SIDEBAR_OPEN'; payload: boolean }
+  | { type: 'SET_ACTIVE_CONTENT'; payload: string };
 
 export interface AppContextType {
   state: AppState;

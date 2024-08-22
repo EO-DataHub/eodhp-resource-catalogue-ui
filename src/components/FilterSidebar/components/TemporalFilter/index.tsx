@@ -1,5 +1,6 @@
-import { FilterData } from "@/context/FilterContext/types";
-import "./styles.scss";
+import { FilterData } from '@/context/FilterContext/types';
+
+import './styles.scss';
 
 const TemporalFilter: React.FC<{
   filterData: FilterData;
@@ -17,20 +18,20 @@ const TemporalFilter: React.FC<{
           {/* Date picker for start date */}
           <label>Start</label>
           <input
-            type="date"
             className="date-picker start-date"
-            onChange={(e) => onStartDateChange(e.target.value)}
+            type="date"
             value={value.start}
+            onChange={(e) => onStartDateChange(e.target.value)}
           />
         </div>
         <div className="date-picker-container">
           {/* Date picker for end date */}
           <label>End</label>
           <input
-            type="date"
             className="date-picker end-date"
-            onChange={(e) => onEndDateChange(e.target.value)}
+            type="date"
             value={value.end}
+            onChange={(e) => onEndDateChange(e.target.value)}
           />
         </div>
       </div>

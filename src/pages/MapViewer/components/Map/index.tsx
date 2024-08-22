@@ -1,7 +1,9 @@
-import { TileLayer, useMapEvents } from "react-leaflet";
-import { useDebounce } from "react-use";
-import { useState } from "react";
-import { useFilters } from "@/hooks/useFilters";
+import { useState } from 'react';
+
+import { TileLayer, useMapEvents } from 'react-leaflet';
+import { useDebounce } from 'react-use';
+
+import { useFilters } from '@/hooks/useFilters';
 
 const Map = () => {
   const map = useMapEvents({});
@@ -22,10 +24,10 @@ const Map = () => {
       });
     },
     300,
-    [position]
+    [position],
   );
 
-  map.on("moveend", () => {
+  map.on('moveend', () => {
     setPosition(map.getCenter());
   });
 
