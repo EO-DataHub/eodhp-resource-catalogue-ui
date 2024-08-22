@@ -1,10 +1,12 @@
 import './styles.scss';
 
-const TextFilter: React.FC<{
+type TestFilterProps = {
   placeholder: string;
   onFilterChange: (value: string) => void;
   value?: string;
-}> = ({ placeholder, onFilterChange, value }) => {
+};
+
+const TextFilter = ({ placeholder, onFilterChange, value }: TestFilterProps) => {
   return (
     <div className="text-filter">
       <input

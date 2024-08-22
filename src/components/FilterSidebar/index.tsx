@@ -70,9 +70,12 @@ const FilterSidebar: React.FC = () => {
         </div>
       </div>
 
-      <div className="filter-collapse-close" onClick={() => setFilterSidebarOpen(false)}>
+      <button
+        className="filter-collapse-close unstyled-button"
+        onClick={() => setFilterSidebarOpen(false)}
+      >
         <TbLayoutSidebarLeftCollapseFilled />
-      </div>
+      </button>
     </>
   );
 };

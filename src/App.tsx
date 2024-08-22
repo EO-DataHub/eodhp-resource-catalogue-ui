@@ -21,13 +21,8 @@ const App: React.FC = () => {
       </div>
       {!filterSidebarOpen && (
         <button
-          className="filter-collapse-open"
+          className="filter-collapse-open unstyled-button"
           onClick={() => setFilterSidebarOpen(true)}
-          // onKeyUp={(event) => {
-          //   if (event.key === 'Enter') {
-          //     setFilterSidebarOpen(true);
-          //   }
-          // }}
         >
           <TbLayoutSidebarRightCollapseFilled />
         </button>

@@ -6,6 +6,7 @@ import './styles.scss';
 
 const ToolboxRow = ({ thumbnail, title, dataPoints, onClick }: ToolboxItemProps) => {
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div className="toolbox-row" onMouseUp={onClick}>
       <div className="toolbox-row__left">
         <img

@@ -2,12 +2,19 @@ import { FilterData } from '@/context/FilterContext/types';
 
 import './styles.scss';
 
-const TemporalFilter: React.FC<{
+type TemporalFilterProps = {
   filterData: FilterData;
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
   value: { start: string; end: string };
-}> = ({ filterData, onStartDateChange, onEndDateChange, value }) => {
+};
+
+const TemporalFilter = ({
+  filterData,
+  onStartDateChange,
+  onEndDateChange,
+  value,
+}: TemporalFilterProps) => {
   return (
     <div className="temporal-filter">
       <div className="filter-header">
@@ -16,9 +23,11 @@ const TemporalFilter: React.FC<{
       <div className="filter-options">
         <div className="date-picker-container">
           {/* Date picker for start date */}
-          <label>Start</label>
+          <label htmlFor="startDate">Start</label>
           <input
             className="date-picker start-date"
+            id="startDate"
+            name="startDate"
             type="date"
             value={value.start}
             onChange={(e) => onStartDateChange(e.target.value)}
@@ -26,9 +35,11 @@ const TemporalFilter: React.FC<{
         </div>
         <div className="date-picker-container">
           {/* Date picker for end date */}
-          <label>End</label>
+          <label htmlFor="endDate">End</label>
           <input
             className="date-picker end-date"
+            id="endDate"
+            name="endDate"
             type="date"
             value={value.end}
             onChange={(e) => onEndDateChange(e.target.value)}

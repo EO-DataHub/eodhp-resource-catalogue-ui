@@ -1,5 +1,6 @@
 import React from 'react';
 
+// eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
 
 import { Collection } from '@/typings/stac';

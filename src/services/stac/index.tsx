@@ -1,4 +1,5 @@
 import axios from 'axios';
+// eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
 
 import hgb from '@/assets/placeholders/hgb.png';

@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
+// eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
 
 import { useFilters } from '@/hooks/useFilters';

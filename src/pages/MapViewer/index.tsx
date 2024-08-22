@@ -34,11 +34,11 @@ const MapViewer = () => {
         <TimelineFilter />
       </MapContainer>
 
-      <div className="table-view-icon" onClick={() => setActiveContent('dataCatalogue')}>
+      <button className="table-view-icon" onClick={() => setActiveContent('dataCatalogue')}>
         <FaTable />
-      </div>
-      <div
-        className="btn-stac-browser"
+      </button>
+      <button
+        className="btn-stac-browser unstyled-button"
         onClick={() =>
           window.open(
             `${import.meta.env.VITE_STAC_BROWSER}/#/external/${import.meta.env.VITE_STAC_ENDPOINT}`,
@@ -47,7 +47,7 @@ const MapViewer = () => {
         }
       >
         <img alt="STAC Browser" src={stacBrowserLogo} />
-      </div>
+      </button>
     </div>
   );
 };

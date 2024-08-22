@@ -1,7 +1,11 @@
 import { FilterData } from '@/context/FilterContext/types';
 import './styles.scss';
 
-const MultiSelectFilter: React.FC<{ filterData: FilterData }> = ({ filterData }) => {
+type MultiSelectFilterProps = {
+  filterData: FilterData;
+};
+
+const MultiSelectFilter = ({ filterData }: MultiSelectFilterProps) => {
   return (
     <div className="multi-select-filter">
       <div className="filter-header">
