@@ -18,6 +18,7 @@
     right: 5px;
     position: fixed;
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .toolbox__window-action {
       cursor: pointer;
       width: 20px;

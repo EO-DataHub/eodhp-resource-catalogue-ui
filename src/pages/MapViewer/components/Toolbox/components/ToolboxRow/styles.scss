@@ -43,6 +43,7 @@
       overflow: hidden;
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .toolbox-row__data-point {
       display: flex;
       flex-direction: row;
