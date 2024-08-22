@@ -1,6 +1,7 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
   },
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
@@ -37,6 +38,17 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[css]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "stylelint.validate": [
+    "css",
+    "postcss",
+    "scss"
+  ],
   "typescript.autoClosingTags": true,
   "typescript.suggest.autoImports": true,
   "prettier.enable": true
