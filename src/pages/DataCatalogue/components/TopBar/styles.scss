@@ -1,4 +1,4 @@
-@import "@/styles/main";
+@import '@/styles/main';
 
 .top-bar {
   display: flex;
@@ -17,7 +17,6 @@
     height: 2rem;
     overflow: hidden;
 
-
     input {
       width: 100%;
       height: 100%;
@@ -26,8 +25,7 @@
 
     button {
       position: absolute;
-      right: 0em;
-
+      right: 0;
       padding: 0.4rem 2rem;
       background-color: $secondary-colour;
       border: none;
@@ -58,29 +56,28 @@
     margin-top: 0.25rem;
     position: relative;
 
-    @media (max-width: 1200px) {
+    @media (width <= 1200px) {
       width: 100px;
     }
 
-    @media (min-width: 1200px) {
+    @media (width >= 1200px) {
       width: 900px;
     }
 
-    @media (max-width: 900px) {
+    @media (width <= 900px) {
       width: 100%;
     }
 
-
     // These must be set as important to override the libary's default styles
     .page-link {
-      color: black!important;
-      font-size: 0.875rem!important;
+      color: black !important;
+      font-size: 0.875rem !important;
     }
 
     .active > .page-link {
-      background-color: $secondary-colour!important;
-      border-color: $secondary-colour!important;
-      color: white!important;
+      background-color: $secondary-colour !important;
+      border-color: $secondary-colour !important;
+      color: white !important;
     }
   }
 }

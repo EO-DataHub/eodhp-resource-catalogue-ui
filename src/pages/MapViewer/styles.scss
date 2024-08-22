@@ -24,7 +24,7 @@
   .draggable {
     position: absolute;
     z-index: 9999;
-    background-color: rgba(240, 240, 240, 0.9); // TODO: Find branding colour
+    background-color: rgb(240 240 240 / 90%); // TODO: Find branding colour
   }
 }
 
@@ -38,7 +38,7 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid rgb(0 0 0 / 20%);
   cursor: pointer;
 
   svg {

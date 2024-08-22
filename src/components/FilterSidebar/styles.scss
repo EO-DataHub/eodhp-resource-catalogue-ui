@@ -1,9 +1,8 @@
-@import "@/styles/main";
+@import '@/styles/main';
 
 .filter-sidebar {
   position: relative;
   width: 100%;
-  height: 100%;
   overflow-y: auto;
   background-color: $sidebar-background;
   height: -webkit-fill-available;
@@ -18,7 +17,7 @@
 
     .filter {
       padding: 0.5rem 1rem;
-      border-bottom: 1px solid #000000;
+      border-bottom: 1px solid #000;
     }
   }
 
@@ -29,7 +28,7 @@
 
     button {
       padding: 0.25rem 2rem;
-      border: 1px solid #000000;
+      border: 1px solid #000;
       background-color: white;
       color: black;
       cursor: pointer;
@@ -62,21 +61,23 @@
 
 .filter-collapse-button {
   background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 @keyframes fadeIn {
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
