@@ -14,7 +14,7 @@ import App from './App';
 import './index.scss';
 
 const enableMocking = async () => {
-  if (process.env.NODE_ENV !== 'development') {
+  if (import.meta.env.MODE !== 'development' || !import.meta.env.VITE_MSW_ENABLED) {
     return;
   }
 
