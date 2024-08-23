@@ -28,6 +28,7 @@ jobs:
       - name: Build app to prove it is in a sensible state
         run: |
           npm ci
+          npm run test:ci
           npm run build
 
   security-scan:

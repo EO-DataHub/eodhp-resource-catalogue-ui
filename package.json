@@ -10,6 +10,8 @@
     "compile": "tsc --noEmit",
     "dev": "npm run compile && vite",
     "build": "npm run compile && npm run lint && npm run lint:css && vite build",
+    "test": "vitest",
+    "test:ci": "vitest run",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "lint:rules": "eslint --print-config rules > eslint-rules.json",
@@ -32,8 +34,14 @@
     "react-use": "^17.5.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@tpzdsp/eslint-config-dsp": "^1.0.1",
+    "@types/jest": "^29.5.12",
     "@types/leaflet": "^1.9.12",
+    "@types/node": "^22.4.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
@@ -43,11 +51,16 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest-dom": "^5.4.0",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "eslint-plugin-testing-library": "^6.3.0",
+    "eslint-plugin-vitest": "^0.5.4",
+    "jsdom": "^24.1.1",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.3.3",
     "sass": "^1.69.7",
@@ -56,6 +69,7 @@
     "stylelint-config-standard-scss": "^13.1.0",
     "stylelint-prettier": "^5.0.2",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vitest": "^2.0.5"
   }
 }
