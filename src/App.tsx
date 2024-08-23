@@ -2,6 +2,7 @@ import React from 'react';
 
 import { TbLayoutSidebarRightCollapseFilled } from 'react-icons/tb';
 
+import { Axe } from '@/components/Axe';
 import FilterSidebar from '@/components/FilterSidebar';
 import { useApp } from '@/hooks/useApp';
 import DataCatalogue from '@/pages/DataCatalogue';
@@ -14,6 +15,8 @@ const App: React.FC = () => {
 
   return (
     <div className="main">
+      <Axe />
+
       <div
         className={`left-sidebar-container ${filterSidebarOpen ? 'left-sidebar-container-open' : 'left-sidebar-container-closed'}`}
       >
