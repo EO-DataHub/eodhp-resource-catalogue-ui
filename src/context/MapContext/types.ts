@@ -1,5 +1,4 @@
-import React from "react";
-import { Collection } from "@/typings/stac"
+import { Collection } from '@/typings/stac';
 
 export type Center = [number, number];
 
@@ -9,8 +8,8 @@ export interface MapState {
 }
 
 export type MapAction =
-  | { type: "SET_CENTER"; payload: Center }
-  | { type: "SET_TOOLBOX_COLLECTIONS_RESULTS"; payload: Collection[] };
+  | { type: 'SET_CENTER'; payload: Center }
+  | { type: 'SET_TOOLBOX_COLLECTIONS_RESULTS'; payload: Collection[] };
 
 export interface MapContextType {
   state: MapState;

@@ -1,13 +1,14 @@
-import { useMapSettings } from "@/hooks/useMapSettings";
-import "./styles.scss";
-import ToolboxRow from "../ToolboxRow";
-import { parseCollectionDataPoints } from "@/utils/stacUtils";
-import { useToolbox } from "@/hooks/useToolbox";
+import { useMapSettings } from '@/hooks/useMapSettings';
+import { useToolbox } from '@/hooks/useToolbox';
+import { parseCollectionDataPoints } from '@/utils/stacUtils';
+
+import ToolboxRow from '../ToolboxRow';
+
+import './styles.scss';
 
 const ToolboxCollections: React.FC = () => {
   const { state: MapSettingsState } = useMapSettings();
-  const { toolboxCollectionsResults: toolboxCollectionsResults } =
-    MapSettingsState;
+  const { toolboxCollectionsResults: toolboxCollectionsResults } = MapSettingsState;
   const {
     actions: { setActivePage, setSelectedCollection },
   } = useToolbox();
@@ -17,11 +18,11 @@ const ToolboxCollections: React.FC = () => {
       {toolboxCollectionsResults.map((collection) => (
         <ToolboxRow
           key={collection.id}
+          dataPoints={parseCollectionDataPoints(collection)}
           thumbnail={collection.thumbnailUrl}
           title={collection.title ? collection.title : collection.id}
-          dataPoints={parseCollectionDataPoints(collection)}
           onClick={() => {
-            setActivePage("items");
+            setActivePage('items');
             setSelectedCollection(collection);
           }}
         />

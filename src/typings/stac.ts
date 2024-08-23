@@ -1,6 +1,13 @@
 // Credit https://github.com/blacha/stac-ts for the STAC typings
 
-import type { CommonMetadata, StacAsset, StacExtensions, StacLink, StacRoles, StacVersion } from './common';
+import type {
+  CommonMetadata,
+  StacAsset,
+  StacExtensions,
+  StacLink,
+  StacRoles,
+  StacVersion,
+} from './common';
 import type { GeoJSONFeature } from './geojson';
 
 /**

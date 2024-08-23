@@ -1,4 +1,4 @@
-@import "@/styles/main";
+@import '@/styles/main';
 
 .toolbox-row {
   display: flex;
@@ -15,7 +15,6 @@
     width: 120px;
     height: -webkit-fill-available;
     max-height: 100%;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,7 +23,7 @@
       height: 100px;
       width: 100px;
       // height: -webkit-fill-available;
-      border:  1px solid black;
+      border: 1px solid black;
       object-fit: cover;
     }
   }
@@ -44,6 +43,7 @@
       overflow: hidden;
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .toolbox-row__data-point {
       display: flex;
       flex-direction: row;

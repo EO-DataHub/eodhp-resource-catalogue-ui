@@ -1,6 +1,9 @@
-import React from "react";
-import { Collection } from "@/typings/stac"
-import { FeatureCollection } from "geojson";
+import React from 'react';
+
+// eslint-disable-next-line import/no-unresolved
+import { FeatureCollection } from 'geojson';
+
+import { Collection } from '@/typings/stac';
 
 export interface ToolboxState {
   activePage: string;
@@ -9,9 +12,9 @@ export interface ToolboxState {
 }
 
 export type ToolboxAction =
-  | { type: "SET_ACTIVE_PAGE"; payload: string; }
-  | { type: "SET_SELECTED_COLLECTION"; payload: Collection; }
-  | { type: "SET_SELECTED_COLLECTION_ITEMS"; payload: FeatureCollection; }
+  | { type: 'SET_ACTIVE_PAGE'; payload: string }
+  | { type: 'SET_SELECTED_COLLECTION'; payload: Collection }
+  | { type: 'SET_SELECTED_COLLECTION_ITEMS'; payload: FeatureCollection };
 
 export interface ToolboxContextType {
   state: ToolboxState;

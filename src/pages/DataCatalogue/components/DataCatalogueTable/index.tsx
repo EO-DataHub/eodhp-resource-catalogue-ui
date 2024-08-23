@@ -1,7 +1,9 @@
-import { useCatalogue } from "@/hooks/useCatalogue";
-import { useFilters } from "@/hooks/useFilters";
-import React, { useMemo } from "react";
-import "./styles.scss";
+import React, { useMemo } from 'react';
+
+import { useCatalogue } from '@/hooks/useCatalogue';
+import { useFilters } from '@/hooks/useFilters';
+
+import './styles.scss';
 
 const itemsPerPage = 6; // TODO: Move to context and make it configurable
 
@@ -22,16 +24,17 @@ const DataCatalogueTable: React.FC = () => {
     <div className="data-catalogue-table">
       <div className="data-catalogue-table__query">
         {activeFilters.textQuery ? (
-          <span>Search results for "{activeFilters.textQuery}"</span>
-        ) : null }
+          <span>Search results for &ldquo;{activeFilters.textQuery}&rdquo;</span>
+        ) : null}
       </div>
       {items.map((row) => {
         return (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           <div
             key={row.id}
             className="data-catalogue-table__row"
             onClick={() => {
-              window.open(row.stacUrl, "_blank");
+              window.open(row.stacUrl, '_blank');
             }}
           >
             <div className="data-catalogue-table__row-content">
@@ -41,7 +44,7 @@ const DataCatalogueTable: React.FC = () => {
                 <span>Updated {row.lastUpdated}</span>
               </div>
               <div className="data-catalogue-table__row-thumbnail">
-                <img src={row.thumbnailUrl} alt="Thumbnail" />
+                <img alt="Thumbnail" src={row.thumbnailUrl} />
               </div>
             </div>
             <div className="data-catalogue-table__row-type">
@@ -52,7 +55,7 @@ const DataCatalogueTable: React.FC = () => {
       })}
       {collectionSearchResults?.length === 0 && (
         <div className="data-catalogue-table__no-results">
-          <span>No results found for "{activeFilters.textQuery}"</span>
+          <span>No results found for &ldquo;{activeFilters.textQuery}&rdquo;</span>
         </div>
       )}
     </div>

@@ -1,12 +1,20 @@
-import { FilterData } from "@/context/FilterContext/types";
-import "./styles.scss";
+import { FilterData } from '@/context/FilterContext/types';
 
-const TemporalFilter: React.FC<{
+import './styles.scss';
+
+type TemporalFilterProps = {
   filterData: FilterData;
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
   value: { start: string; end: string };
-}> = ({ filterData, onStartDateChange, onEndDateChange, value }) => {
+};
+
+const TemporalFilter = ({
+  filterData,
+  onStartDateChange,
+  onEndDateChange,
+  value,
+}: TemporalFilterProps) => {
   return (
     <div className="temporal-filter">
       <div className="filter-header">
@@ -15,22 +23,26 @@ const TemporalFilter: React.FC<{
       <div className="filter-options">
         <div className="date-picker-container">
           {/* Date picker for start date */}
-          <label>Start</label>
+          <label htmlFor="startDate">Start</label>
           <input
-            type="date"
             className="date-picker start-date"
-            onChange={(e) => onStartDateChange(e.target.value)}
+            id="startDate"
+            name="startDate"
+            type="date"
             value={value.start}
+            onChange={(e) => onStartDateChange(e.target.value)}
           />
         </div>
         <div className="date-picker-container">
           {/* Date picker for end date */}
-          <label>End</label>
+          <label htmlFor="endDate">End</label>
           <input
-            type="date"
             className="date-picker end-date"
-            onChange={(e) => onEndDateChange(e.target.value)}
+            id="endDate"
+            name="endDate"
+            type="date"
             value={value.end}
+            onChange={(e) => onEndDateChange(e.target.value)}
           />
         </div>
       </div>

@@ -1,5 +1,8 @@
-import React, { createContext, useReducer } from "react";
-import { exampleFilterData } from "./placeholderData";
+import React, { createContext, useReducer } from 'react';
+
+import { Bounds } from '@/typings/common';
+
+import { exampleFilterData } from './placeholderData';
 import {
   FilterAction,
   FilterActiveFilters,
@@ -7,16 +10,15 @@ import {
   FilterData,
   FilterProviderProps,
   FilterState,
-} from "./types";
-import { Bounds } from "@/typings/common";
+} from './types';
 
 const initialState: FilterState = {
   filterOptions: exampleFilterData,
   activeFilters: {
-    textQuery: "",
+    textQuery: '',
     temporal: {
-      start: "",
-      end: "",
+      start: '',
+      end: '',
     },
     bounds: {
       west: 0,
@@ -29,9 +31,9 @@ const initialState: FilterState = {
 
 const reducer = (state: FilterState, action: FilterAction): FilterState => {
   switch (action.type) {
-    case "SET_FILTER_OPTIONS":
+    case 'SET_FILTER_OPTIONS':
       return { ...state, filterOptions: action.payload };
-    case "SET_ACTIVE_FILTERS":
+    case 'SET_ACTIVE_FILTERS':
       return { ...state, activeFilters: action.payload };
     default:
       return state;
@@ -44,11 +46,11 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setFilterOptions = (payload: FilterData[]) => {
-    dispatch({ type: "SET_FILTER_OPTIONS", payload });
+    dispatch({ type: 'SET_FILTER_OPTIONS', payload });
   };
 
   const setActiveFilters = (payload: FilterActiveFilters) => {
-    dispatch({ type: "SET_ACTIVE_FILTERS", payload });
+    dispatch({ type: 'SET_ACTIVE_FILTERS', payload });
   };
 
   const setTemporalStartFilter = (end: string) => {
@@ -85,10 +87,10 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
 
   const resetFilters = () =>
     setActiveFilters({
-      textQuery: "",
+      textQuery: '',
       temporal: {
-        start: "",
-        end: "",
+        start: '',
+        end: '',
       },
       bounds: {
         west: 0,
@@ -113,9 +115,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     },
   };
 
-  return (
-    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
-  );
+  return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>;
 };
 
 export { FilterContext, FilterProvider };

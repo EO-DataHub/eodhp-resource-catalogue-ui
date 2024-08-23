@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unassigned-import
 import 'leaflet';
 
 declare module 'leaflet' {
@@ -15,8 +16,7 @@ declare module 'leaflet' {
 
     class WMTS extends TileLayer {
       constructor(url: string, options?: WMTSOptions);
-      setParams(params: WMTSOptions,
-        noRedraw?: boolean): this;
+      setParams(params: WMTSOptions, noRedraw?: boolean): this;
     }
   }
 

@@ -1,5 +1,6 @@
-import React from "react";
-import { Collection } from "@/typings/stac";
+import React from 'react';
+
+import { Collection } from '@/typings/stac';
 
 export interface CatalogueState {
   collectionSearchResults: Collection[];
@@ -8,9 +9,9 @@ export interface CatalogueState {
 }
 
 export type CatalogueAction =
-  | { type: "SET_COLLECTION_SEARCH_RESULTS"; payload: Collection[] }
-  | { type: "SET_TEXT_QUERY"; payload: string }
-  | { type: "SET_ACTIVE_PAGE"; payload: number };
+  | { type: 'SET_COLLECTION_SEARCH_RESULTS'; payload: Collection[] }
+  | { type: 'SET_TEXT_QUERY'; payload: string }
+  | { type: 'SET_ACTIVE_PAGE'; payload: number };
 
 export interface CatalogueContextType {
   state: CatalogueState;

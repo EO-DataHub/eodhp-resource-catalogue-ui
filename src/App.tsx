@@ -1,9 +1,11 @@
-import DataCatalogue from "./pages/DataCatalogue";
-import MapViewer from "./pages/MapViewer";
-import React from "react";
-import FilterSidebar from "./components/FilterSidebar";
-import { TbLayoutSidebarRightCollapseFilled } from "react-icons/tb";
-import { useApp } from "@/hooks/useApp";
+import React from 'react';
+
+import { TbLayoutSidebarRightCollapseFilled } from 'react-icons/tb';
+
+import FilterSidebar from '@/components/FilterSidebar';
+import { useApp } from '@/hooks/useApp';
+import DataCatalogue from '@/pages/DataCatalogue';
+import MapViewer from '@/pages/MapViewer';
 
 const App: React.FC = () => {
   const { state: AppState, actions: AppActions } = useApp();
@@ -12,21 +14,24 @@ const App: React.FC = () => {
 
   return (
     <div className="main">
-      <div className={`left-sidebar-container ${filterSidebarOpen ? "left-sidebar-container-open" : "left-sidebar-container-closed"}`}>
+      <div
+        className={`left-sidebar-container ${filterSidebarOpen ? 'left-sidebar-container-open' : 'left-sidebar-container-closed'}`}
+      >
         <FilterSidebar />
       </div>
-      {
-        !filterSidebarOpen && (
-          <div className="filter-collapse-open"
-            onClick={() => setFilterSidebarOpen(true)}
-          >
-            <TbLayoutSidebarRightCollapseFilled />
-          </div>
-        )
-      }
-      <div className={`main-content-container ${!filterSidebarOpen ? "main-content-container-full" : ""}`}>
-        {activeContent === "dataCatalogue" && <DataCatalogue />}
-        {activeContent === "map" && <MapViewer />}
+      {!filterSidebarOpen && (
+        <button
+          className="filter-collapse-open unstyled-button"
+          onClick={() => setFilterSidebarOpen(true)}
+        >
+          <TbLayoutSidebarRightCollapseFilled />
+        </button>
+      )}
+      <div
+        className={`main-content-container ${!filterSidebarOpen ? 'main-content-container-full' : ''}`}
+      >
+        {activeContent === 'dataCatalogue' && <DataCatalogue />}
+        {activeContent === 'map' && <MapViewer />}
       </div>
     </div>
   );

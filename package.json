@@ -3,11 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.12.2"
+  },
   "scripts": {
-    "dev": "tsc --noEmit && vite",
-    "build": "vite build",
+    "compile": "tsc --noEmit",
+    "dev": "npm run compile && vite",
+    "build": "npm run compile && npm run lint && npm run lint:css && vite build",
     "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "lint:rules": "eslint --print-config rules > eslint-rules.json",
+    "lint:css": "stylelint '**/*.{css,scss}'",
+    "lint:css:fix": "stylelint '**/*.{css,scss}' --fix",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -25,6 +32,7 @@
     "react-use": "^17.5.1"
   },
   "devDependencies": {
+    "@tpzdsp/eslint-config-dsp": "^1.0.1",
     "@types/leaflet": "^1.9.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -32,12 +40,21 @@
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "postcss-scss": "^4.0.9",
+    "prettier": "^3.3.3",
     "sass": "^1.69.7",
-    "stylelint": "^16.8.1",
+    "stylelint": "^16.8.2",
     "stylelint-config-standard": "^36.0.1",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "stylelint-prettier": "^5.0.2",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   }

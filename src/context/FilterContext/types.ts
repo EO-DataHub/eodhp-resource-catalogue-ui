@@ -1,5 +1,6 @@
-import React from "react";
-import { Bounds, Temporal } from "@/typings/common";
+import React from 'react';
+
+import { Bounds, Temporal } from '@/typings/common';
 
 export interface FilterState {
   filterOptions: FilterData[];
@@ -7,8 +8,8 @@ export interface FilterState {
 }
 
 export type FilterAction =
-  | { type: "SET_FILTER_OPTIONS"; payload: FilterData[] }
-  | { type: "SET_ACTIVE_FILTERS"; payload: FilterActiveFilters };
+  | { type: 'SET_FILTER_OPTIONS'; payload: FilterData[] }
+  | { type: 'SET_ACTIVE_FILTERS'; payload: FilterActiveFilters };
 
 export interface FilterContextType {
   state: FilterState;
@@ -28,7 +29,7 @@ export interface FilterProviderProps {
 
 export interface FilterData {
   name: string;
-  type: "multi-select" | "date-range" | "text-input";
+  type: 'multi-select' | 'date-range' | 'text-input';
   options?: FilterOption[];
 }
 

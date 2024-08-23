@@ -1,13 +1,15 @@
-import { useToolbox } from "@/hooks/useToolbox";
-import ToolboxRow from "../ToolboxRow";
-import {
-  parseFeatureDataPoints,
-  returnFeatureThumbnail,
-} from "@/utils/stacUtils";
-import { Feature } from "@/typings/stac";
-import "./styles.scss";
-import L from "leaflet";
-import { useMap } from "react-leaflet";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import L from 'leaflet';
+import { useMap } from 'react-leaflet';
+
+import { useToolbox } from '@/hooks/useToolbox';
+import { Feature } from '@/typings/stac';
+import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
+
+import ToolboxRow from '../ToolboxRow';
+
+import './styles.scss';
 
 const ToolboxItems = () => {
   const {
@@ -24,15 +26,13 @@ const ToolboxItems = () => {
         <div
           className="toolbox__header-back"
           onClick={() => {
-            setActivePage("collections");
+            setActivePage('collections');
           }}
         >
           <span>&lt; Return to Collections</span>
         </div>
         <div className="toolbox__header-title">
-          {selectedCollection.title
-            ? selectedCollection.title
-            : selectedCollection.id}
+          {selectedCollection.title ? selectedCollection.title : selectedCollection.id}
         </div>
       </div>
 
@@ -41,9 +41,9 @@ const ToolboxItems = () => {
           return (
             <ToolboxRow
               key={item.id}
-              title={item.id.toString()}
-              thumbnail={returnFeatureThumbnail(item)}
               dataPoints={parseFeatureDataPoints(item)}
+              thumbnail={returnFeatureThumbnail(item)}
+              title={item.id.toString()}
               onClick={(e) => {
                 // Temporary function to add layer to the map
                 map.eachLayer((layer) => {
@@ -53,7 +53,7 @@ const ToolboxItems = () => {
                 });
                 const boundsLayer = L.geoJSON(item.geometry);
                 boundsLayer.setStyle({
-                  color: "red",
+                  color: 'red',
                   weight: 2,
                   fillOpacity: 0,
                 });
@@ -61,11 +61,9 @@ const ToolboxItems = () => {
                 map.fitBounds(boundsLayer.getBounds());
 
                 if (e.shiftKey) {
-                  const url = item.links.find(
-                    (link) => link.rel === "self"
-                  )?.href;
+                  const url = item.links.find((link) => link.rel === 'self')?.href;
                   if (url) {
-                    window.open(url, "_blank");
+                    window.open(url, '_blank');
                   }
                 }
               }}
