@@ -19,5 +19,10 @@ export default defineConfig({
     allowOnly: true,
     setupFiles: [path.resolve(__dirname, './vitest.setup.ts')],
     include: ['**/*.test.{ts,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+    },
+    reporters: process.env.GITHUB_ACTIONS ? ['verbose', 'github-actions'] : ['verbose'],
   },
 });
