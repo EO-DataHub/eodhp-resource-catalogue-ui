@@ -19,6 +19,7 @@
     "lint:rules": "eslint --print-config rules > eslint-rules.json",
     "lint:css": "stylelint '**/*.{css,scss}'",
     "lint:css:fix": "stylelint '**/*.{css,scss}' --fix",
+    "lint:css:rules": "stylelint --print-config rules > stylelint-rules.json",
     "postinstall": "npx husky install .husky",
     "preview": "vite preview"
   },
