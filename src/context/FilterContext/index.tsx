@@ -26,6 +26,7 @@ const initialState: FilterState = {
 };
 
 const reducer = (state: FilterState, action: FilterAction): FilterState => {
+  console.log('ACTION PAYLOAD: ', action);
   switch (action.type) {
     case 'SET_FILTER_OPTIONS':
       return { ...state, filterOptions: action.payload };
