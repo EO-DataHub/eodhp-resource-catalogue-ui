@@ -2,8 +2,11 @@ import React, { createContext, useEffect, useReducer } from 'react';
 
 // eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
+import { transformExtent } from 'ol/proj';
 
+import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useFilters } from '@/hooks/useFilters';
+import { useMap } from '@/hooks/useMap';
 import { getStacItems } from '@/services/stac';
 import { Collection } from '@/typings/stac';
 
@@ -37,6 +40,8 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     state: { activeFilters },
   } = useFilters();
 
+  const { map } = useMap();
+
   const setSelectedCollectionItems = (selectedCollectionItems: FeatureCollection) => {
     dispatch({
       type: 'SET_SELECTED_COLLECTION_ITEMS',
@@ -47,10 +52,19 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
   useEffect(() => {
     const fetchItems = async () => {
       if (state.selectedCollection) {
+        const extent = map.getView().calculateExtent(map.getSize());
+        // Transform the map extent to the CRS used by the data.
+        const transformedExtent = transformExtent(extent, MAP_PROJECTION, DATA_PROJECTION);
+        const bounds = {
+          west: transformedExtent[0],
+          south: transformedExtent[1],
+          east: transformedExtent[2],
+          north: transformedExtent[3],
+        };
         try {
           const items = await getStacItems(
             state.selectedCollection,
-            activeFilters.bounds,
+            bounds,
             activeFilters.temporal.start,
             activeFilters.temporal.end,
           );
@@ -62,7 +76,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     };
 
     fetchItems();
-  }, [state.selectedCollection, activeFilters]);
+  }, [state.selectedCollection, activeFilters, map]);
 
   const value = {
     state,

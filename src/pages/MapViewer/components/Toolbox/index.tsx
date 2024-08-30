@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState } from 'react';
 
-import { useMap } from 'react-leaflet';
 import { Tooltip } from 'react-tooltip';
 
 import { useToolbox } from '@/hooks/useToolbox';
@@ -19,8 +18,6 @@ const Toolbox: React.FC = () => {
     state: { activePage },
   } = useToolbox();
 
-  const map = useMap();
-
   const renderContent = () => {
     switch (activePage) {
       case 'collections':
@@ -36,8 +33,6 @@ const Toolbox: React.FC = () => {
     <div
       className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
       id="toolbox"
-      onMouseDown={() => map.dragging.disable()}
-      onMouseUp={() => map.dragging.enable()}
     >
       <div className="toolbox__window-actions">
         <Tooltip id="window-tooltip" place="top-start" />

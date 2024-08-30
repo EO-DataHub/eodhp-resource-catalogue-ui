@@ -1,38 +1,29 @@
 import Draggable from 'react-draggable';
 import { FaTable } from 'react-icons/fa6';
-import { MapContainer } from 'react-leaflet';
 
 import stacBrowserLogo from '@/assets/icons/stac-browser.png';
+import { MapComponent } from '@/components/Map';
 import { useApp } from '@/hooks/useApp';
-import { useMapSettings } from '@/hooks/useMapSettings';
 
-import Map from './components/Map';
 import TimelineFilter from './components/TimelineFilter';
 import Toolbox from './components/Toolbox';
 
-// eslint-disable-next-line
-import L from 'leaflet';
-
-import 'leaflet/dist/leaflet.css';
 import './styles.scss';
 
 const MapViewer = () => {
   const { actions: AppActions } = useApp();
   const { setActiveContent } = AppActions;
 
-  const { state } = useMapSettings();
-  const { center } = state;
   return (
     <div className="map-viewer">
-      <MapContainer center={center} zoom={13}>
+      <MapComponent>
         <Draggable defaultPosition={{ x: 150, y: 150 }}>
           <div className="draggable">
             <Toolbox />
           </div>
         </Draggable>
-        <Map />
         <TimelineFilter />
-      </MapContainer>
+      </MapComponent>
 
       <button
         aria-label="Data Catalogue"
