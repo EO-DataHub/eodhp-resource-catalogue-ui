@@ -21,6 +21,7 @@ const initialState: FilterState = {
       end: '',
     },
     bounds: null,
+    qualityAssurance: null,
   },
 };
 
