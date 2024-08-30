@@ -34,10 +34,15 @@ const MapViewer = () => {
         <TimelineFilter />
       </MapContainer>
 
-      <button className="table-view-icon" onClick={() => setActiveContent('dataCatalogue')}>
+      <button
+        aria-label="Data Catalogue"
+        className="table-view-icon"
+        onClick={() => setActiveContent('dataCatalogue')}
+      >
         <FaTable />
       </button>
       <button
+        aria-label="STAC Browser"
         className="btn-stac-browser unstyled-button"
         onClick={() =>
           window.open(

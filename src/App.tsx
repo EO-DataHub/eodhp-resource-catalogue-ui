@@ -14,8 +14,10 @@ const App: React.FC = () => {
   const { setFilterSidebarOpen } = AppActions;
 
   return (
-    <div className="main">
+    <main className="main">
       <Axe />
+
+      <h1 className="offscreen">Map Catalogue</h1>
 
       <div
         className={`left-sidebar-container ${filterSidebarOpen ? 'left-sidebar-container-open' : 'left-sidebar-container-closed'}`}
@@ -24,6 +26,7 @@ const App: React.FC = () => {
       </div>
       {!filterSidebarOpen && (
         <button
+          aria-label="Collapse Sidebar Open"
           className="filter-collapse-open unstyled-button"
           onClick={() => setFilterSidebarOpen(true)}
         >
@@ -36,7 +39,7 @@ const App: React.FC = () => {
         {activeContent === 'dataCatalogue' && <DataCatalogue />}
         {activeContent === 'map' && <MapViewer />}
       </div>
-    </div>
+    </main>
   );
 };
 
