@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Feature } from 'ol';
-import { buffer } from 'ol/extent';
 import { Polygon } from 'ol/geom';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
@@ -60,7 +59,6 @@ const ToolboxItems = () => {
 
                 // Reproject the geometry from EPSG:4326 to what is used by the map i.e. EPSG:3857
                 polygon.getGeometry().transform(DATA_PROJECTION, MAP_PROJECTION);
-                const bufferedExtent = buffer(polygon.getGeometry().getExtent(), 0.1);
 
                 const vectorSource1 = new VectorSource({
                   features: [polygon],
@@ -83,7 +81,7 @@ const ToolboxItems = () => {
                 addLayer(vectorLayer);
 
                 // Zoom the map to the buffered extent of the scene.
-                map.getView().fit(bufferedExtent);
+                map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
 
                 if (e.shiftKey) {
                   const url = item.links.find((link) => link.rel === 'self')?.href;
