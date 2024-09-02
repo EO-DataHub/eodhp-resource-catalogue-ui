@@ -60,12 +60,12 @@ const ToolboxItems = () => {
                 // Reproject the geometry from EPSG:4326 to what is used by the map i.e. EPSG:3857
                 polygon.getGeometry().transform(DATA_PROJECTION, MAP_PROJECTION);
 
-                const vectorSource1 = new VectorSource({
+                const sceneSource = new VectorSource({
                   features: [polygon],
                 });
 
-                const vectorLayer = new VectorLayer({
-                  source: vectorSource1,
+                const sceneLayer = new VectorLayer({
+                  source: sceneSource,
                   style: new Style({
                     stroke: new Stroke({
                       color: 'red',
@@ -73,12 +73,12 @@ const ToolboxItems = () => {
                     }),
                   }),
                 });
-                vectorLayer.set('name', COLLECTION_SCENE_ID);
+                sceneLayer.set('name', COLLECTION_SCENE_ID);
 
                 // Remove any previously set layer.
                 removeLayer(COLLECTION_SCENE_ID);
                 // Add new collection scene layer.
-                addLayer(vectorLayer);
+                addLayer(sceneLayer);
 
                 // Zoom the map to the buffered extent of the scene.
                 map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
