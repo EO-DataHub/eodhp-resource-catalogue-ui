@@ -5,7 +5,7 @@ import { buffer } from 'ol/extent';
 import { Polygon } from 'ol/geom';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
-import { Fill, Stroke, Style } from 'ol/style';
+import { Stroke, Style } from 'ol/style';
 
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useMap } from '@/hooks/useMap';
@@ -70,12 +70,8 @@ const ToolboxItems = () => {
                   source: vectorSource1,
                   style: new Style({
                     stroke: new Stroke({
-                      color: 'blue',
-                      lineDash: [4],
-                      width: 3,
-                    }),
-                    fill: new Fill({
-                      color: 'rgba(0, 0, 255, 0.1)',
+                      color: 'red',
+                      width: 2,
                     }),
                   }),
                 });
