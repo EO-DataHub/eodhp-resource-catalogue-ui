@@ -20,12 +20,7 @@ const initialState: FilterState = {
       start: '',
       end: '',
     },
-    bounds: {
-      west: 0,
-      south: 0,
-      east: 0,
-      north: 0,
-    },
+    bounds: null,
   },
 };
 
@@ -92,12 +87,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         start: '',
         end: '',
       },
-      bounds: {
-        west: 0,
-        south: 0,
-        east: 0,
-        north: 0,
-      },
+      bounds: null,
     });
 
   const value = {
