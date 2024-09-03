@@ -1,15 +1,22 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import L from 'leaflet';
-import { useMap } from 'react-leaflet';
+import { Feature } from 'ol';
+import { Polygon } from 'ol/geom';
+import { Vector as VectorLayer } from 'ol/layer';
+import { Vector as VectorSource } from 'ol/source';
+import { Stroke, Style } from 'ol/style';
 
+import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
+import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
-import { Feature } from '@/typings/stac';
+import { Feature as StacFeature } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
 
 import ToolboxRow from '../ToolboxRow';
 
 import './styles.scss';
+
+const COLLECTION_SCENE_ID = 'collection-scene';
 
 const ToolboxItems = () => {
   const {
@@ -17,7 +24,7 @@ const ToolboxItems = () => {
     actions: { setActivePage },
   } = useToolbox();
 
-  const map = useMap();
+  const { addLayer, removeLayer, map } = useMap();
 
   return (
     <div className="toolbox-content-container">
@@ -37,7 +44,7 @@ const ToolboxItems = () => {
       </div>
 
       <div className="toolbox__items">
-        {selectedCollectionItems?.features?.map((item: Feature) => {
+        {selectedCollectionItems?.features?.map((item: StacFeature) => {
           return (
             <ToolboxRow
               key={item.id}
@@ -45,20 +52,36 @@ const ToolboxItems = () => {
               thumbnail={returnFeatureThumbnail(item)}
               title={item.id.toString()}
               onClick={(e) => {
-                // Temporary function to add layer to the map
-                map.eachLayer((layer) => {
-                  if (layer instanceof L.GeoJSON) {
-                    map.removeLayer(layer);
-                  }
+                const polygon = new Feature({
+                  geometry: new Polygon(item.geometry.coordinates),
+                  name: item.id,
                 });
-                const boundsLayer = L.geoJSON(item.geometry);
-                boundsLayer.setStyle({
-                  color: 'red',
-                  weight: 2,
-                  fillOpacity: 0,
+
+                // Reproject the geometry from EPSG:4326 to what is used by the map i.e. EPSG:3857
+                polygon.getGeometry().transform(DATA_PROJECTION, MAP_PROJECTION);
+
+                const sceneSource = new VectorSource({
+                  features: [polygon],
                 });
-                boundsLayer.addTo(map);
-                map.fitBounds(boundsLayer.getBounds());
+
+                const sceneLayer = new VectorLayer({
+                  source: sceneSource,
+                  style: new Style({
+                    stroke: new Stroke({
+                      color: 'red',
+                      width: 2,
+                    }),
+                  }),
+                });
+                sceneLayer.set('name', COLLECTION_SCENE_ID);
+
+                // Remove any previously set layer.
+                removeLayer(COLLECTION_SCENE_ID);
+                // Add new collection scene layer.
+                addLayer(sceneLayer);
+
+                // Zoom the map to the buffered extent of the scene.
+                map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
 
                 if (e.shiftKey) {
                   const url = item.links.find((link) => link.rel === 'self')?.href;

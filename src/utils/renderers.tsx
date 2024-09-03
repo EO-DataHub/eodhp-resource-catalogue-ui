@@ -2,12 +2,16 @@ import { ReactElement, ReactNode } from 'react';
 
 import { RenderHookOptions, RenderHookResult, render, renderHook } from '@testing-library/react';
 
+import { FilterProvider } from '@/context/FilterContext';
+import { MapContextType, MapProvider } from '@/context/MapContext';
+
 type WrapperParams = {
   children: ReactNode;
 };
 
 type Options = {
   initialEntries?: string[];
+  initialMapState?: Partial<MapContextType>;
   renderHookOptions?: RenderHookOptions<unknown>;
 };
 
@@ -22,10 +26,14 @@ type Options = {
  * @returns The rendered component.
  */
 const customRender = (ui: ReactElement, options?: Options) => {
-  const { renderHookOptions } = options ?? {};
+  const { renderHookOptions, initialMapState } = options ?? {};
 
   return render(ui, {
-    wrapper: ({ children }: WrapperParams): ReactElement => <>{children}</>,
+    wrapper: ({ children }: WrapperParams): ReactElement => (
+      <FilterProvider>
+        <MapProvider initialState={initialMapState}>{children}</MapProvider>
+      </FilterProvider>
+    ),
     ...renderHookOptions,
   });
 };
@@ -44,9 +52,13 @@ const customRenderHook = <T, P>(
   callback: () => unknown,
   options?: Options,
 ): RenderHookResult<T, P> => {
-  const { renderHookOptions } = options ?? {};
+  const { renderHookOptions, initialMapState } = options ?? {};
 
-  const wrapper = ({ children }: WrapperParams): ReactElement => <>{children}</>;
+  const wrapper = ({ children }: WrapperParams): ReactElement => (
+    <FilterProvider>
+      <MapProvider initialState={initialMapState}>{children}</MapProvider>
+    </FilterProvider>
+  );
 
   const utils = renderHook(() => callback(), { wrapper, ...renderHookOptions });
 

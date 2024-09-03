@@ -71,6 +71,7 @@ const FilterSidebar: React.FC = () => {
       </div>
 
       <button
+        aria-label="Collapse Sidebar Close"
         className="filter-collapse-close unstyled-button"
         onClick={() => setFilterSidebarOpen(false)}
       >

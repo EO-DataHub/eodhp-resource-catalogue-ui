@@ -1,4 +1,4 @@
-import { useMapSettings } from '@/hooks/useMapSettings';
+import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
 import { parseCollectionDataPoints } from '@/utils/stacUtils';
 
@@ -7,15 +7,15 @@ import ToolboxRow from '../ToolboxRow';
 import './styles.scss';
 
 const ToolboxCollections: React.FC = () => {
-  const { state: MapSettingsState } = useMapSettings();
-  const { toolboxCollectionsResults: toolboxCollectionsResults } = MapSettingsState;
+  const { collections } = useMap();
+
   const {
     actions: { setActivePage, setSelectedCollection },
   } = useToolbox();
 
   return (
     <div className="toolbox__collections">
-      {toolboxCollectionsResults.map((collection) => (
+      {collections?.map((collection) => (
         <ToolboxRow
           key={collection.id}
           dataPoints={parseCollectionDataPoints(collection)}
