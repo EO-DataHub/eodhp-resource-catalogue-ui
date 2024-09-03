@@ -18,7 +18,8 @@
       ]
     },
     "types": [
-      "@testing-library/jest-dom"
+      "@testing-library/jest-dom",
+      "./src/typings/vitest-globals.d.ts"
     ]
   },
   "include": [
