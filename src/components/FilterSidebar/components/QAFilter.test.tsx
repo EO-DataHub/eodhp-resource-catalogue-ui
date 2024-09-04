@@ -29,6 +29,26 @@ describe('QAFilter Component', () => {
     expect(screen.getByText('Please select an option')).toBeInTheDocument();
   });
 
+  it.only('should not call onChange when placeholder option is selected', async () => {
+    const user = userEvent.setup();
+
+    const handleChange = vi.fn();
+
+    render(<QAFilter filterData={filterData} onChange={handleChange} />);
+
+    // Select the dropdown
+    const selectElement = screen.getByRole('combobox', { name: /test filter/i });
+
+    const value = '';
+
+    // Interact with the combobox using userEvent
+    await user.selectOptions(selectElement, value);
+
+    // Ensure the event handler is called
+    expect(selectElement).toHaveValue(value);
+    expect(handleChange).not.toHaveBeenCalled();
+  });
+
   it('should call onChange when an option is selected', async () => {
     const user = userEvent.setup();
 

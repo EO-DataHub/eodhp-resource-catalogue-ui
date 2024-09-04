@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import { FilterData } from '@/context/FilterContext/types';
 
@@ -7,18 +7,29 @@ type QAFilterProps = {
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 };
 
-export const QAFilter = ({ filterData, onChange }: QAFilterProps) => (
-  <div>
-    <label htmlFor="options">{filterData.name}</label>
+export const QAFilter = ({ filterData, onChange }: QAFilterProps) => {
+  const [selectedItem, setSelectedItem] = useState('');
 
-    <select id="options" onChange={onChange}>
-      <option value="none">Please select an option</option>
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedItem(event.target.value);
+    onChange(event);
+  };
 
-      {filterData.options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
+  return (
+    <div>
+      <label htmlFor="options">{filterData.name}</label>
+
+      <select id="options" value={selectedItem} onChange={handleChange}>
+        <option disabled={true} value="">
+          Please select an option
         </option>
-      ))}
-    </select>
-  </div>
-);
+
+        {filterData.options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
