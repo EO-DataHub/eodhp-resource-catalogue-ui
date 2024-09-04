@@ -29,8 +29,8 @@ export interface FilterProviderProps {
 
 export interface FilterData {
   name: string;
-  type: 'multi-select' | 'date-range' | 'text-input';
-  options?: FilterOption[];
+  type: 'multi-select' | 'date-range' | 'text-input' | 'combobox';
+  options?: FilterOption[] | ComboFilterOption[];
 }
 
 export interface FilterOption {
@@ -38,8 +38,14 @@ export interface FilterOption {
   name: string;
 }
 
+type ComboFilterOption = {
+  value: 'pass' | 'partial' | 'fail' | 'none';
+  label: string;
+};
+
 export interface FilterActiveFilters {
   textQuery: string;
   temporal: Temporal;
   bounds: Bounds;
+  qualityAssurance?: string;
 }

@@ -1,5 +1,4 @@
 import type { Map } from 'ol'; // Import Map type
-import { describe, expect, it, vi } from 'vitest';
 
 import { render, screen, userEvent } from '@/utils/renderers';
 

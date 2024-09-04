@@ -1,5 +1,6 @@
 import { TbLayoutSidebarLeftCollapseFilled } from 'react-icons/tb';
 
+import { QAFilter } from '@/components/FilterSidebar/components/QAFilter';
 import { FilterData } from '@/context/FilterContext/types';
 import { useApp } from '@/hooks/useApp';
 import { useFilters } from '@/hooks/useFilters';
@@ -7,6 +8,7 @@ import { useFilters } from '@/hooks/useFilters';
 import MultiSelectFilter from './components/MultiSelectFilter';
 import TemporalFilter from './components/TemporalFilter';
 import TextFilter from './components/TextFilter';
+
 import './styles.scss';
 
 const FilterSidebar: React.FC = () => {
@@ -42,6 +44,15 @@ const FilterSidebar: React.FC = () => {
             value={activeFilters.textQuery}
             onFilterChange={(value: string) =>
               setActiveFilters({ ...activeFilters, textQuery: value })
+            }
+          />
+        );
+      case 'combobox':
+        return (
+          <QAFilter
+            filterData={filter}
+            onChange={(event) =>
+              setActiveFilters({ ...activeFilters, qualityAssurance: event.target.value })
             }
           />
         );

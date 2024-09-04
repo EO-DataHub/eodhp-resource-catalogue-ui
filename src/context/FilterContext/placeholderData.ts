@@ -23,6 +23,15 @@ export const exampleFilterData: FilterData[] = [
     ],
   },
   {
+    name: 'Quality Assurance',
+    type: 'combobox',
+    options: [
+      { value: 'pass', label: 'Pass' },
+      { value: 'partial', label: 'Partial' },
+      { value: 'fail', label: 'Fail' },
+    ],
+  },
+  {
     name: 'License',
     type: 'multi-select',
     options: [
