@@ -1,7 +1,7 @@
-import { FilterData } from '@/context/FilterContext/types'; // adjust if needed
+import { FilterData } from '@/context/FilterContext/types';
 import { render, screen, userEvent } from '@/utils/renderers';
 
-import { QAFilter } from './QAFilter'; // adjust the import based on your file structure
+import { QAFilter } from './QAFilter';
 
 // Mock data for the FilterData type
 const filterData: FilterData = {
