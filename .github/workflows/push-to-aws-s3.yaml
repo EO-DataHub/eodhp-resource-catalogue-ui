@@ -63,4 +63,4 @@ jobs:
       - name: Sync files to S3 bucket
         run: |
           echo ls
-          aws s3 cp dist s3://eodhp-static-web-artefacts/static-apps/resource-catalogue/$IMAGE_TAG --recursive $(if [[ "${GITHUB_REF_TYPE}" = "branch" ]]; then echo --cache-control no-cache; fi)
+          aws s3 cp dist s3://eodhp-static-web-artefacts/static-apps/resource-catalogue/$IMAGE_TAG --recursive $(if [[ "${GITHUB_REF_TYPE}" = "branch" ]]; then echo --cache-control no-cache; else echo --cache-control max-age=31536000; fi)
