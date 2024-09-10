@@ -21,7 +21,7 @@ const COLLECTION_SCENE_ID = 'collection-scene';
 const ToolboxItems = () => {
   const {
     state: { selectedCollection, selectedCollectionItems },
-    actions: { setActivePage },
+    actions: { setActivePage, setSelectedCollectionItem },
   } = useToolbox();
 
   const { addLayer, removeLayer, map } = useMap();
@@ -44,55 +44,63 @@ const ToolboxItems = () => {
       </div>
 
       <div className="toolbox__items">
-        {selectedCollectionItems?.features?.map((item: StacFeature) => {
-          return (
-            <ToolboxRow
-              key={item.id}
-              dataPoints={parseFeatureDataPoints(item)}
-              thumbnail={returnFeatureThumbnail(item)}
-              title={item.id.toString()}
-              onClick={(e) => {
-                const polygon = new Feature({
-                  geometry: new Polygon(item.geometry.coordinates),
-                  name: item.id,
-                });
+        {selectedCollectionItems?.features.length < 1 ? (
+          <p className="no-items">No items available, make sure you have drawn an AOI</p>
+        ) : (
+          selectedCollectionItems?.features?.map((item: StacFeature) => {
+            return (
+              <ToolboxRow
+                key={item.id}
+                dataPoints={parseFeatureDataPoints(item)}
+                thumbnail={returnFeatureThumbnail(item)}
+                title={item.id.toString()}
+                onClick={(e) => {
+                  setSelectedCollectionItem(item);
+                  setActivePage('purchase');
 
-                // Reproject the geometry from EPSG:4326 to what is used by the map i.e. EPSG:3857
-                polygon.getGeometry().transform(DATA_PROJECTION, MAP_PROJECTION);
+                  // Create a map layer for selected collection item.
+                  const polygon = new Feature({
+                    geometry: new Polygon(item.geometry.coordinates),
+                    name: item.id,
+                  });
 
-                const sceneSource = new VectorSource({
-                  features: [polygon],
-                });
+                  // Reproject the geometry from EPSG:4326 to what is used by the map i.e. EPSG:3857
+                  polygon.getGeometry().transform(DATA_PROJECTION, MAP_PROJECTION);
 
-                const sceneLayer = new VectorLayer({
-                  source: sceneSource,
-                  style: new Style({
-                    stroke: new Stroke({
-                      color: 'red',
-                      width: 2,
+                  const sceneSource = new VectorSource({
+                    features: [polygon],
+                  });
+
+                  const sceneLayer = new VectorLayer({
+                    source: sceneSource,
+                    style: new Style({
+                      stroke: new Stroke({
+                        color: 'red',
+                        width: 2,
+                      }),
                     }),
-                  }),
-                });
-                sceneLayer.set('name', COLLECTION_SCENE_ID);
+                  });
+                  sceneLayer.set('name', COLLECTION_SCENE_ID);
 
-                // Remove any previously set layer.
-                removeLayer(COLLECTION_SCENE_ID);
-                // Add new collection scene layer.
-                addLayer(sceneLayer);
+                  // Remove any previously set layer.
+                  removeLayer(COLLECTION_SCENE_ID);
+                  // Add new collection scene layer.
+                  addLayer(sceneLayer);
 
-                // Zoom the map to the buffered extent of the scene.
-                map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
+                  // Zoom the map to the buffered extent of the scene.
+                  map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
 
-                if (e.shiftKey) {
-                  const url = item.links.find((link) => link.rel === 'self')?.href;
-                  if (url) {
-                    window.open(url, '_blank');
+                  if (e.shiftKey) {
+                    const url = item.links.find((link) => link.rel === 'self')?.href;
+                    if (url) {
+                      window.open(url, '_blank');
+                    }
                   }
-                }
-              }}
-            />
-          );
-        })}
+                }}
+              />
+            );
+          })
+        )}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { Tooltip } from 'react-tooltip';
 
 import { useToolbox } from '@/hooks/useToolbox';
 
+import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
 import ToolboxCollections from './components/ToolboxCollections';
 import ToolboxItems from './components/ToolboxItems';
 
@@ -24,6 +25,8 @@ const Toolbox: React.FC = () => {
         return <ToolboxCollections />;
       case 'items':
         return <ToolboxItems />;
+      case 'purchase':
+        return <PurchaseFormPanel />;
       default:
         return <ToolboxCollections />;
     }
@@ -34,7 +37,7 @@ const Toolbox: React.FC = () => {
       className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
       id="toolbox"
     >
-      <div className="toolbox__window-actions">
+      <div className="handle toolbox__window-actions">
         <Tooltip id="window-tooltip" place="top-start" />
         <span
           className="toolbox__window-action"
