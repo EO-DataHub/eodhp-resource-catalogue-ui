@@ -70,7 +70,7 @@ const MapViewer = () => {
   return (
     <div className="map-viewer">
       <MapComponent>
-        <Draggable defaultPosition={{ x: 150, y: 150 }}>
+        <Draggable defaultPosition={{ x: 150, y: 150 }} handle=".handle">
           <div className="draggable">
             <Toolbox />
           </div>
