@@ -1,0 +1,10 @@
+.range-slider {
+  display: flex;
+  flex-direction: column;
+
+  datalist {
+    display: flex;
+    padding: 0 0.75rem;
+    justify-content: space-between;
+  }
+}
