@@ -11,21 +11,13 @@ import { Feature as StacFeature } from '@/typings/stac';
 
 type FormValues = {
   name: string;
-  products: string;
-  collectionId: string;
   aoi: string;
-  apiKey: string;
-  contract: string;
   licence: string;
 };
 
 const PurchaseFormSchema = z.object({
   name: z.string().min(3, { message: 'Must be at least 3 characters' }),
-  products: z.string().min(3, { message: 'Must be at least 3 characters' }),
-  collectionId: z.string().min(3, { message: 'Must be at least 3 characters' }),
   aoi: z.string().min(3, { message: 'Must be at least 3 characters' }),
-  apiKey: z.string().min(3, { message: 'Must be at least 3 characters' }),
-  contract: z.string().min(3, { message: 'Must be at least 3 characters' }),
   licence: z.string().min(3, { message: 'Must be at least 3 characters' }),
 }) as ZodType<FormValues>;
 
@@ -35,11 +27,7 @@ type PurchaseFormProps = {
 
 const defaultValues: FormValues = {
   name: '',
-  products: '',
-  collectionId: '',
   aoi: '',
-  apiKey: '',
-  contract: '',
   licence: '',
 };
 
@@ -73,42 +61,10 @@ export const PurchaseForm = ({ selectedItem }: PurchaseFormProps) => {
       />
 
       <FormField<FormValues>
-        error={errors.products}
-        label="Products:"
-        name="products"
-        register={register}
-        type="text"
-      />
-
-      <FormField<FormValues>
-        error={errors.collectionId}
-        label="Collection ID:"
-        name="collectionId"
-        register={register}
-        type="text"
-      />
-
-      <FormField<FormValues>
         disabled
         error={errors.aoi}
         label="Order Size:"
         name="aoi"
-        register={register}
-        type="text"
-      />
-
-      <FormField<FormValues>
-        error={errors.apiKey}
-        label="API Key:"
-        name="apiKey"
-        register={register}
-        type="text"
-      />
-
-      <FormField<FormValues>
-        error={errors.contract}
-        label="Contract:"
-        name="contract"
         register={register}
         type="text"
       />

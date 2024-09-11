@@ -30,11 +30,7 @@ describe('PurchaseForm Component', () => {
     render(<PurchaseForm selectedItem={mockSelectedItem} />);
 
     expect(screen.getByRole('textbox', { name: /ordername:/i })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /products:/i })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /collection id:/i })).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /order size:/i })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /api key:/i })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /contract:/i })).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /licence:/i })).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: /create order/i })).toBeInTheDocument();
@@ -47,7 +43,7 @@ describe('PurchaseForm Component', () => {
     await user.click(screen.getByRole('button', { name: /create order/i }));
 
     const errorMessages = screen.getAllByRole('paragraph', { name: 'field-error' });
-    expect(errorMessages).toHaveLength(6);
+    expect(errorMessages).toHaveLength(2);
     errorMessages.forEach((error) =>
       expect(error).toHaveTextContent('Must be at least 3 characters'),
     );
@@ -60,21 +56,13 @@ describe('PurchaseForm Component', () => {
     render(<PurchaseForm selectedItem={mockSelectedItem} />);
 
     await user.type(screen.getByRole('textbox', { name: /ordername:/i }), 'Test Order');
-    await user.type(screen.getByRole('textbox', { name: /products:/i }), 'Test Product');
-    await user.type(screen.getByRole('textbox', { name: /collection id:/i }), 'Test Collection');
-    await user.type(screen.getByRole('textbox', { name: /api key:/i }), 'Test API Key');
-    await user.type(screen.getByRole('textbox', { name: /contract:/i }), 'Test Contract');
     await user.type(screen.getByRole('textbox', { name: /licence:/i }), 'Test Licence');
 
     await user.click(screen.getByRole('button', { name: /create order/i }));
 
     expect(consoleLogSpy).toHaveBeenCalledWith('SUBMIT FORM DATA: ', {
       name: 'Test Order',
-      products: 'Test Product',
-      collectionId: 'Test Collection',
       aoi: '4261422.9 km2', // Example area calculation
-      apiKey: 'Test API Key',
-      contract: 'Test Contract',
       licence: 'Test Licence',
     });
 
