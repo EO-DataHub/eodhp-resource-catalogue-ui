@@ -1,22 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { Suspense, lazy, useState } from 'react';
+import { useState } from 'react';
 
 import { Tooltip } from 'react-tooltip';
 
 import { useToolbox } from '@/hooks/useToolbox';
 
-// import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
+import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
 import ToolboxCollections from './components/ToolboxCollections';
 import ToolboxItems from './components/ToolboxItems';
 
 import './styles.scss';
-
-const PurchaseFormPanel = lazy(() =>
-  import('./components/purchases/PurchaseFormPanel').then((module) => ({
-    default: module.PurchaseFormPanel,
-  })),
-);
 
 const Toolbox: React.FC = () => {
   const [toolboxVisible, setToolboxVisible] = useState(true); // TODO: Move to context
@@ -32,11 +26,7 @@ const Toolbox: React.FC = () => {
       case 'items':
         return <ToolboxItems />;
       case 'purchase':
-        return (
-          <Suspense>
-            <PurchaseFormPanel />
-          </Suspense>
-        );
+        return <PurchaseFormPanel />;
       default:
         return <ToolboxCollections />;
     }
