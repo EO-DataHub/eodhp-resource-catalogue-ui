@@ -1,0 +1,68 @@
+/* stylelint-disable-next-line no-empty-source */
+.button-link {
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+
+  /* optional */
+  font-family: arial, sans-serif;
+
+  /* input has OS specific font-family */
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.form {
+  // display: flex;
+  // flex-direction: column;
+  // gap: 15px;
+
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-gap: 15px;
+  padding: 1rem;
+
+  label {
+    grid-column: 1/2;
+  }
+
+  input,
+  button {
+    grid-column: 2/3;
+  }
+
+  // .field-error {
+  //   color: #f00;
+  // }
+
+  button {
+    background-color: #008000;
+  }
+}
+
+// .form {
+//   display: flex;
+//   flex-direction: column;
+// }
+
+// .form-field {
+//   display: flex;
+//   flex-direction: column;
+//   padding: 0.5rem;
+// }
+
+// .form-input {
+//   display: flex;
+//   gap: 2rem;
+// }
+
+// .button-wrapper {
+//   align-self: flex-end;
+//   padding: 2rem 1rem 0 0;
+
+//   button {
+//     padding: 0.5rem;
+//     background-color: #069;
+//   }
+// }

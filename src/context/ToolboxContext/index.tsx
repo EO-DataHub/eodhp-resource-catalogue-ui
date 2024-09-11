@@ -5,7 +5,7 @@ import { FeatureCollection } from 'geojson';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacItems } from '@/services/stac';
-import { Collection } from '@/typings/stac';
+import { Collection, Feature as StacFeature } from '@/typings/stac';
 
 import { ToolboxAction, ToolboxContextType, ToolboxProviderProps, ToolboxState } from './types';
 
@@ -16,6 +16,7 @@ const initialState: ToolboxState = {
     type: 'FeatureCollection',
     features: [],
   },
+  selectedCollectionItem: null,
 };
 
 const reducer = (state: ToolboxState, action: ToolboxAction): ToolboxState => {
@@ -26,6 +27,8 @@ const reducer = (state: ToolboxState, action: ToolboxAction): ToolboxState => {
       return { ...state, selectedCollection: action.payload };
     case 'SET_SELECTED_COLLECTION_ITEMS':
       return { ...state, selectedCollectionItems: action.payload };
+    case 'SET_SELECTED_COLLECTION_ITEM':
+      return { ...state, selectedCollectionItem: action.payload };
   }
 };
 
@@ -85,6 +88,12 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
         dispatch({
           type: 'SET_SELECTED_COLLECTION_ITEMS',
           payload: selectedCollectionItems,
+        });
+      },
+      setSelectedCollectionItem: (selectedCollectionItem: StacFeature) => {
+        dispatch({
+          type: 'SET_SELECTED_COLLECTION_ITEM',
+          payload: selectedCollectionItem,
         });
       },
     },

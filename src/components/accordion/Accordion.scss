@@ -1,0 +1,26 @@
+@import '@/styles/main';
+
+.accordion {
+  list-style-type: none;
+  padding: unset;
+
+  .accordion-item {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background-color: $primary-colour;
+      padding: 0.5rem 1rem;
+      font-weight: bolder;
+      color: #fff;
+    }
+
+    .content {
+      padding: 1rem;
+    }
+
+    .active {
+      background-color: $secondary-colour;
+    }
+  }
+}

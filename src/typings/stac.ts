@@ -219,6 +219,7 @@ export type StacItem = GeoJSONFeature & {
 export type Feature = {
   id: string;
   type: 'Feature';
+  bbox: [number, number, number, number];
   geometry: {
     type: 'Polygon';
     coordinates: number[][][];
