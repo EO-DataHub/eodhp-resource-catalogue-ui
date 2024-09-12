@@ -4,16 +4,18 @@ import { Feature, Map } from 'ol';
 import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { MdOutlineRectangle } from 'react-icons/md';
+import { PiPencilSimpleLineFill } from 'react-icons/pi';
 
-import './styles.scss';
+import { useMap } from '@/hooks/useMap';
 
-type DrawingToolsProps = {
-  map: Map;
-  drawRectangle: (drawingSource: VectorSource<Feature<Geometry>>) => void;
-};
+import { DrawingToolbox } from './DrawingToolbox';
 
-export const DrawingTools = ({ map, drawRectangle }: DrawingToolsProps) => {
+import './DrawingTools.scss';
+
+export const DrawingTools = () => {
+  const { map } = useMap();
+
+  const [isToolboxVisible, setIsToolboxVisible] = useState<boolean>(false);
   const [drawingSource, setDrawingSource] = useState<VectorSource<Feature<Geometry>> | undefined>(
     undefined,
   );
@@ -46,12 +48,18 @@ export const DrawingTools = ({ map, drawRectangle }: DrawingToolsProps) => {
   return (
     <div className="drawing-tools">
       <button
-        aria-label="Rectangle button"
+        aria-label="display drawing tools panel"
         className="bbox"
-        onClick={() => drawRectangle(drawingSource as VectorSource<Feature<Geometry>>)}
+        onClick={() => setIsToolboxVisible((prev) => !prev)}
       >
-        <MdOutlineRectangle />
+        <PiPencilSimpleLineFill />
       </button>
+
+      <DrawingToolbox
+        drawingSource={drawingSource}
+        isToolboxVisible={isToolboxVisible}
+        map={map as Map}
+      />
     </div>
   );
 };

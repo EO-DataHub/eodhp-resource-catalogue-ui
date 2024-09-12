@@ -49,11 +49,11 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      if (state.selectedCollection && activeFilters.bounds) {
+      if (state.selectedCollection && activeFilters.aoi) {
         try {
           const items = await getStacItems(
             state.selectedCollection,
-            activeFilters.bounds,
+            activeFilters.aoi,
             activeFilters.temporal.start,
             activeFilters.temporal.end,
           );
@@ -66,7 +66,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
 
     fetchItems();
   }, [
-    activeFilters.bounds,
+    activeFilters.aoi,
     activeFilters.temporal.end,
     activeFilters.temporal.start,
     state.selectedCollection,

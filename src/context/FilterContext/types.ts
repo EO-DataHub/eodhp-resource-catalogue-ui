@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Bounds, Temporal } from '@/typings/common';
+import { GeoJSONGeometry } from 'ol/format/GeoJSON';
+
+import { Temporal } from '@/typings/common';
 
 export interface FilterState {
   filterOptions: FilterData[];
@@ -18,7 +20,7 @@ export interface FilterContextType {
     setActiveFilters: (filters: FilterActiveFilters) => void;
     setTemporalStartFilter: (start: string) => void;
     setTemporalEndFilter: (end: string) => void;
-    setBoundsFilter: (Bounds: Bounds) => void;
+    setAoiFilter: (geometry: GeoJSONGeometry) => void;
     resetFilters: () => void;
   };
 }
@@ -46,6 +48,6 @@ type ComboFilterOption = {
 export interface FilterActiveFilters {
   textQuery: string;
   temporal: Temporal;
-  bounds: Bounds;
+  aoi: GeoJSONGeometry;
   qualityAssurance?: string;
 }
