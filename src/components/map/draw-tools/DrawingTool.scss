@@ -9,9 +9,9 @@
   svg {
     font-size: 20px;
   }
-}
 
-.active {
-  background-color: $secondary-colour;
-  color: #fff;
+  &.active {
+    background-color: $secondary-colour;
+    color: #fff;
+  }
 }
