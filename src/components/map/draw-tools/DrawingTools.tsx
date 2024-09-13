@@ -5,6 +5,7 @@ import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { PiPencilSimpleLineFill } from 'react-icons/pi';
+import { Tooltip } from 'react-tooltip';
 
 import { useMap } from '@/hooks/useMap';
 
@@ -47,9 +48,13 @@ export const DrawingTools = () => {
 
   return (
     <div className="drawing-tools">
+      <Tooltip id="drawTools" />
+
       <button
         aria-label="display drawing tools panel"
         className="bbox"
+        data-tooltip-content="display drawing tools panel"
+        data-tooltip-id="drawTools"
         onClick={() => setIsDrawingToolboxVisible((prev) => !prev)}
       >
         <PiPencilSimpleLineFill />

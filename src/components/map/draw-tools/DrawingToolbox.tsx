@@ -123,6 +123,7 @@ export const DrawingToolbox = ({
       <DrawingTool
         aria-label={Shapes.BOX}
         isActive={isActive === Shapes.BOX}
+        tooltip="Draw rectangular AOI"
         onClick={() => drawShape(Shapes.BOX)}
       >
         <PiRectangle />
@@ -130,6 +131,7 @@ export const DrawingToolbox = ({
       <DrawingTool
         aria-label={Shapes.POLYGON}
         isActive={isActive === Shapes.POLYGON}
+        tooltip="Draw Polygon AOI"
         onClick={() => drawShape(Shapes.POLYGON)}
       >
         <PiPolygonFill />
@@ -137,6 +139,7 @@ export const DrawingToolbox = ({
       <DrawingTool
         aria-label={Shapes.CIRCLE}
         isActive={isActive === Shapes.CIRCLE}
+        tooltip="Draw Circular AOI"
         onClick={() => drawShape(Shapes.CIRCLE)}
       >
         <PiCircle />
@@ -144,6 +147,7 @@ export const DrawingToolbox = ({
       <DrawingTool
         aria-label={Shapes.BIN}
         isActive={isActive === Shapes.BIN}
+        tooltip="Delete any visible AOI"
         onClick={() => drawShape(Shapes.BIN)}
       >
         <RiDeleteBin6Line />
