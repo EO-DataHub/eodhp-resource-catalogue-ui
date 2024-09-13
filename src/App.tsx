@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 
 import { TbLayoutSidebarRightCollapseFilled } from 'react-icons/tb';
 
 import { Axe } from '@/components/Axe';
 import FilterSidebar from '@/components/FilterSidebar';
 import { useApp } from '@/hooks/useApp';
-import DataCatalogue from '@/pages/DataCatalogue';
-import MapViewer from '@/pages/MapViewer';
-import { QAPanel } from '@/pages/q-and-a/QAPanel';
+
+const DataCatalogue = lazy(() => import('@/pages/DataCatalogue'));
+const MapViewer = lazy(() => import('@/pages/MapViewer'));
+
+const QAPanel = lazy(() =>
+  import('@/pages/q-and-a/QAPanel').then((module) => ({
+    default: module.QAPanel,
+  })),
+);
 
 const App: React.FC = () => {
   const { state: AppState, actions: AppActions } = useApp();
@@ -37,9 +43,21 @@ const App: React.FC = () => {
       <div
         className={`main-content-container ${!filterSidebarOpen ? 'main-content-container-full' : ''}`}
       >
-        {activeContent === 'dataCatalogue' ? <DataCatalogue /> : null}
-        {activeContent === 'map' ? <MapViewer /> : null}
-        {activeContent === 'qa' ? <QAPanel /> : null}
+        {activeContent === 'dataCatalogue' && (
+          <Suspense>
+            <DataCatalogue />
+          </Suspense>
+        )}
+        {activeContent === 'map' && (
+          <Suspense>
+            <MapViewer />
+          </Suspense>
+        )}
+        {activeContent === 'qa' && (
+          <Suspense>
+            <QAPanel />
+          </Suspense>
+        )}
       </div>
     </main>
   );
