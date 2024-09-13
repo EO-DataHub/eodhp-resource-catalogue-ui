@@ -10,6 +10,7 @@ import { defaults } from 'ol/interaction/defaults';
 import { Options, createBox } from 'ol/interaction/Draw';
 import VectorSource from 'ol/source/Vector';
 import { PiCircle, PiPolygonFill, PiRectangle } from 'react-icons/pi';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useFilters } from '@/hooks/useFilters';
@@ -28,6 +29,7 @@ enum Shapes {
   CIRCLE = 'Circle',
   BOX = 'box',
   POLYGON = 'Polygon',
+  BIN = 'bin',
 }
 
 export const DrawingToolbox = ({
@@ -44,66 +46,71 @@ export const DrawingToolbox = ({
   const drawShape = (type: Type | string) => {
     setIsActive(type);
 
-    // I don't know if this is a problem with how I've coded this but if you add an interaction
-    // but then never draw, the interaction is left on the map, so you end up drawing multiple
-    // features on the next click. The only way I've found to ensure this cannot happen is to
-    // clear all interactions and only add back in the defaults.
-    map?.getInteractions().clear();
-    defaults()
-      .getArray()
-      .forEach((interaction) => map?.addInteraction(interaction));
-    const modify = new Modify({ source: drawingSource });
-    map?.addInteraction(modify);
-
     if (drawingSource) {
       drawingSource?.clear();
 
-      let options: Options = {
-        source: drawingSource,
-        type: Shapes.CIRCLE,
-      };
-      if (type === Shapes.BOX) {
-        options = {
-          ...options,
-          geometryFunction: createBox(),
+      if (type !== Shapes.BIN) {
+        // I don't know if this is a problem with how I've coded this but if you add an interaction
+        // but then never draw, the interaction is left on the map, so you end up drawing multiple
+        // features on the next click. The only way I've found to ensure this cannot happen is to
+        // clear all interactions and only add back in the defaults.
+        map?.getInteractions().clear();
+        defaults()
+          .getArray()
+          .forEach((interaction) => map?.addInteraction(interaction));
+        const modify = new Modify({ source: drawingSource });
+        map?.addInteraction(modify);
+
+        let options: Options = {
+          source: drawingSource,
+          type: Shapes.CIRCLE,
         };
-      } else {
-        options = {
-          ...options,
-          type: type as Type,
-        };
-      }
-
-      const drawObj = new Draw(options);
-      map?.addInteraction(drawObj);
-
-      const snapObj = new Snap({
-        source: drawingSource,
-      });
-      map?.addInteraction(snapObj);
-
-      drawObj?.on('drawend', (event) => {
-        const feature = event.feature;
-        const writer = new GeoJSON();
-
-        // INFO: We need to clone the feature if already a polygon as the transforming later
-        //       will affect the feature drawn on the map. The conversion from `Circle` polygon
-        //       is also a new feature.
-        let geometry = feature.clone().getGeometry();
-        if (type === Shapes.CIRCLE) {
-          geometry = fromCircle(feature.getGeometry() as Circle);
+        if (type === Shapes.BOX) {
+          options = {
+            ...options,
+            geometryFunction: createBox(),
+          };
+        } else {
+          options = {
+            ...options,
+            type: type as Type,
+          };
         }
 
-        const transformedGeometry = geometry.transform(MAP_PROJECTION, DATA_PROJECTION);
-        const geojson = writer.writeGeometryObject(transformedGeometry);
+        const drawObj = new Draw(options);
+        map?.addInteraction(drawObj);
 
-        setAoiFilter(geojson);
+        const snapObj = new Snap({
+          source: drawingSource,
+        });
+        map?.addInteraction(snapObj);
 
-        map?.removeInteraction(drawObj as Interaction);
-        map?.removeInteraction(snapObj as Interaction);
+        drawObj?.on('drawend', (event) => {
+          const feature = event.feature;
+          const writer = new GeoJSON();
 
+          // INFO: We need to clone the feature if already a polygon as the transforming later
+          //       will affect the feature drawn on the map. The conversion from `Circle` polygon
+          //       is also a new feature.
+          let geometry = feature.clone().getGeometry();
+          if (type === Shapes.CIRCLE) {
+            geometry = fromCircle(feature.getGeometry() as Circle);
+          }
+
+          const transformedGeometry = geometry.transform(MAP_PROJECTION, DATA_PROJECTION);
+          const geojson = writer.writeGeometryObject(transformedGeometry);
+
+          setAoiFilter(geojson);
+
+          map?.removeInteraction(drawObj as Interaction);
+          map?.removeInteraction(snapObj as Interaction);
+
+          setIsActive('');
+        });
+      } else {
+        setAoiFilter(null);
         setIsActive('');
-      });
+      }
     }
   };
 
@@ -133,6 +140,13 @@ export const DrawingToolbox = ({
         onClick={() => drawShape(Shapes.CIRCLE)}
       >
         <PiCircle />
+      </DrawingTool>
+      <DrawingTool
+        aria-label={Shapes.BIN}
+        isActive={isActive === Shapes.BIN}
+        onClick={() => drawShape(Shapes.BIN)}
+      >
+        <RiDeleteBin6Line />
       </DrawingTool>
     </div>
   );
