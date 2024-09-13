@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 
-import { Bounds } from '@/typings/common';
+import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 
 import { exampleFilterData } from './placeholderData';
 import {
@@ -20,7 +20,7 @@ const initialState: FilterState = {
       start: '',
       end: '',
     },
-    bounds: null,
+    aoi: null,
     qualityAssurance: null,
   },
 };
@@ -69,15 +69,10 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     });
   };
 
-  const setBoundsFilter = (bounds: Bounds) => {
+  const setAoiFilter = (geometry: GeoJSONGeometry) => {
     setActiveFilters({
       ...state.activeFilters,
-      bounds: {
-        west: bounds.west,
-        south: bounds.south,
-        east: bounds.east,
-        north: bounds.north,
-      },
+      aoi: geometry,
     });
   };
 
@@ -88,7 +83,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         start: '',
         end: '',
       },
-      bounds: null,
+      aoi: null,
     });
 
   const value = {
@@ -101,7 +96,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
       setActiveFilters,
       setTemporalStartFilter,
       setTemporalEndFilter,
-      setBoundsFilter,
+      setAoiFilter,
       resetFilters,
     },
   };

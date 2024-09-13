@@ -1,0 +1,21 @@
+@import '@/styles/main';
+
+.drawing-toolbox {
+  position: fixed;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: solid 1px;
+  background-color: $primary-colour;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(150%); /* Hidden off-screen */
+
+  &.open {
+    transform: translateX(0); /* Slide in */
+  }
+
+  &.closed {
+    transform: translateX(150%); /* Slide out */
+  }
+}

@@ -1,6 +1,7 @@
 import axios from 'axios';
 // eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
+import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 
 import hgb from '@/assets/placeholders/hgb.png';
 import landsat from '@/assets/placeholders/landsat.png';
@@ -50,7 +51,7 @@ export const getStacCollections = async (
 // In the future we are going to use `cql2-json`, this item search is temporary
 export const getStacItems = async (
   collection: Collection,
-  bbox: { west: number; south: number; east: number; north: number },
+  geometry: GeoJSONGeometry,
   startDate: string,
   endDate: string,
 ): Promise<FeatureCollection> => {
@@ -60,18 +61,7 @@ export const getStacItems = async (
     collections: [collection.id],
     limit: 100,
     catalog_paths: [getStacCatalogUrl(collection)],
-    intersects: {
-      type: 'Polygon',
-      coordinates: [
-        [
-          [bbox.west, bbox.south],
-          [bbox.east, bbox.south],
-          [bbox.east, bbox.north],
-          [bbox.west, bbox.north],
-          [bbox.west, bbox.south],
-        ],
-      ],
-    },
+    intersects: geometry,
   };
 
   if (startDate || endDate) {

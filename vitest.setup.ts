@@ -18,3 +18,12 @@ afterEach(() => {
 afterAll(() => {
   server.close();
 });
+
+// Mock ResizeObserver globally
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;

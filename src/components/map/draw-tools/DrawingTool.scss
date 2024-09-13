@@ -1,0 +1,17 @@
+@import '@/styles/main';
+
+.tool {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+
+  svg {
+    font-size: 20px;
+  }
+
+  &.active {
+    background-color: $secondary-colour;
+    color: #fff;
+  }
+}
