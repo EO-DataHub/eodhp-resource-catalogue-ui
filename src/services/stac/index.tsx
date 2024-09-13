@@ -16,10 +16,13 @@ import { StacCollectionsResponse } from './types';
 // 2. Or, retrieve a limited number of collections and paginate on the server side
 // The latter requires more network requests, however it's more efficient for large datasets
 export const getStacCollections = async (
+  privateCatalogue: string,
   searchQuery: string = '',
   limit: number = 99999,
 ): Promise<Collection[]> => {
-  const url = `${import.meta.env.VITE_STAC_ENDPOINT}/collections?limit=${limit}&q=${searchQuery}`;
+  const url = `${import.meta.env.VITE_STAC_ENDPOINT}/${privateCatalogue}collections?limit=${limit}&q=${searchQuery}`;
+  // const url = `${import.meta.env.VITE_STAC_ENDPOINT}/collections?limit=${limit}&q=${searchQuery}`;
+
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -49,12 +52,14 @@ export const getStacCollections = async (
 
 // In the future we are going to use `cql2-json`, this item search is temporary
 export const getStacItems = async (
+  privateCatalogue: string,
   collection: Collection,
   geometry: GeoJSONGeometry,
   startDate: string,
   endDate: string,
 ): Promise<FeatureCollection> => {
-  const itemsUrl = `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
+  const itemsUrl = `${import.meta.env.VITE_STAC_ENDPOINT}/${privateCatalogue}search`;
+  // const itemsUrl = `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
 
   const data = {
     collections: [collection.id],

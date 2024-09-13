@@ -12,6 +12,7 @@ import { Extent } from 'ol/extent';
 import BaseLayer from 'ol/layer/Base';
 import Layer from 'ol/layer/Layer';
 import Map from 'ol/Map';
+import { useLocation } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 
 import { useFilters } from '@/hooks/useFilters';
@@ -50,6 +51,10 @@ const DEFAULT_ZOOM = 7;
 export const MapProvider = ({ initialState = {}, children }: MapProviderProps) => {
   const mapRef = useRef(null);
 
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const catalogPath = searchParams.get('catalogPath');
+
   const [mapConfig, setMapConfig] = useState<MapConfig>({
     center: DEFAULT_LON_LAT,
     zoom: DEFAULT_ZOOM,
@@ -67,7 +72,7 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
     () => {
       const fetchData = async () => {
         try {
-          const collections = await getStacCollections(activeFilters.textQuery);
+          const collections = await getStacCollections(catalogPath ?? '', activeFilters.textQuery);
           setCollections(collections);
         } catch (error) {
           console.error('Error fetching collections', error);

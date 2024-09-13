@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
 import { FeatureCollection } from 'geojson';
+import { useLocation } from 'react-router-dom';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacItems } from '@/services/stac';
@@ -39,6 +40,10 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     state: { activeFilters },
   } = useFilters();
 
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const catalogPath = searchParams.get('catalogPath');
+
   const setSelectedCollectionItems = (selectedCollectionItems: FeatureCollection) => {
     dispatch({
       type: 'SET_SELECTED_COLLECTION_ITEMS',
@@ -51,6 +56,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
       if (state.selectedCollection && activeFilters.aoi) {
         try {
           const items = await getStacItems(
+            catalogPath ?? '',
             state.selectedCollection,
             activeFilters.aoi,
             activeFilters.temporal.start,
@@ -68,6 +74,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     activeFilters.aoi,
     activeFilters.temporal.end,
     activeFilters.temporal.start,
+    catalogPath,
     state.selectedCollection,
   ]);
 
