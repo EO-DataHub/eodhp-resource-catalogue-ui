@@ -15,7 +15,7 @@ import './DrawingTools.scss';
 export const DrawingTools = () => {
   const { map } = useMap();
 
-  const [isToolboxVisible, setIsToolboxVisible] = useState<boolean>(false);
+  const [isDrawingToolboxVisible, setIsDrawingToolboxVisible] = useState<boolean>(false);
   const [drawingSource, setDrawingSource] = useState<VectorSource<Feature<Geometry>> | undefined>(
     undefined,
   );
@@ -50,14 +50,14 @@ export const DrawingTools = () => {
       <button
         aria-label="display drawing tools panel"
         className="bbox"
-        onClick={() => setIsToolboxVisible((prev) => !prev)}
+        onClick={() => setIsDrawingToolboxVisible((prev) => !prev)}
       >
         <PiPencilSimpleLineFill />
       </button>
 
       <DrawingToolbox
         drawingSource={drawingSource}
-        isToolboxVisible={isToolboxVisible}
+        isDrawingToolboxVisible={isDrawingToolboxVisible}
         map={map as Map}
       />
     </div>

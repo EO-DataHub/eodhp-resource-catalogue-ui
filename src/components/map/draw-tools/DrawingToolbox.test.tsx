@@ -42,7 +42,7 @@ describe('DrawingToolbox', () => {
     render(
       <DrawingToolbox
         drawingSource={mockSource}
-        isToolboxVisible={isToolboxVisible}
+        isDrawingToolboxVisible={isToolboxVisible}
         map={mockMap}
       />,
     );

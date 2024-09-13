@@ -19,7 +19,7 @@ import { DrawingTool } from './DrawingTool';
 import './DrawingToolbox.scss';
 
 type DrawingToolboxProps = {
-  isToolboxVisible: boolean;
+  isDrawingToolboxVisible: boolean;
   map: Map;
   drawingSource: VectorSource<Feature<Geometry>>;
 };
@@ -30,7 +30,11 @@ enum Shapes {
   POLYGON = 'Polygon',
 }
 
-export const DrawingToolbox = ({ isToolboxVisible, map, drawingSource }: DrawingToolboxProps) => {
+export const DrawingToolbox = ({
+  isDrawingToolboxVisible,
+  map,
+  drawingSource,
+}: DrawingToolboxProps) => {
   const {
     actions: { setAoiFilter },
   } = useFilters();
@@ -106,7 +110,7 @@ export const DrawingToolbox = ({ isToolboxVisible, map, drawingSource }: Drawing
   return (
     <div
       aria-label="drawing-toolbox"
-      className={`drawing-toolbox ${isToolboxVisible ? 'open' : 'closed'}`}
+      className={`drawing-toolbox ${isDrawingToolboxVisible ? 'open' : 'closed'}`}
       role="region"
     >
       <DrawingTool
