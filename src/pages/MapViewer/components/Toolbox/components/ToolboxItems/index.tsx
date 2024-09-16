@@ -55,8 +55,8 @@ const ToolboxItems = () => {
                 thumbnail={returnFeatureThumbnail(item)}
                 title={item.id.toString()}
                 onClick={(e) => {
+                  setActivePage('assets');
                   setSelectedCollectionItem(item);
-                  setActivePage('purchase');
 
                   // Create a map layer for selected collection item.
                   if (item.geometry.type !== 'Polygon') {
@@ -101,7 +101,16 @@ const ToolboxItems = () => {
                     }
                   }
                 }}
-              />
+              >
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setActivePage('purchase');
+                  }}
+                >
+                  Purchase Item
+                </button>
+              </ToolboxRow>
             );
           })
         )}

@@ -4,10 +4,10 @@ import { ToolboxItemProps } from './types.js';
 
 import './styles.scss';
 
-const ToolboxRow = ({ thumbnail, title, dataPoints, onClick }: ToolboxItemProps) => {
+const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: ToolboxItemProps) => {
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className="toolbox-row" onMouseUp={onClick}>
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+    <div className="toolbox-row" onClick={onClick}>
       <div className="toolbox-row__left">
         <img
           alt="thumbnail"
@@ -18,6 +18,7 @@ const ToolboxRow = ({ thumbnail, title, dataPoints, onClick }: ToolboxItemProps)
           }}
         />
       </div>
+
       <div className="toolbox-row__right">
         <span className="toolbox-row__right-title">{titleFromId(title)}</span>
         {dataPoints?.map((dataPoint) => (
@@ -26,6 +27,7 @@ const ToolboxRow = ({ thumbnail, title, dataPoints, onClick }: ToolboxItemProps)
             <span className="toolbox-row__data-point-text">{dataPoint.text}</span>
           </div>
         ))}
+        {children ? children : null}
       </div>
     </div>
   );
