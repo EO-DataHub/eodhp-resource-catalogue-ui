@@ -1,6 +1,7 @@
 @import '@/styles/main';
 
 .toolbox-row {
+  position: relative;
   display: flex;
   flex-direction: row;
   padding: 10px;
@@ -61,6 +62,21 @@
         font-size: 0.875em;
         align-self: center;
       }
+    }
+  }
+
+  &__copy-link {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
+    svg {
+      height: 1rem;
+      width: 1rem;
     }
   }
 }

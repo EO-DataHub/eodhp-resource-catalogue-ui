@@ -51,6 +51,7 @@ const ToolboxItems = () => {
             return (
               <ToolboxRow
                 key={item.id}
+                copyLink={item.links.find((link) => link.rel === 'self')?.href}
                 dataPoints={parseFeatureDataPoints(item)}
                 thumbnail={returnFeatureThumbnail(item)}
                 title={item.id.toString()}
