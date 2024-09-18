@@ -1,7 +1,6 @@
 @import '@/styles/main';
 
 .toolbox-row {
-  position: relative;
   display: flex;
   flex-direction: row;
   padding: 10px;
@@ -66,9 +65,9 @@
   }
 
   &__copy-link {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
+    display: flex;
+    align-self: flex-end;
+    margin-bottom: 1em;
     background: none;
     border: none;
     padding: 0;
