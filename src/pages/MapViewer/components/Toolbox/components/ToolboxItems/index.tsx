@@ -6,6 +6,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Stroke, Style } from 'ol/style';
 
+import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
@@ -48,6 +49,8 @@ const ToolboxItems = () => {
           <p className="no-items">No items available, make sure you have drawn an AOI</p>
         ) : (
           selectedCollectionItems?.features?.map((item: StacItem) => {
+            const url = item.links.find((link) => link.rel === 'self')?.href;
+
             return (
               <ToolboxRow
                 key={item.id}
@@ -59,10 +62,6 @@ const ToolboxItems = () => {
                   setSelectedCollectionItem(item);
 
                   // Create a map layer for selected collection item.
-                  if (item.geometry.type !== 'Polygon') {
-                    console.error('Selected item is not a polygon');
-                    return;
-                  }
                   const polygon = new Feature({
                     geometry: new Polygon(item.geometry.coordinates),
                     name: item.id,
@@ -95,21 +94,24 @@ const ToolboxItems = () => {
                   map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
 
                   if (e.shiftKey) {
-                    const url = item.links.find((link) => link.rel === 'self')?.href;
                     if (url) {
                       window.open(url, '_blank');
                     }
                   }
                 }}
               >
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setActivePage('purchase');
-                  }}
-                >
-                  Purchase Item
-                </button>
+                <div className="button-wrapper">
+                  <button
+                    className="purchase-btn"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setActivePage('purchase');
+                    }}
+                  >
+                    Purchase Item
+                  </button>
+                  <ClipboardButton text={url} />
+                </div>
               </ToolboxRow>
             );
           })
