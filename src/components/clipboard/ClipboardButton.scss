@@ -1,0 +1,18 @@
+.clipboard {
+  display: flex;
+
+  .btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .copied {
+      color: green;
+    }
+
+    svg {
+      font-size: 2rem;
+    }
+  }
+}

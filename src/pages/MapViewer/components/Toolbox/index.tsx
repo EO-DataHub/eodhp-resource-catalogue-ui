@@ -6,6 +6,7 @@ import { Tooltip } from 'react-tooltip';
 
 import { useToolbox } from '@/hooks/useToolbox';
 
+import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
 import ToolboxCollections from './components/ToolboxCollections';
 import ToolboxItems from './components/ToolboxItems';
@@ -27,6 +28,8 @@ const Toolbox: React.FC = () => {
         return <ToolboxItems />;
       case 'purchase':
         return <PurchaseFormPanel />;
+      case 'assets':
+        return <AssetsPanel />;
       default:
         return <ToolboxCollections />;
     }
