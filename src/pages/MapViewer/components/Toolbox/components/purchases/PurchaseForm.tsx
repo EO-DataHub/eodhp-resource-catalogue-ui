@@ -7,7 +7,7 @@ import { ZodType, z } from 'zod';
 
 import { FormField } from '@/components/form/FormField';
 import { SubmitButton } from '@/components/form/SubmitButton';
-import { Feature as StacFeature } from '@/typings/stac';
+import { StacItem } from '@/typings/stac';
 
 type FormValues = {
   name: string;
@@ -22,7 +22,7 @@ const PurchaseFormSchema = z.object({
 }) as ZodType<FormValues>;
 
 type PurchaseFormProps = {
-  selectedItem: StacFeature;
+  selectedItem: StacItem;
 };
 
 const defaultValues: FormValues = {

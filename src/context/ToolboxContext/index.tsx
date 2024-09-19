@@ -1,11 +1,10 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
-// eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacItems } from '@/services/stac';
-import { Collection, Feature as StacFeature } from '@/typings/stac';
+import { Collection, StacItem } from '@/typings/stac';
 
 import { ToolboxAction, ToolboxContextType, ToolboxProviderProps, ToolboxState } from './types';
 
@@ -90,7 +89,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
           payload: selectedCollectionItems,
         });
       },
-      setSelectedCollectionItem: (selectedCollectionItem: StacFeature) => {
+      setSelectedCollectionItem: (selectedCollectionItem: StacItem) => {
         dispatch({
           type: 'SET_SELECTED_COLLECTION_ITEM',
           payload: selectedCollectionItem,

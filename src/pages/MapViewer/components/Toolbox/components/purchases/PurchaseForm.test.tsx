@@ -1,10 +1,12 @@
-import { Feature as StacFeature } from '@/typings/stac';
+import { StacItem } from '@/typings/stac';
 import { render, screen, userEvent } from '@/utils/renderers';
 
 import { PurchaseForm } from './PurchaseForm';
 
 describe('PurchaseForm Component', () => {
-  const mockSelectedItem: StacFeature = {
+  const mockSelectedItem: StacItem = {
+    stac_version: '1.0.0',
+    assets: {},
     id: 'test id',
     type: 'Feature',
     bbox: [10, 20, 30, 40],
