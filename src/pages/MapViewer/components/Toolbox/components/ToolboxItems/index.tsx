@@ -9,7 +9,7 @@ import { Stroke, Style } from 'ol/style';
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
-import { Feature as StacFeature } from '@/typings/stac';
+import { StacItem } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
 
 import ToolboxRow from '../ToolboxRow';
@@ -47,7 +47,7 @@ const ToolboxItems = () => {
         {selectedCollectionItems?.features.length < 1 ? (
           <p className="no-items">No items available, make sure you have drawn an AOI</p>
         ) : (
-          selectedCollectionItems?.features?.map((item: StacFeature) => {
+          selectedCollectionItems?.features?.map((item: StacItem) => {
             return (
               <ToolboxRow
                 key={item.id}
@@ -59,6 +59,10 @@ const ToolboxItems = () => {
                   setActivePage('purchase');
 
                   // Create a map layer for selected collection item.
+                  if (item.geometry.type !== 'Polygon') {
+                    console.error('Selected item is not a polygon');
+                    return;
+                  }
                   const polygon = new Feature({
                     geometry: new Polygon(item.geometry.coordinates),
                     name: item.id,

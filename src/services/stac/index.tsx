@@ -1,5 +1,4 @@
 import axios from 'axios';
-// eslint-disable-next-line import/no-unresolved
 import { FeatureCollection } from 'geojson';
 import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 

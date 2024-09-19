@@ -1,14 +1,8 @@
 // Credit https://github.com/blacha/stac-ts for the STAC typings
 
-import type {
-  CommonMetadata,
-  StacAsset,
-  StacExtensions,
-  StacLink,
-  StacRoles,
-  StacVersion,
-} from './common';
-import type { GeoJSONFeature } from './geojson';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+
+import type { StacAsset, StacExtensions, StacLink, StacRoles, StacVersion } from './common';
 
 /**
  * This object represents Collections in a SpatioTemporal Asset Catalog.
@@ -165,69 +159,18 @@ interface Range {
 /**
  * This object represents the metadata for an item in a SpatioTemporal Asset Catalog.
  */
-export type StacItem = GeoJSONFeature & {
-  /** The STAC version the Item implements. */
-  stac_version: StacVersion;
-  /** A list of extensions the Item implements. */
-  stac_extensions?: StacExtensions;
-  /**
-   * Provider identifier. The ID should be unique within the Collection that contains the Item
-   *
-   * https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#id
-   */
-  id: string;
-  /**
-   * The ID of the STAC Collection this Item references to.
-   *
-   * Only exists if {@link StacItem.links} contain a `{"rel": "collection"}`
-   *
-   * https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#collections
-   */
-  collection?: string;
-  /**
-   * List of link objects to resources and related URLs. A link with the rel set to self is strongly recommended.
-   *
-   * https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#link-object
-   */
-  links: StacLink[];
-  /**
-   * Dictionary of asset objects that can be downloaded, each with a unique key.
-   *
-   * https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#assets
-   **/
-  assets: { [k: string]: StacAsset };
-  /**
-   * A dictionary of additional metadata for the Item.
-   *
-   * https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#properties-object
-   */
-  properties: CommonMetadata &
-    (
-      | {
-          datetime: {
-            [k: string]: unknown;
-          };
-          [k: string]: unknown;
-        }
-      | {
-          [k: string]: unknown;
-        }
-    );
-  [k: string]: unknown;
-};
 
-export type Feature = {
+export interface StacItemProperties extends GeoJsonProperties {
+  datetime?: string;
+  // This will need to be extended
+}
+
+// Define the StacItem with top-level properties
+export interface StacItem extends Feature<Geometry, StacItemProperties> {
+  stac_version: string;
+  stac_extensions?: string[];
   id: string;
-  type: 'Feature';
-  bbox: [number, number, number, number];
-  geometry: {
-    type: 'Polygon';
-    coordinates: number[][][];
-  };
-  properties: {
-    datetime: string;
-    [k: string]: unknown;
-  };
+  collection?: string;
   links: StacLink[];
-  [k: string]: unknown;
-};
+  assets: { [k: string]: StacAsset };
+}

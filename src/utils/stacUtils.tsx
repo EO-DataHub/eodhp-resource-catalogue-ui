@@ -3,7 +3,7 @@ import { IoTimeOutline } from 'react-icons/io5';
 import { TbAxisX } from 'react-icons/tb';
 
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
-import { Collection, Feature } from '@/typings/stac';
+import { Collection, StacItem } from '@/typings/stac';
 
 import { parseDate, titleFromId } from './genericUtils';
 
@@ -71,7 +71,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   return dataPoints;
 };
 
-export const parseFeatureDataPoints = (feature: Feature): DataPoint[] => {
+export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
   // just return the time
   const dataPoints: DataPoint[] = [];
   const {
@@ -90,9 +90,10 @@ export const parseFeatureDataPoints = (feature: Feature): DataPoint[] => {
   return dataPoints;
 };
 
-export const returnFeatureThumbnail = (feature: Feature): string => {
-  return (
-    feature.links.find((link) => link.rel === 'thumbnail')?.href ||
-    'https://via.placeholder.com/100'
+export const returnFeatureThumbnail = (feature: StacItem): string => {
+  const assetsArray = Object.values(feature.assets);
+  const thumbnailAsset = assetsArray.find(
+    (asset) => asset.roles && asset.roles.includes('thumbnail'),
   );
+  return thumbnailAsset?.href || 'https://via.placeholder.com/100';
 };
