@@ -35,9 +35,12 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     dataPoints.push({
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      text: `${new Date(temporal.interval[0][0]).toLocaleDateString()} - ${new Date(
-        temporal.interval[0][1],
-      ).toLocaleDateString()}`,
+      text:
+        temporal?.interval.length > 0
+          ? `${new Date(temporal?.interval?.[0][0]).toLocaleDateString()} - ${new Date(
+              temporal.interval[0][1],
+            ).toLocaleDateString()}`
+          : 'No date given',
       tooltip: 'Temporal Extent',
     });
 
