@@ -61,6 +61,11 @@ const ToolboxItems = () => {
                   setActivePage('assets');
                   setSelectedCollectionItem(item);
 
+                  if (item.geometry.type !== 'Polygon') {
+                    console.error('Selected item is not a polygon');
+                    return;
+                  }
+
                   // Create a map layer for selected collection item.
                   const polygon = new Feature({
                     geometry: new Polygon(item.geometry.coordinates),
