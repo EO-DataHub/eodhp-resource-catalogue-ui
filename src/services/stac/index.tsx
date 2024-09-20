@@ -7,7 +7,6 @@ import landsat from '@/assets/placeholders/landsat.png';
 import sentinel2 from '@/assets/placeholders/sentinel-2.png';
 import terraclimate from '@/assets/placeholders/terraclimate.png';
 import { Collection } from '@/typings/stac';
-import { AppUrls } from '@/utils/appUrls';
 import { formatDateAsISO8601 } from '@/utils/genericUtils';
 import { HttpCodes } from '@/utils/http';
 
@@ -37,8 +36,8 @@ export const getStacCollections = async (
     });
 
     if (!response.ok) {
-      if (response.status === HttpCodes.FORBIDDEN) {
-        window.location.href = AppUrls.SIGN_IN;
+      if (response.status === HttpCodes.UNAUTHORIZED) {
+        window.location.href = import.meta.env.VITE_SIGN_IN;
       } else {
         throw new Error('Network response was not ok');
       }
@@ -104,12 +103,14 @@ const getStacCatalogUrl = (collection: Collection): string => {
   const selfLink = collection.links.find((link) => link.rel === 'self');
   if (!selfLink?.href) return '';
 
-  let url = selfLink.href.replace(import.meta.env.VITE_STAC_ENDPOINT, '');
-  if (url.startsWith('/catalogs/')) {
-    url = url.replace('/catalogs/', '');
-  }
+  // Extract central part of URL, so take:
+  // `https://test.eodatahub.org.uk/api/catalogue/stac/catalogs/supported-datasets/ceda-stac-fastapi/collections/cmip6`
+  // and return `supported-datasets/ceda-stac-fastapi`.
+  const catalogsStr = '/catalogs/';
+  const start = selfLink.href.indexOf(catalogsStr) + catalogsStr.length;
+  const end = selfLink.href.indexOf('/collections/');
+  const catalogUrl = selfLink.href.slice(start, end);
 
-  const [catalogUrl] = url.split('/collections/');
   return catalogUrl;
 };
 
