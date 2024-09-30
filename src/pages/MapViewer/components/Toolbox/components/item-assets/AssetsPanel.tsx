@@ -3,14 +3,22 @@ import { useToolbox } from '@/hooks/useToolbox';
 
 import './AssetsPanel.scss';
 
+type Asset = {
+  key: string;
+  value: string;
+};
+
 export const AssetsPanel = () => {
   const {
     state: { selectedCollectionItem },
     actions: { setActivePage },
   } = useToolbox();
 
-  // Reduce the object of objects down to an array of key/value objects.
-  const assets = Object.keys(selectedCollectionItem.assets).reduce((acc, key) => {
+  // Reduce the object of objects down to an array of key/value objects e.g.
+  // [{ cloud: 'https:/....' }, ..., { saturated_pixel: 'https:/....' }]
+  // If at a later date we decide we want more from the StacAsset object displayed
+  // we can just add that to the new object added to the `acc` array.
+  const assets = Object.keys(selectedCollectionItem.assets).reduce<Asset[]>((acc, key) => {
     acc = [...acc, { key, value: selectedCollectionItem.assets[key].href }];
 
     return acc;
@@ -19,12 +27,7 @@ export const AssetsPanel = () => {
   return (
     <div>
       <div className="toolbox__header">
-        <button
-          className="button-link"
-          onClick={() => {
-            setActivePage('items');
-          }}
-        >
+        <button className="button-link" onClick={() => setActivePage('items')}>
           <span>&lt; Return to Items</span>
         </button>
       </div>
