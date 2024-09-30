@@ -1,5 +1,7 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { getStacCollections } from '@/services/stac';
 import { Collection } from '@/typings/stac';
 
@@ -34,6 +36,10 @@ const CatalogueContext = createContext<CatalogueContextType | undefined>(undefin
 const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const catalogPath = searchParams.get('catalogPath');
+
   const setCollectionSearchResults = (collections: Collection[]) => {
     dispatch({ type: 'SET_COLLECTION_SEARCH_RESULTS', payload: collections });
   };
@@ -49,7 +55,7 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
   useEffect(() => {
     const fetchInitialCollections = async () => {
       try {
-        const collections: Collection[] = await getStacCollections('');
+        const collections: Collection[] = await getStacCollections(catalogPath ?? '', '');
         setCollectionSearchResults(collections);
       } catch (error) {
         console.error('Error fetching initial collections:', error);

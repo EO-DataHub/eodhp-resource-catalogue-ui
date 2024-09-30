@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import Draggable from 'react-draggable';
 import { FaTable } from 'react-icons/fa6';
 
@@ -12,14 +14,16 @@ import Toolbox from './components/Toolbox';
 import './styles.scss';
 
 const MapViewer = () => {
+  const nodeRef = useRef(null);
+
   const { actions: AppActions } = useApp();
   const { setActiveContent } = AppActions;
 
   return (
     <div className="map-viewer">
       <MapComponent>
-        <Draggable defaultPosition={{ x: 150, y: 150 }} handle=".handle">
-          <div className="draggable">
+        <Draggable defaultPosition={{ x: 150, y: 150 }} handle=".handle" nodeRef={nodeRef}>
+          <div ref={nodeRef} className="draggable">
             <Toolbox />
           </div>
         </Draggable>

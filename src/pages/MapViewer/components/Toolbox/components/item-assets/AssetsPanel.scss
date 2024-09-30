@@ -1,0 +1,12 @@
+.asset-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  grid-gap: 0.5rem;
+  padding: 0.5rem;
+
+  .label {
+    padding-right: 0.5rem;
+    font-weight: bold;
+  }
+}

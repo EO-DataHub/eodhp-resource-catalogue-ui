@@ -7,7 +7,9 @@ import landsat from '@/assets/placeholders/landsat.png';
 import sentinel2 from '@/assets/placeholders/sentinel-2.png';
 import terraclimate from '@/assets/placeholders/terraclimate.png';
 import { Collection } from '@/typings/stac';
+import { AppUrls } from '@/utils/appUrls';
 import { formatDateAsISO8601 } from '@/utils/genericUtils';
+import { HttpCodes } from '@/utils/http';
 
 import { StacCollectionsResponse } from './types';
 
@@ -16,13 +18,18 @@ import { StacCollectionsResponse } from './types';
 // 2. Or, retrieve a limited number of collections and paginate on the server side
 // The latter requires more network requests, however it's more efficient for large datasets
 export const getStacCollections = async (
+  privateCatalog: string,
   searchQuery: string = '',
   limit: number = 99999,
 ): Promise<Collection[]> => {
-  const url = `${import.meta.env.VITE_STAC_ENDPOINT}/collections?limit=${limit}&q=${searchQuery}`;
+  const url = privateCatalog
+    ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${privateCatalog}/collections?limit=${limit}&q=${searchQuery}`
+    : `${import.meta.env.VITE_STAC_ENDPOINT}/collections?limit=${limit}&q=${searchQuery}`;
+
   try {
     const response = await fetch(url, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -30,7 +37,11 @@ export const getStacCollections = async (
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      if (response.status === HttpCodes.FORBIDDEN) {
+        window.location.href = AppUrls.SIGN_IN;
+      } else {
+        throw new Error('Network response was not ok');
+      }
     }
     const data: StacCollectionsResponse = await response.json();
 
@@ -49,12 +60,15 @@ export const getStacCollections = async (
 
 // In the future we are going to use `cql2-json`, this item search is temporary
 export const getStacItems = async (
+  privateCatalog: string,
   collection: Collection,
   geometry: GeoJSONGeometry,
   startDate: string,
   endDate: string,
 ): Promise<FeatureCollection> => {
-  const itemsUrl = `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
+  const itemsUrl = privateCatalog
+    ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${privateCatalog}/search`
+    : `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
 
   const data = {
     collections: [collection.id],

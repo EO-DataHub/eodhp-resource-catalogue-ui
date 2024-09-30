@@ -10,3 +10,12 @@
   padding-top: 2rem;
   color: #f00;
 }
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  & .purchase-btn {
+    padding: 0.5rem;
+  }
+}

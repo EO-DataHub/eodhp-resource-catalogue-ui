@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from 'react';
 
 import { RenderHookOptions, RenderHookResult, render, renderHook } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
 import { FilterProvider } from '@/context/FilterContext';
 import { MapContextType, MapProvider } from '@/context/MapContext';
@@ -30,9 +31,11 @@ const customRender = (ui: ReactElement, options?: Options) => {
 
   return render(ui, {
     wrapper: ({ children }: WrapperParams): ReactElement => (
-      <FilterProvider>
-        <MapProvider initialState={initialMapState}>{children}</MapProvider>
-      </FilterProvider>
+      <BrowserRouter>
+        <FilterProvider>
+          <MapProvider initialState={initialMapState}>{children}</MapProvider>
+        </FilterProvider>
+      </BrowserRouter>
     ),
     ...renderHookOptions,
   });
@@ -55,9 +58,11 @@ const customRenderHook = <T, P>(
   const { renderHookOptions, initialMapState } = options ?? {};
 
   const wrapper = ({ children }: WrapperParams): ReactElement => (
-    <FilterProvider>
-      <MapProvider initialState={initialMapState}>{children}</MapProvider>
-    </FilterProvider>
+    <BrowserRouter>
+      <FilterProvider>
+        <MapProvider initialState={initialMapState}>{children}</MapProvider>
+      </FilterProvider>
+    </BrowserRouter>
   );
 
   const utils = renderHook(() => callback(), { wrapper, ...renderHookOptions });
