@@ -13,6 +13,7 @@ import { useToolbox } from '@/hooks/useToolbox';
 import { StacItem } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
 
+import { ToolboxItemSkeleton } from './ToolboxItemSkeleton';
 import ToolboxRow from '../ToolboxRow';
 
 import './styles.scss';
@@ -45,7 +46,9 @@ const ToolboxItems = () => {
       </div>
 
       <div className="toolbox__items">
-        {selectedCollectionItems?.features.length < 1 ? (
+        {!selectedCollectionItems ? <ToolboxItemSkeleton /> : null}
+
+        {selectedCollectionItems && selectedCollectionItems.features.length < 1 ? (
           <p className="no-items">No items available, make sure you have drawn an AOI</p>
         ) : (
           selectedCollectionItems?.features?.map((item: StacItem) => {

@@ -12,10 +12,11 @@ import { ToolboxAction, ToolboxContextType, ToolboxProviderProps, ToolboxState }
 const initialState: ToolboxState = {
   activePage: 'collections',
   selectedCollection: null,
-  selectedCollectionItems: {
-    type: 'FeatureCollection',
-    features: [],
-  },
+  selectedCollectionItems: null,
+  // selectedCollectionItems: {
+  //   type: 'FeatureCollection',
+  //   features: [],
+  // },
   selectedCollectionItem: null,
 };
 

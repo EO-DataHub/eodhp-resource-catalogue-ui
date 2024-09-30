@@ -33,6 +33,7 @@ export type StacAsset = {
   description?: string;
   type?: string;
   roles?: string[];
+  key?: string;
   [k: string]: unknown;
 } & CommonMetadata;
 

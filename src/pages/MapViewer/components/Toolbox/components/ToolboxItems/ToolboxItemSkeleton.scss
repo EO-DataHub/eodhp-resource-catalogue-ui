@@ -1,0 +1,58 @@
+.skeleton {
+  background-color: #fff;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 0.5rem;
+}
+
+.skeleton-text {
+  height: 20px;
+  margin-bottom: 10px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-thumbnail {
+  width: 100px;
+  height: 100px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-right: 10px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-content {
+  flex: 1;
+}
+
+.skeleton-title {
+  width: 60%;
+}
+
+.skeleton-data-points {
+  width: 80%;
+}
+
+.skeleton-button {
+  width: 100px;
+  height: 30px;
+  margin-right: 10px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e0e0;
+  }
+
+  50% {
+    background-color: #f0f0f0;
+  }
+
+  100% {
+    background-color: #e0e0e0;
+  }
+}
