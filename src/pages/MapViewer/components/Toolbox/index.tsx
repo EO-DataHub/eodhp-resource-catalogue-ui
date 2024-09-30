@@ -1,8 +1,6 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState } from 'react';
 
-import { Tooltip } from 'react-tooltip';
+import { FaRegWindowMinimize } from 'react-icons/fa';
 
 import { useToolbox } from '@/hooks/useToolbox';
 
@@ -36,39 +34,14 @@ const Toolbox: React.FC = () => {
   };
 
   return (
-    <div
-      className={`toolbox ${toolboxVisible ? 'toolbox--visible' : 'toolbox--hidden'}`}
-      id="toolbox"
-    >
+    <div className={`toolbox`} id="toolbox">
       <div className="handle toolbox__window-actions">
-        <Tooltip id="window-tooltip" place="top-start" />
-        <span
-          className="toolbox__window-action"
-          data-tooltip-html={
-            "As there is no design yet for where the toolbox can 'dock' or minimise too, this will just hide the toolbox." +
-            '<br/>Refresh the page to get it back for now' +
-            '<br/><br/> Any ideas for where this could clearly go, please let us know!'
-          }
-          data-tooltip-id="window-tooltip"
-          onClick={() => setToolboxVisible(false)}
-        >
-          _
-        </span>
-        <span
-          className="toolbox__window-action"
-          data-tooltip-html={
-            "As there is no design yet for where the toolbox can 'dock' or minimise too, this will just hide the toolbox." +
-            '<br/>Refresh the page to get it back for now' +
-            '<br/><br/> Any ideas for where this could clearly go, please let us know!'
-          }
-          data-tooltip-id="window-tooltip"
-          onClick={() => setToolboxVisible(false)}
-        >
-          X
-        </span>
+        <button className="minimize" onClick={() => setToolboxVisible((prev) => !prev)}>
+          <FaRegWindowMinimize />
+        </button>
       </div>
 
-      <div className="toolbox__content">{renderContent()}</div>
+      {toolboxVisible ? <div className="toolbox__content">{renderContent()}</div> : null}
     </div>
   );
 };

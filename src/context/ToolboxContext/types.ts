@@ -9,13 +9,15 @@ export interface ToolboxState {
   selectedCollection: Collection | null;
   selectedCollectionItems: FeatureCollection;
   selectedCollectionItem: StacItem;
+  isCollectionItemsPending: boolean;
 }
 
 export type ToolboxAction =
   | { type: 'SET_ACTIVE_PAGE'; payload: string }
   | { type: 'SET_SELECTED_COLLECTION'; payload: Collection }
   | { type: 'SET_SELECTED_COLLECTION_ITEMS'; payload: FeatureCollection }
-  | { type: 'SET_SELECTED_COLLECTION_ITEM'; payload: StacItem };
+  | { type: 'SET_SELECTED_COLLECTION_ITEM'; payload: StacItem }
+  | { type: 'SET_COLLECTION_ITEMS_PENDING'; payload: boolean };
 
 export interface ToolboxContextType {
   state: ToolboxState;

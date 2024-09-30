@@ -16,7 +16,9 @@ const initialState: ToolboxState = {
     type: 'FeatureCollection',
     features: [],
   },
+
   selectedCollectionItem: null,
+  isCollectionItemsPending: false,
 };
 
 const reducer = (state: ToolboxState, action: ToolboxAction): ToolboxState => {
@@ -29,6 +31,8 @@ const reducer = (state: ToolboxState, action: ToolboxAction): ToolboxState => {
       return { ...state, selectedCollectionItems: action.payload };
     case 'SET_SELECTED_COLLECTION_ITEM':
       return { ...state, selectedCollectionItem: action.payload };
+    case 'SET_COLLECTION_ITEMS_PENDING':
+      return { ...state, isCollectionItemsPending: action.payload };
   }
 };
 
@@ -51,10 +55,18 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     });
   };
 
+  const setCollectionItemsPending = (isPending: boolean) => {
+    dispatch({
+      type: 'SET_COLLECTION_ITEMS_PENDING',
+      payload: isPending,
+    });
+  };
+
   useEffect(() => {
     const fetchItems = async () => {
       if (state.selectedCollection && activeFilters.aoi) {
         try {
+          setCollectionItemsPending(true);
           const items = await getStacItems(
             catalogPath ?? '',
             state.selectedCollection,
@@ -63,6 +75,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
             activeFilters.temporal.end,
           );
           setSelectedCollectionItems(items);
+          setCollectionItemsPending(false);
         } catch (error) {
           console.error('Error fetching STAC items:', error);
         }
