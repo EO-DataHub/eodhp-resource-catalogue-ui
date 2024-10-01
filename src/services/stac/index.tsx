@@ -7,7 +7,6 @@ import landsat from '@/assets/placeholders/landsat.png';
 import sentinel2 from '@/assets/placeholders/sentinel-2.png';
 import terraclimate from '@/assets/placeholders/terraclimate.png';
 import { Collection } from '@/typings/stac';
-import { AppUrls } from '@/utils/appUrls';
 import { formatDateAsISO8601 } from '@/utils/genericUtils';
 import { HttpCodes } from '@/utils/http';
 
@@ -37,8 +36,8 @@ export const getStacCollections = async (
     });
 
     if (!response.ok) {
-      if (response.status === HttpCodes.FORBIDDEN) {
-        window.location.href = AppUrls.SIGN_IN;
+      if (response.status === HttpCodes.UNAUTHORIZED) {
+        window.location.href = import.meta.env.VITE_SIGN_IN;
       } else {
         throw new Error('Network response was not ok');
       }
@@ -104,7 +103,13 @@ const getStacCatalogUrl = (collection: Collection): string => {
   const selfLink = collection.links.find((link) => link.rel === 'self');
   if (!selfLink?.href) return '';
 
-  let url = selfLink.href.replace(import.meta.env.VITE_STAC_ENDPOINT, '');
+  const index =
+    selfLink.href.indexOf(import.meta.env.VITE_STAC_ENDPOINT) +
+    import.meta.env.VITE_STAC_ENDPOINT.length;
+
+  // Remove everything up to the end of the Env Var `VITE_STAC_ENDPOINT`.
+  let url = selfLink.href.slice(index, selfLink.href.length);
+
   if (url.startsWith('/catalogs/')) {
     url = url.replace('/catalogs/', '');
   }
