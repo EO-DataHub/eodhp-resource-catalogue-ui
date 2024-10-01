@@ -103,14 +103,18 @@ const getStacCatalogUrl = (collection: Collection): string => {
   const selfLink = collection.links.find((link) => link.rel === 'self');
   if (!selfLink?.href) return '';
 
-  // Extract central part of URL, so take:
-  // `https://test.eodatahub.org.uk/api/catalogue/stac/catalogs/supported-datasets/ceda-stac-fastapi/collections/cmip6`
-  // and return `supported-datasets/ceda-stac-fastapi`.
-  const catalogsStr = '/catalogs/';
-  const start = selfLink.href.indexOf(catalogsStr) + catalogsStr.length;
-  const end = selfLink.href.indexOf('/collections/');
-  const catalogUrl = selfLink.href.slice(start, end);
+  const index =
+    selfLink.href.indexOf(import.meta.env.VITE_STAC_ENDPOINT) +
+    import.meta.env.VITE_STAC_ENDPOINT.length;
 
+  // Remove everything up to the end of the Env Var `VITE_STAC_ENDPOINT`.
+  let url = selfLink.href.slice(index, selfLink.href.length);
+
+  if (url.startsWith('/catalogs/')) {
+    url = url.replace('/catalogs/', '');
+  }
+
+  const [catalogUrl] = url.split('/collections/');
   return catalogUrl;
 };
 
