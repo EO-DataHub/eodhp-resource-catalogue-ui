@@ -6,8 +6,7 @@ import './styles.scss';
 
 const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: ToolboxItemProps) => {
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-    <div className="toolbox-row" onClick={onClick}>
+    <button className="toolbox-row" onClick={onClick}>
       <div className="toolbox-row__left">
         <img
           alt="thumbnail"
@@ -29,7 +28,7 @@ const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: Toolbox
         ))}
         {children ? children : null}
       </div>
-    </div>
+    </button>
   );
 };
 

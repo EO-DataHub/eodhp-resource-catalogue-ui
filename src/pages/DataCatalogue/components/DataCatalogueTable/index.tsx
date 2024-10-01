@@ -29,8 +29,7 @@ const DataCatalogueTable: React.FC = () => {
       </div>
       {items.map((row) => {
         return (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-          <div
+          <button
             key={row.id}
             className="data-catalogue-table__row"
             onClick={() => {
@@ -50,7 +49,7 @@ const DataCatalogueTable: React.FC = () => {
             <div className="data-catalogue-table__row-type">
               <span>{row.type}</span>
             </div>
-          </div>
+          </button>
         );
       })}
       {collectionSearchResults?.length === 0 && (
