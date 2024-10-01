@@ -36,7 +36,11 @@ const Toolbox: React.FC = () => {
   return (
     <div className={`toolbox`} id="toolbox">
       <div className="handle toolbox__window-actions">
-        <button className="minimize" onClick={() => setToolboxVisible((prev) => !prev)}>
+        <button
+          aria-label="minimize toolbox dialog"
+          className="minimize"
+          onClick={() => setToolboxVisible((prev) => !prev)}
+        >
           <FaRegWindowMinimize />
         </button>
       </div>
