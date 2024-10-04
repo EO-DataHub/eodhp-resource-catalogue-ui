@@ -35,6 +35,25 @@
   }
 }
 
+.qa-view-icon {
+  position: absolute;
+  top: 58.5px;
+  right: 12px;
+  background-color: white;
+  border-radius: 10%;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border: 2px solid rgb(0 0 0 / 20%);
+  cursor: pointer;
+
+  svg {
+    align-self: center;
+    font-size: 20px;
+  }
+}
+
 .btn-stac-browser {
   position: absolute;
   top: 8.5px;

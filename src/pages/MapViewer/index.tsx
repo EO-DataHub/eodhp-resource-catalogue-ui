@@ -2,6 +2,7 @@ import { useRef } from 'react';
 
 import Draggable from 'react-draggable';
 import { FaTable } from 'react-icons/fa6';
+import { VscPreview } from 'react-icons/vsc';
 
 import stacBrowserLogo from '@/assets/icons/stac-browser.png';
 import { MapComponent } from '@/components/Map';
@@ -36,6 +37,13 @@ const MapViewer = () => {
         onClick={() => setActiveContent('dataCatalogue')}
       >
         <FaTable />
+      </button>
+      <button
+        aria-label="QA Panel"
+        className="qa-view-icon"
+        onClick={() => setActiveContent('qa')}
+      >
+        <VscPreview />
       </button>
       <button
         aria-label="STAC Browser"
