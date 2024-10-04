@@ -38,11 +38,7 @@ const MapViewer = () => {
       >
         <FaTable />
       </button>
-      <button
-        aria-label="QA Panel"
-        className="qa-view-icon"
-        onClick={() => setActiveContent('qa')}
-      >
+      <button aria-label="QA Panel" className="qa-view-icon" onClick={() => setActiveContent('qa')}>
         <VscPreview />
       </button>
       <button

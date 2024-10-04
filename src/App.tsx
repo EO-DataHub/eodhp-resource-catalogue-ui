@@ -7,6 +7,7 @@ import FilterSidebar from '@/components/FilterSidebar';
 import { useApp } from '@/hooks/useApp';
 import DataCatalogue from '@/pages/DataCatalogue';
 import MapViewer from '@/pages/MapViewer';
+import { QAPanel } from '@/pages/q-and-a/QAPanel';
 
 const App: React.FC = () => {
   const { state: AppState, actions: AppActions } = useApp();
@@ -36,8 +37,9 @@ const App: React.FC = () => {
       <div
         className={`main-content-container ${!filterSidebarOpen ? 'main-content-container-full' : ''}`}
       >
-        {activeContent === 'dataCatalogue' && <DataCatalogue />}
-        {activeContent === 'map' && <MapViewer />}
+        {activeContent === 'dataCatalogue' ? <DataCatalogue /> : null}
+        {activeContent === 'map' ? <MapViewer /> : null}
+        {activeContent === 'qa' ? <QAPanel /> : null}
       </div>
     </main>
   );

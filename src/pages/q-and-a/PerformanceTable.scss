@@ -1,0 +1,43 @@
+.performance-table {
+  margin-top: 1rem;
+  width: 100%;
+  border-collapse: collapse;
+
+  .light-blue {
+    background-color: #dae3f3;
+  }
+
+  .pale-green {
+    background-color: #e2f0d9;
+  }
+
+  th {
+    border: 1px solid #ccc;
+    padding: 0.5rem 0;
+  }
+
+  tbody {
+    background-color: #fff;
+  }
+
+  td {
+    border: 1px solid #ccc;
+    padding: 10px;
+
+    .good {
+      color: #548235;
+    }
+
+    .bad {
+      color: #f00;
+    }
+
+    .ugly {
+      color: #ffd966;
+    }
+
+    svg {
+      font-size: 20px;
+    }
+  }
+}
