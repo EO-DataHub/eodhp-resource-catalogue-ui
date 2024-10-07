@@ -1,0 +1,28 @@
+.legend {
+  .title {
+    background-color: #062060;
+    color: #fff;
+    text-align: center;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    .border {
+      border: 1px solid #000;
+    }
+
+    .tick-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    li {
+      padding: 0.2rem;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.quality-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    color: #fff;
+    background-color: #062060;
+
+    th {
+      padding: 0.5rem 0;
+    }
+  }
+
+  td {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+}
