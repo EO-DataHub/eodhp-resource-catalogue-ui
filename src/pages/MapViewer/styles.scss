@@ -1,6 +1,6 @@
 .map-viewer {
   display: flex;
-  flex-grow: 4;
+  flex-grow: 1;
   height: 100%;
 
   .draggable {
@@ -12,7 +12,8 @@
 
 .flex-grow {
   display: flex;
-  flex-grow: 1;
+
+  // flex-grow: 1;
   width: 100%;
 }
 
