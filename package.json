@@ -77,6 +77,7 @@
     "postcss-scss": "^4.0.9",
     "prettier": "^3.3.3",
     "sass": "^1.69.7",
+    "stac-ts": "^1.0.3",
     "stylelint": "^16.8.2",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-config-standard-scss": "^13.1.0",

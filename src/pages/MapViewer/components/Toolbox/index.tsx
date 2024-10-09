@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import { FaRegWindowMinimize } from 'react-icons/fa';
 
+import { Tree } from '@/components/tree/Tree';
+import { TreeComponent } from '@/components/tree/TreeComponent';
 import { useToolbox } from '@/hooks/useToolbox';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
@@ -10,6 +12,11 @@ import ToolboxCollections from './components/ToolboxCollections';
 import ToolboxItems from './components/ToolboxItems';
 
 import './styles.scss';
+
+// const ENVIRONMENT = 'dev';
+const ENVIRONMENT = 'test';
+const HOST = `https://${ENVIRONMENT}.eodatahub.org.uk`;
+const CATALOG_URL = `${HOST}/api/catalogue/stac/catalogs/supported-datasets`;
 
 const Toolbox: React.FC = () => {
   const [toolboxVisible, setToolboxVisible] = useState(true); // TODO: Move to context
@@ -21,7 +28,9 @@ const Toolbox: React.FC = () => {
   const renderContent = () => {
     switch (activePage) {
       case 'collections':
-        return <ToolboxCollections />;
+        // return <ToolboxCollections />;
+        // return <Tree />;
+        return <TreeComponent catalogUrl={CATALOG_URL} />;
       case 'items':
         return <ToolboxItems />;
       case 'purchase':

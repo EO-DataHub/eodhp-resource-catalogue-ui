@@ -30,19 +30,19 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     });
   }
 
-  temporal &&
-    temporal.interval &&
+  if (temporal?.interval) {
     dataPoints.push({
       icon: IoTimeOutline,
       alt: 'Time Icon',
       text:
-        temporal?.interval.length > 0
-          ? `${new Date(temporal?.interval?.[0][0]).toLocaleDateString()} - ${new Date(
+        temporal.interval.length > 0
+          ? `${new Date(temporal.interval[0][0]).toLocaleDateString()} - ${new Date(
               temporal.interval[0][1],
             ).toLocaleDateString()}`
           : 'No date given',
       tooltip: 'Temporal Extent',
     });
+  }
 
   // Summaries could be anything, so there needs to be some checks and processing.
   // We may not even want this, but it's here for now.

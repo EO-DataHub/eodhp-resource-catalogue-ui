@@ -1,0 +1,29 @@
+.node {
+  /* Reset button defaults */
+  background: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
+  /* Custom styles to look like a div */
+  // display: block; /* Or inline-block, depending on your use case */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: auto;
+  padding: 10px;
+
+  // background-color: #f0f0f0;
+  // background-color: rgb(240 240 240 / 90%);
+  border: unset;
+  cursor: pointer;
+
+  /* Optional hover/focus styles */
+  &:hover,
+  &:focus {
+    background-color: #e0e0e0;
+    outline: none; /* Remove focus outline, if desired */
+  }
+}

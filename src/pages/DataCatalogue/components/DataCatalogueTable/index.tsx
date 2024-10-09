@@ -10,6 +10,7 @@ const itemsPerPage = 6; // TODO: Move to context and make it configurable
 const DataCatalogueTable: React.FC = () => {
   const { state: CatalogueState } = useCatalogue();
   const { collectionSearchResults, activePage } = CatalogueState;
+  console.log('COLLECTIONS: ', collectionSearchResults);
 
   const { state: FilterState } = useFilters();
   const { activeFilters } = FilterState;

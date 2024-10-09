@@ -2,7 +2,8 @@
 
 * {
   margin: 0;
-  padding: 0;
+
+  // padding: 0; // Removed this so that UL/LI elements work, this was breaking that.
   box-sizing: border-box;
   font-family: $base-font-family;
   font-size: $base-font-size;
