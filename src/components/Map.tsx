@@ -6,6 +6,7 @@ import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { Tile as TileLayer } from 'ol/layer';
 import { fromLonLat } from 'ol/proj';
 import { OSM } from 'ol/source';
+import { Tooltip } from 'react-tooltip';
 
 import { useMap } from '@/hooks/useMap';
 
@@ -59,6 +60,28 @@ export const MapComponent = ({ children }: MapComponentProps) => {
 
     setMap(map);
 
+    const attachTooltips = () => {
+      const zoomInButton = document.querySelector('.ol-zoom-in');
+      const zoomOutButton = document.querySelector('.ol-zoom-out');
+
+      if (zoomInButton) {
+        // Remove default title, so we don't get duplicate tooltips.
+        zoomInButton.removeAttribute('title');
+
+        zoomInButton.setAttribute('data-tooltip-content', 'Zoom In');
+      }
+
+      if (zoomOutButton) {
+        // Remove default title, so we don't get duplicate tooltips.
+        zoomOutButton.removeAttribute('title');
+
+        zoomOutButton.setAttribute('data-tooltip-content', 'Zoom Out');
+      }
+    };
+
+    // Wait for DOM rendering before attaching tooltips
+    setTimeout(attachTooltips, 0);
+
     return () => {
       map?.setTarget(undefined);
     };
@@ -69,6 +92,7 @@ export const MapComponent = ({ children }: MapComponentProps) => {
       <div ref={mapRef} className="flex-grow" id="map">
         {children}
       </div>
+      <Tooltip anchorSelect=".ol-zoom-in, .ol-zoom-out" place="right" />
     </div>
   );
 };
