@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { Vector as VectorLayer } from 'ol/layer';
@@ -45,14 +43,14 @@ const ToolboxItems = () => {
     <div className="toolbox-content-container">
       {/* This header could be its own component, can't see where it would be used though */}
       <div className="toolbox__header">
-        <div
+        <button
           className="toolbox__header-back"
           onClick={() => {
             setActivePage('collections');
           }}
         >
           <span>&lt; Return to Collections</span>
-        </div>
+        </button>
         <div className="toolbox__header-title">
           {selectedCollection.title ? selectedCollection.title : selectedCollection.id}
         </div>
@@ -68,7 +66,7 @@ const ToolboxItems = () => {
               dataPoints={parseFeatureDataPoints(item)}
               thumbnail={returnFeatureThumbnail(item)}
               title={item.id.toString()}
-              onClick={(e) => {
+              onClick={() => {
                 setActivePage('assets');
                 setSelectedCollectionItem(item);
 
@@ -108,12 +106,6 @@ const ToolboxItems = () => {
 
                 // Zoom the map to the buffered extent of the scene.
                 map.getView().fit(polygon.getGeometry(), { padding: [20, 20, 20, 20] });
-
-                if (e.shiftKey) {
-                  if (url) {
-                    window.open(url, '_blank');
-                  }
-                }
               }}
             >
               <div className="button-wrapper">

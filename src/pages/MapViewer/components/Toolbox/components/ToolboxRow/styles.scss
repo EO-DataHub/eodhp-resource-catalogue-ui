@@ -6,6 +6,7 @@
   padding: 10px;
   cursor: pointer;
   align-items: center;
+  border: unset;
 
   &:hover {
     background-color: $hover-colour;
@@ -42,6 +43,7 @@
       font-size: 0.875rem;
       word-wrap: break-word;
       overflow: hidden;
+      text-align: left;
     }
 
     /* stylelint-disable-next-line selector-class-pattern */

@@ -1,4 +1,9 @@
-/* stylelint-disable-next-line selector-class-pattern */
+/* stylelint-disable selector-class-pattern */
+.toolbox__header-back {
+  display: flex;
+  border: unset;
+}
+
 .toolbox__items {
   overflow-y: auto;
   height: calc(100% - 50px);
