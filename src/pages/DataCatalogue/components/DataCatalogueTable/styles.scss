@@ -29,6 +29,8 @@
     display: flex;
     padding: 0.5rem 0;
     cursor: pointer;
+    width: 100%;
+    border: unset;
 
     &:hover {
       background-color: $hover-colour;
@@ -49,6 +51,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      align-items: flex-start;
       padding: 0.25rem 0.5rem;
 
       span {
