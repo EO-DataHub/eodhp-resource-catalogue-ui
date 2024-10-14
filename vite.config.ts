@@ -6,7 +6,7 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/static-apps/resource-catalogue/main/', // TODO: This will only retrieve the asset from the main branch
+  base: '/static-apps/resource-catalogue/791--sub-cat-1/', // TODO: This will only retrieve the asset from the main branch
   plugins: [react()],
   resolve: {
     alias: {
