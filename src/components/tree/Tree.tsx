@@ -32,7 +32,7 @@ type TreeProps = {
 export const Tree = ({ catalogUrl }: TreeProps) => {
   const [treeData, setTreeData] = useState<TreeCatalog[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
-  const [filteredTreeData, setFilteredTreeData] = useState<TreeCatalog[]>([]);
+  const [filteredTreeData, setFilteredTreeData] = useState<TreeCatalog[]>(null);
 
   const {
     state: { activeFilters },
@@ -132,7 +132,7 @@ export const Tree = ({ catalogUrl }: TreeProps) => {
 
   return (
     <div>
-      {filteredTreeData.length > 0 ? (
+      {filteredTreeData ? (
         <ul className="branch">
           {filteredTreeData.map((catalog) => (
             <TreeNode
