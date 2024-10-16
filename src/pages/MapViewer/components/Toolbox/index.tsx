@@ -20,6 +20,9 @@ const ROOT_CATALOG_URL = `${CATALOG_URL}/supported-datasets/catalogs`;
 // Utility function to fetch data from a given URL
 const fetchData = async (url: string) => {
   const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Error fetching data');
+  }
   return response.json();
 };
 
@@ -48,53 +51,63 @@ const Toolbox = () => {
 
   // Recursive function to fetch and build the tree structure
   const fetchCatalog = useCallback(async (url: string): Promise<TreeCatalog> => {
-    const catalogData = await fetchData(url);
+    try {
+      const catalogData = await fetchData(url);
 
-    // Check if the current catalog has sub-catalogs or collections
-    const subCatalogs: TreeCatalog[] = await Promise.all(
-      catalogData.links
-        ?.filter((link) => link.rel === 'child')
-        .map((link: Link) => fetchCatalog(link.href)) || [],
-    );
+      // Check if the current catalog has sub-catalogs or collections
+      const subCatalogs: TreeCatalog[] = await Promise.all(
+        catalogData?.links
+          ?.filter((link) => link.rel === 'child' && !link.href.includes('/collections'))
+          .map((link: Link) => fetchCatalog(link.href)) || [],
+      );
 
-    const collectionUrl = catalogData.links
-      .filter((link) => link.rel === 'data')
-      .filter((link) => link.href.includes('/collections'))
-      .map((link) => link.href)[0];
+      const collectionUrl = catalogData?.links
+        ?.filter((link) => link.rel === 'data')
+        .filter((link) => link.href.includes('/collections'))
+        .map((link) => link.href)[0];
 
-    let collections: Collection[] = [];
-    if (collectionUrl) {
-      const collectionsResponse = await fetchData(collectionUrl);
-      collections = collectionsResponse.collections;
+      let collections: Collection[] = [];
+      if (collectionUrl) {
+        const collectionsResponse = await fetchData(collectionUrl);
+        collections = collectionsResponse.collections;
+      }
+
+      // Return the catalog with its children (sub-catalogs and collections)
+      return {
+        ...catalogData,
+        catalogs: subCatalogs,
+        collections,
+      };
+    } catch (error) {
+      console.error(error);
     }
-
-    // Return the catalog with its children (sub-catalogs and collections)
-    return {
-      ...catalogData,
-      catalogs: subCatalogs,
-      collections,
-    };
   }, []);
 
   // Fetch the ROOTS array of URLs when the component mounts
   useEffect(() => {
     const fetchRoots = async () => {
-      const rootsResponse = await fetchData(catalogUrl);
+      try {
+        const rootsResponse = await fetchData(catalogUrl);
 
-      const rootCatalogUrls = rootsResponse.catalogs.reduce((acc, obj) => {
-        const selfLink = obj.links.find((link: Link) => link.rel === 'self');
+        const catalogs = rootsResponse.catalogs ? rootsResponse.catalogs : [rootsResponse];
 
-        if (selfLink) {
-          acc.push(selfLink.href);
-        }
+        const rootCatalogUrls = catalogs?.reduce((acc, obj) => {
+          const selfLink = obj.links.find((link: Link) => link.rel === 'self');
 
-        return acc;
-      }, []);
+          if (selfLink) {
+            acc.push(selfLink.href);
+          }
 
-      const topLevelCatalogs = await Promise.all(
-        rootCatalogUrls.map((url: string) => fetchCatalog(url)),
-      );
-      setTreeData(topLevelCatalogs);
+          return acc;
+        }, []);
+
+        const topLevelCatalogs = await Promise.all(
+          rootCatalogUrls.map((url: string) => fetchCatalog(url)),
+        );
+        setTreeData(topLevelCatalogs);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchRoots();
