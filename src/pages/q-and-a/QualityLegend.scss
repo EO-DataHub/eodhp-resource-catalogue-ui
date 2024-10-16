@@ -6,8 +6,8 @@
   }
 
   ul {
-    list-style: none;
-    padding: 0;
+    // list-style: none;
+    // padding: 0;
 
     .border {
       border: 1px solid #000;
@@ -20,9 +20,9 @@
       gap: 0.3rem;
     }
 
-    li {
-      padding: 0.2rem;
-      text-align: center;
-    }
+    // li {
+    //   padding: 0.2rem;
+    //   text-align: center;
+    // }
   }
 }
