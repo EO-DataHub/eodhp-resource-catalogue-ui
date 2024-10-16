@@ -4,6 +4,7 @@ import { useCatalogue } from '@/hooks/useCatalogue';
 import { useFilters } from '@/hooks/useFilters';
 
 import './styles.scss';
+import { DataCatalogueRow } from './DataCatalogueRow';
 
 const itemsPerPage = 6; // TODO: Move to context and make it configurable
 
@@ -27,31 +28,10 @@ const DataCatalogueTable: React.FC = () => {
           <span>Search results for &ldquo;{activeFilters.textQuery}&rdquo;</span>
         ) : null}
       </div>
-      {items.map((row) => {
-        return (
-          <button
-            key={row.id}
-            className="data-catalogue-table__row"
-            onClick={() => {
-              window.open(row.stacUrl, '_blank');
-            }}
-          >
-            <div className="data-catalogue-table__row-content">
-              <div className="data-catalogue-table__row-information">
-                <span>{row.title || row.id}</span>
-                <span>{row.description}</span>
-                <span>Updated {row.lastUpdated}</span>
-              </div>
-              <div className="data-catalogue-table__row-thumbnail">
-                <img alt="Thumbnail" src={row.thumbnailUrl} />
-              </div>
-            </div>
-            <div className="data-catalogue-table__row-type">
-              <span>{row.type}</span>
-            </div>
-          </button>
-        );
-      })}
+      {items.map((row) => (
+        <DataCatalogueRow key={row.id} row={row} />
+      ))}
+
       {collectionSearchResults?.length === 0 && (
         <div className="data-catalogue-table__no-results">
           <span>No results found for &ldquo;{activeFilters.textQuery}&rdquo;</span>

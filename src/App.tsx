@@ -37,8 +37,8 @@ const App: React.FC = () => {
       <div
         className={`main-content-container ${!filterSidebarOpen ? 'main-content-container-full' : ''}`}
       >
+        <MapViewer />
         {activeContent === 'dataCatalogue' ? <DataCatalogue /> : null}
-        {activeContent === 'map' ? <MapViewer /> : null}
         {activeContent === 'qa' ? <QAPanel /> : null}
       </div>
     </main>
