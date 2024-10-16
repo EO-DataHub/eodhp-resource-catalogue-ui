@@ -15,7 +15,8 @@ type TreeNodeProps = {
 const CATALOG = 'Catalog';
 
 export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }: TreeNodeProps) => {
-  const label = node?.title.trim() !== '' ? node.title : node?.id;
+  console.log('TREE NODE: ', node);
+  const label = node?.title?.trim() !== '' ? node?.title : node?.id;
 
   if (node.type === CATALOG) {
     const isExpanded = expandedNodes[node.id] ?? false;
@@ -37,17 +38,22 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
                 toggleExpand={toggleExpand}
               />
             ))}
-            {node.collections?.map((collection) => (
-              <li key={collection.id}>
-                <ToolboxRow
-                  key={collection.id}
-                  dataPoints={parseCollectionDataPoints(collection)}
-                  thumbnail={collection.thumbnailUrl ?? folder}
-                  title={collection.title ? collection.title : collection.id}
-                  onClick={() => handleLeafClick(collection)}
-                />
-              </li>
-            ))}
+            {node.collections?.map((collection) => {
+              // Extract the thumbnail URL from the assets object
+              const thumbnailUrl = collection.assets?.thumbnail?.href ?? folder;
+
+              return (
+                <li key={collection.id}>
+                  <ToolboxRow
+                    key={collection.id}
+                    dataPoints={parseCollectionDataPoints(collection)}
+                    thumbnail={thumbnailUrl}
+                    title={collection.title ? collection.title : collection.id}
+                    onClick={() => handleLeafClick(collection)}
+                  />
+                </li>
+              );
+            })}
           </ul>
         ) : null}
       </li>
