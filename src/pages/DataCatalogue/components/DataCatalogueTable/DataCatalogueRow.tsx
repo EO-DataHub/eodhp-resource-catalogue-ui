@@ -57,9 +57,7 @@ export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
     <button
       key={row.id}
       className="data-catalogue-table__row"
-      onClick={() => {
-        window.open(row.stacUrl, '_blank');
-      }}
+      onClick={() => window.open(row.stacUrl, '_blank')}
     >
       <div className="data-catalogue-table__row-content">
         <div className="data-catalogue-table__row-information">
