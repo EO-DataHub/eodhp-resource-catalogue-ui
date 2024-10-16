@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 
 import { useDebounce } from 'react-use';
 
 import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
-import { Collection, Link } from '@/typings/stac';
+import { Collection } from '@/typings/stac';
 
 import { TreeNode } from './TreeNode';
 import { filterTree } from './utils';
@@ -19,19 +19,13 @@ export type TreeCatalog = {
   collections?: Collection[]; // collections
 };
 
-// Utility function to fetch data from a given URL
-const fetchData = async (url: string) => {
-  const response = await fetch(url);
-  return response.json();
-};
-
 type TreeProps = {
-  catalogUrl: string;
+  treeData: TreeCatalog[];
+  expandedNodes: { [key: string]: boolean };
+  setExpandedNodes: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 };
 
-export const Tree = ({ catalogUrl }: TreeProps) => {
-  const [treeData, setTreeData] = useState<TreeCatalog[]>([]);
-  const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
+export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) => {
   const [filteredTreeData, setFilteredTreeData] = useState<TreeCatalog[]>(null);
 
   const {
@@ -42,61 +36,6 @@ export const Tree = ({ catalogUrl }: TreeProps) => {
     actions: { setActivePage, setSelectedCollection },
   } = useToolbox();
 
-  // Recursive function to fetch and build the tree structure
-  const fetchCatalog = useCallback(async (url: string): Promise<TreeCatalog> => {
-    const catalogData = await fetchData(url);
-
-    // Check if the current catalog has sub-catalogs or collections
-    const subCatalogs: TreeCatalog[] = await Promise.all(
-      catalogData.links
-        ?.filter((link) => link.rel === 'child')
-        .map((link: Link) => fetchCatalog(link.href)) || [],
-    );
-
-    const collectionUrl = catalogData.links
-      .filter((link) => link.rel === 'data')
-      .filter((link) => link.href.includes('/collections'))
-      .map((link) => link.href)[0];
-
-    let collections: Collection[] = [];
-    if (collectionUrl) {
-      const collectionsResponse = await fetchData(collectionUrl);
-      collections = collectionsResponse.collections;
-    }
-
-    // Return the catalog with its children (sub-catalogs and collections)
-    return {
-      ...catalogData,
-      catalogs: subCatalogs,
-      collections,
-    };
-  }, []);
-
-  // Fetch the ROOTS array of URLs when the component mounts
-  useEffect(() => {
-    const fetchRoots = async () => {
-      const rootsResponse = await fetchData(catalogUrl);
-
-      const rootCatalogUrls = rootsResponse.catalogs.reduce((acc, obj) => {
-        const selfLink = obj.links.find((link: Link) => link.rel === 'self');
-
-        if (selfLink) {
-          acc.push(selfLink.href);
-        }
-
-        return acc;
-      }, []);
-
-      const topLevelCatalogs = await Promise.all(
-        rootCatalogUrls.map((url: string) => fetchCatalog(url)),
-      );
-      setTreeData(topLevelCatalogs);
-    };
-
-    fetchRoots();
-  }, [catalogUrl, fetchCatalog]);
-
-  // Recursive function to filter tree nodes based on the filter text
   const filter = useCallback(
     (node: TreeCatalog | Collection): TreeCatalog | Collection | null =>
       filterTree(node, activeFilters),

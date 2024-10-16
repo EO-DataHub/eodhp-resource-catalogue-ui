@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FaRegWindowMinimize } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 
 import { Tree } from '@/components/tree/Tree';
 import { useToolbox } from '@/hooks/useToolbox';
+import { Collection, Link } from '@/typings/stac';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
@@ -16,22 +17,98 @@ import './styles.scss';
 const CATALOG_URL = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs`;
 const ROOT_CATALOG_URL = `${CATALOG_URL}/supported-datasets/catalogs`;
 
-const Toolbox: React.FC = () => {
+// Utility function to fetch data from a given URL
+const fetchData = async (url: string) => {
+  const response = await fetch(url);
+  return response.json();
+};
+
+export type TreeCatalog = {
+  id: string;
+  title: string;
+  type: 'Catalog';
+  catalogs?: TreeCatalog[]; // sub-catalogs
+  collections?: Collection[]; // collections
+};
+
+const Toolbox = () => {
   const [toolboxVisible, setToolboxVisible] = useState(true); // TODO: Move to context
+  const [treeData, setTreeData] = useState<TreeCatalog[]>([]);
+  const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
 
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const catalogPath = searchParams.get('catalogPath');
 
+  const catalogUrl = catalogPath ? `${CATALOG_URL}/${catalogPath}` : ROOT_CATALOG_URL;
+
   const {
     state: { activePage },
   } = useToolbox();
+
+  // Recursive function to fetch and build the tree structure
+  const fetchCatalog = useCallback(async (url: string): Promise<TreeCatalog> => {
+    const catalogData = await fetchData(url);
+
+    // Check if the current catalog has sub-catalogs or collections
+    const subCatalogs: TreeCatalog[] = await Promise.all(
+      catalogData.links
+        ?.filter((link) => link.rel === 'child')
+        .map((link: Link) => fetchCatalog(link.href)) || [],
+    );
+
+    const collectionUrl = catalogData.links
+      .filter((link) => link.rel === 'data')
+      .filter((link) => link.href.includes('/collections'))
+      .map((link) => link.href)[0];
+
+    let collections: Collection[] = [];
+    if (collectionUrl) {
+      const collectionsResponse = await fetchData(collectionUrl);
+      collections = collectionsResponse.collections;
+    }
+
+    // Return the catalog with its children (sub-catalogs and collections)
+    return {
+      ...catalogData,
+      catalogs: subCatalogs,
+      collections,
+    };
+  }, []);
+
+  // Fetch the ROOTS array of URLs when the component mounts
+  useEffect(() => {
+    const fetchRoots = async () => {
+      const rootsResponse = await fetchData(catalogUrl);
+
+      const rootCatalogUrls = rootsResponse.catalogs.reduce((acc, obj) => {
+        const selfLink = obj.links.find((link: Link) => link.rel === 'self');
+
+        if (selfLink) {
+          acc.push(selfLink.href);
+        }
+
+        return acc;
+      }, []);
+
+      const topLevelCatalogs = await Promise.all(
+        rootCatalogUrls.map((url: string) => fetchCatalog(url)),
+      );
+      setTreeData(topLevelCatalogs);
+    };
+
+    fetchRoots();
+  }, [catalogUrl, fetchCatalog]);
 
   const renderContent = () => {
     switch (activePage) {
       case 'collections':
         return (
-          <Tree catalogUrl={catalogPath ? `${CATALOG_URL}/${catalogPath}` : ROOT_CATALOG_URL} />
+          <Tree
+            expandedNodes={expandedNodes}
+            setExpandedNodes={setExpandedNodes}
+            treeData={treeData}
+          />
         );
       case 'items':
         return <ToolboxItems />;

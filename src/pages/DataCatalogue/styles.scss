@@ -1,7 +1,11 @@
 .data-catalogue {
+  position: absolute;
+  top: 0;
+  right: 0;
   background-color: #efefef;
   height: 100%;
   width: 100%;
   border-left: 1px solid black;
   padding: 1rem;
+  z-index: 99999;
 }
