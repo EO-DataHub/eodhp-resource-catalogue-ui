@@ -1,22 +1,29 @@
 import React from 'react';
 
-import { TbLayoutSidebarRightCollapseFilled } from 'react-icons/tb';
+// import { TbLayoutSidebarRightCollapseFilled } from 'react-icons/tb';
 
-import { Axe } from '@/components/Axe';
-import FilterSidebar from '@/components/FilterSidebar';
-import { useApp } from '@/hooks/useApp';
-import DataCatalogue from '@/pages/DataCatalogue';
-import MapViewer from '@/pages/MapViewer';
-import { QAPanel } from '@/pages/q-and-a/QAPanel';
+// import { Axe } from '@/components/Axe';
+// import FilterSidebar from '@/components/FilterSidebar';
+// import { useApp } from '@/hooks/useApp';
+// import DataCatalogue from '@/pages/DataCatalogue';
+// import MapViewer from '@/pages/MapViewer';
+// import { QAPanel } from '@/pages/q-and-a/QAPanel';
 
 const App: React.FC = () => {
-  const { state: AppState, actions: AppActions } = useApp();
-  const { filterSidebarOpen, activeContent } = AppState;
-  const { setFilterSidebarOpen } = AppActions;
+  // const { state: AppState, actions: AppActions } = useApp();
+  // const { filterSidebarOpen, activeContent } = AppState;
+  // const { setFilterSidebarOpen } = AppActions;
 
   return (
     <main className="main">
-      <Axe />
+      <ul>
+        <li>Item 1</li>
+        <li>Item 1</li>
+        <li>Item 1</li>
+        <li>Item 1</li>
+        <li>Item 1</li>
+      </ul>
+      {/* <Axe />
 
       <h1 className="offscreen">Map Catalogue</h1>
 
@@ -40,7 +47,7 @@ const App: React.FC = () => {
         <MapViewer />
         {activeContent === 'dataCatalogue' ? <DataCatalogue /> : null}
         {activeContent === 'qa' ? <QAPanel /> : null}
-      </div>
+      </div> */}
     </main>
   );
 };
