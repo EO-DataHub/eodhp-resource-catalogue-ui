@@ -29,7 +29,7 @@ const enableMocking = async () => {
   });
 };
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById('resource-catalogue-ui');
 if (!rootElement) throw new Error('Failed to find the root element');
 
 const root = ReactDOM.createRoot(rootElement);
