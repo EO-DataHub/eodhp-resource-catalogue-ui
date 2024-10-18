@@ -51,15 +51,13 @@ describe('DrawingTools', () => {
     render(<DrawingTools />);
 
     // Check that the button is rendered
-    expect(
-      screen.getByRole('button', { name: /display drawing tools panel/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /map drawing tools/i })).toBeInTheDocument();
   });
 
   it('should toggle the DrawingToolbox visibility when the button is clicked', async () => {
     render(<DrawingTools />);
 
-    const button = screen.getByRole('button', { name: /display drawing tools panel/i });
+    const button = screen.getByRole('button', { name: /map drawing tools/i });
 
     // DrawingToolbox should not be visible initially
     const toolbox = screen.queryByRole('region', { name: /drawing-toolbox/i });
