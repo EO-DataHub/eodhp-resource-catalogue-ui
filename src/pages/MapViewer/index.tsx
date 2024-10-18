@@ -34,38 +34,41 @@ const MapViewer = () => {
         <TimelineFilter />
       </MapComponent>
 
-      <button
-        aria-label="Data Catalogue"
-        className="table-view-icon"
-        data-tooltip-content="View Data Catalogue"
-        data-tooltip-id="map-buttons"
-        onClick={() => setActiveContent('dataCatalogue')}
-      >
-        <FaTable />
-      </button>
-      <button
-        aria-label="QA Panel"
-        className="qa-view-icon"
-        data-tooltip-content="View Q&A"
-        data-tooltip-id="map-buttons"
-        onClick={() => setActiveContent('qa')}
-      >
-        <VscPreview />
-      </button>
-      <button
-        aria-label="STAC Browser"
-        className="btn-stac-browser unstyled-button"
-        data-tooltip-content="Open in STAC Browser"
-        data-tooltip-id="map-buttons"
-        onClick={() =>
-          window.open(
-            `${import.meta.env.VITE_STAC_BROWSER}/#/external/${import.meta.env.VITE_STAC_ENDPOINT}`,
-            '_blank',
-          )
-        }
-      >
-        <img alt="STAC Browser" src={stacBrowserLogo} />
-      </button>
+      <div className="horizontal">
+        <button
+          aria-label="STAC Browser"
+          className="btn-stac-browser unstyled-button"
+          data-tooltip-content="Open in STAC Browser"
+          data-tooltip-id="map-buttons"
+          onClick={() =>
+            window.open(
+              `${import.meta.env.VITE_STAC_BROWSER}/#/external/${import.meta.env.VITE_STAC_ENDPOINT}`,
+              '_blank',
+            )
+          }
+        >
+          <img alt="STAC Browser" src={stacBrowserLogo} />
+        </button>
+      </div>
+
+      <div className="vertical">
+        <button
+          aria-label="Data Catalogue"
+          data-tooltip-content="View Data Catalogue"
+          data-tooltip-id="map-buttons"
+          onClick={() => setActiveContent('dataCatalogue')}
+        >
+          <FaTable />
+        </button>
+        <button
+          aria-label="QA Panel"
+          data-tooltip-content="View Q&A"
+          data-tooltip-id="map-buttons"
+          onClick={() => setActiveContent('qa')}
+        >
+          <VscPreview />
+        </button>
+      </div>
 
       <DrawingTools />
     </div>
