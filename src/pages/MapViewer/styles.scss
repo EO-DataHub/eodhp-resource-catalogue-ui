@@ -3,6 +3,10 @@
   flex-grow: 4;
   height: 100%;
 
+  #map-buttons {
+    z-index: 100;
+  }
+
   .draggable {
     position: absolute;
     z-index: 9999;

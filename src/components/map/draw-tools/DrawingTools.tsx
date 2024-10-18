@@ -51,9 +51,9 @@ export const DrawingTools = () => {
       <Tooltip id="drawTools" />
 
       <button
-        aria-label="display drawing tools panel"
+        aria-label="Map Drawing Tools"
         className="bbox"
-        data-tooltip-content="display drawing tools panel"
+        data-tooltip-content="Map Drawing tools"
         data-tooltip-id="drawTools"
         onClick={() => setIsDrawingToolboxVisible((prev) => !prev)}
       >
