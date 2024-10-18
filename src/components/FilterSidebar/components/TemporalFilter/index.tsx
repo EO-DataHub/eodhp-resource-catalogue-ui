@@ -1,4 +1,5 @@
 import { FilterData } from '@/context/FilterContext/types';
+import { formatDate } from '@/utils/date';
 
 import './styles.scss';
 
@@ -30,7 +31,7 @@ const TemporalFilter = ({
             name="startDate"
             type="date"
             value={value.start}
-            onChange={(e) => onStartDateChange(e.target.value)}
+            onChange={(e) => onStartDateChange(formatDate(e.target.value))}
           />
         </div>
         <div className="date-picker-container">
@@ -42,7 +43,7 @@ const TemporalFilter = ({
             name="endDate"
             type="date"
             value={value.end}
-            onChange={(e) => onEndDateChange(e.target.value)}
+            onChange={(e) => onEndDateChange(formatDate(e.target.value))}
           />
         </div>
       </div>
