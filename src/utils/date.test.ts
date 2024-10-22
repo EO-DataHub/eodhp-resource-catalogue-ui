@@ -21,7 +21,9 @@ describe('Formate date utils method', () => {
 
   it('should throw an error when an unsupported formatType is provided', () => {
     const date = new Date();
-    expect(() => formatDate(date, 'UNKNOWN')).toThrow('Format type: UNKNOWN not implemented');
+    expect(() => formatDate(date, false, 'UNKNOWN')).toThrow(
+      'Format type: UNKNOWN not implemented',
+    );
   });
 
   it('should throw an error when an invalid date string is provided', () => {

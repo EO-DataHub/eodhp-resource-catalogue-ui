@@ -8,8 +8,12 @@ export const formatDate = (
   if (!date) date = new Date();
   let newDate = date.toLocaleString();
   try {
-    if (formatType === 'ISO8601') {
-      newDate = format(new Date(date), 'yyyy-MM-dd');
+    switch (formatType) {
+      case 'ISO8601':
+        newDate = format(new Date(date), 'yyyy-MM-dd');
+        break;
+      default:
+        throw new Error(`Format type: ${formatType} not implemented`);
     }
   } catch (error) {
     throw new Error(error.message);
