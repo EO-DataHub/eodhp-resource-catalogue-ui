@@ -1,13 +1,21 @@
 import { format } from 'date-fns';
 
-export const formatDate = (date: string | Date, formatType = 'ISO8601'): string => {
+export const formatDate = (
+  date: string | Date,
+  includeTime = false,
+  formatType = 'ISO8601',
+): string => {
+  if (!date) date = new Date();
+  let newDate = date.toLocaleString();
   try {
-    if (!date) date = new Date();
     if (formatType === 'ISO8601') {
-      return format(new Date(date), 'yyyy-MM-dd');
+      newDate = format(new Date(date), 'yyyy-MM-dd');
     }
-    throw new Error(`Format type: ${formatType} not implemented`);
   } catch (error) {
     throw new Error(error.message);
   }
+  if (includeTime) {
+    newDate = newDate + ' ' + new Date(date).toLocaleTimeString();
+  }
+  return newDate;
 };
