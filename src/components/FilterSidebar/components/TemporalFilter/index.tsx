@@ -37,9 +37,7 @@ const TemporalFilter = ({
             id="startDate"
             name="startDate"
             selected={value.start ? new Date(value.start) : new Date()}
-            onChange={(date: Date) => {
-              onStartDateChange(formatDate(date));
-            }}
+            onChange={(date: Date) => onStartDateChange(formatDate(date))}
           />
         </div>
         <div className="date-picker-container">
@@ -53,9 +51,7 @@ const TemporalFilter = ({
             id="endDate"
             name="endDate"
             selected={value.end ? new Date(value.end) : new Date()}
-            onChange={(date: Date) => {
-              onEndDateChange(formatDate(date));
-            }}
+            onChange={(date: Date) => onEndDateChange(formatDate(date))}
           />
         </div>
       </div>

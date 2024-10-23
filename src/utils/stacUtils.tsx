@@ -5,7 +5,7 @@ import { TbAxisX } from 'react-icons/tb';
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
-import { formatDate } from './date';
+import { TIME_DATE_FORMAT, formatDate } from './date';
 import { titleFromId } from './genericUtils';
 
 /**
@@ -24,13 +24,14 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   // Add the Last Updated and Temporal Extent data points
   if (lastUpdated) {
     dataPoints.push({
+      id: `${collection.id}_last_updated`,
       icon: CiCalendarDate,
       alt: 'Calendar Icon',
       value: formatDate(lastUpdated),
       tooltip: 'Last Updated',
     });
   }
-  if (temporal) handleTemporalDataPoints(temporal, dataPoints);
+  if (temporal) handleTemporalDataPoints(collection, temporal, dataPoints);
 
   // Summaries could be anything, so there needs to be some checks and processing.
   // We may not even want this, but it's here for now.
@@ -45,6 +46,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
         key.toString().length < 10
       ) {
         dataPoints.push({
+          id: `${collection.id}_${key}`,
           icon: TbAxisX,
           alt: 'Cloud Coverage Icon',
           value: `${titleFromId(key)} - ${summaries[key].toString()}`,
@@ -62,9 +64,14 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   return dataPoints;
 };
 
-const handleTemporalDataPoints = (temporal: TemporalExtentObject, dataPoints: DataPoint[]) => {
+const handleTemporalDataPoints = (
+  collection: Collection,
+  temporal: TemporalExtentObject,
+  dataPoints: DataPoint[],
+) => {
   if (!temporal.interval) return;
   dataPoints.push({
+    id: `${collection.id}_temporal`,
     icon: IoTimeOutline,
     alt: 'Time Icon',
     value:
@@ -89,9 +96,10 @@ export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
 
   if (datetime) {
     dataPoints.push({
+      id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      value: formatDate(datetime, true),
+      value: formatDate(datetime, TIME_DATE_FORMAT),
       tooltip: 'Datetime',
     });
   }

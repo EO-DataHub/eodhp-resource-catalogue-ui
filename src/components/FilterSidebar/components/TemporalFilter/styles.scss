@@ -20,9 +20,3 @@
     }
   }
 }
-
-// Remove duplicate header in react-datepicker
-/* stylelint-disable-next-line selector-class-pattern */
-.react-datepicker__current-month {
-  display: none;
-}

@@ -21,7 +21,7 @@ const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: Toolbox
       <div className="toolbox-row__right">
         <span className="toolbox-row__right-title">{titleFromId(title)}</span>
         {dataPoints?.map((dataPoint) => (
-          <div key={dataPoint.tooltip} className="toolbox-row__data-point">
+          <div key={dataPoint.id} className="toolbox-row__data-point">
             <dataPoint.icon />
             <span className="toolbox-row__data-point-text">{dataPoint.value}</span>
           </div>
