@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-export const DEFAULT_DATE_FORMAT = 'yyyy-mm-dd';
+export const DEFAULT_DATE_FORMAT = 'yyyy/mm/dd';
 export const TIME_DATE_FORMAT = `${DEFAULT_DATE_FORMAT}Thh:mm:ss`;
 
 export const formatDate = (date: string | Date, formatType = DEFAULT_DATE_FORMAT): string => {
