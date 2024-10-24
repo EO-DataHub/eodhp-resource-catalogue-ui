@@ -32,7 +32,7 @@ describe('DataCatalogueRow', () => {
   it('should render loading state initially', () => {
     render(<DataCatalogueRow row={mockRow} />);
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('should render row data after fetching parent data', async () => {

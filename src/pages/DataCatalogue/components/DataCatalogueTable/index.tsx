@@ -29,7 +29,7 @@ const DataCatalogueTable: React.FC = () => {
         ) : null}
       </div>
       {items.map((row) => (
-        <DataCatalogueRow key={row.id} row={row} />
+        <DataCatalogueRow key={`${row.id}-${row.lastUpdated}`} row={row} />
       ))}
 
       {collectionSearchResults?.length === 0 && (
