@@ -3,9 +3,10 @@ import { IoTimeOutline } from 'react-icons/io5';
 import { TbAxisX } from 'react-icons/tb';
 
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
-import { Collection, StacItem } from '@/typings/stac';
+import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
-import { parseDate, titleFromId } from './genericUtils';
+import { DEFAULT_DATE_FORMAT, formatDate } from './date';
+import { titleFromId } from './genericUtils';
 
 /**
  * Further discussion needed around this function.
@@ -23,26 +24,14 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   // Add the Last Updated and Temporal Extent data points
   if (lastUpdated) {
     dataPoints.push({
+      id: `${collection.id}_last_updated`,
       icon: CiCalendarDate,
       alt: 'Calendar Icon',
-      text: parseDate(lastUpdated),
+      value: formatDate(lastUpdated),
       tooltip: 'Last Updated',
     });
   }
-
-  temporal &&
-    temporal.interval &&
-    dataPoints.push({
-      icon: IoTimeOutline,
-      alt: 'Time Icon',
-      text:
-        temporal?.interval.length > 0
-          ? `${new Date(temporal?.interval?.[0][0]).toLocaleDateString()} - ${new Date(
-              temporal.interval[0][1],
-            ).toLocaleDateString()}`
-          : 'No date given',
-      tooltip: 'Temporal Extent',
-    });
+  if (temporal) handleTemporalDataPoints(collection, temporal, dataPoints);
 
   // Summaries could be anything, so there needs to be some checks and processing.
   // We may not even want this, but it's here for now.
@@ -57,9 +46,10 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
         key.toString().length < 10
       ) {
         dataPoints.push({
+          id: `${collection.id}_${key}`,
           icon: TbAxisX,
           alt: 'Cloud Coverage Icon',
-          text: `${titleFromId(key)} - ${summaries[key].toString()}`,
+          value: `${titleFromId(key)} - ${summaries[key].toString()}`,
           tooltip: key,
         });
       }
@@ -74,6 +64,29 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   return dataPoints;
 };
 
+const handleTemporalDataPoints = (
+  collection: Collection,
+  temporal: TemporalExtentObject,
+  dataPoints: DataPoint[],
+) => {
+  if (!temporal.interval) return;
+  dataPoints.push({
+    id: `${collection.id}_temporal`,
+    icon: IoTimeOutline,
+    alt: 'Time Icon',
+    value:
+      temporal?.interval.length > 0 ? (
+        <div>
+          <div>{formatDate(temporal.interval[0][0])} - </div>
+          <div>{formatDate(temporal.interval[0][1])}</div>
+        </div>
+      ) : (
+        'No date given'
+      ),
+    tooltip: 'Temporal Extent',
+  });
+};
+
 export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
   // just return the time
   const dataPoints: DataPoint[] = [];
@@ -83,9 +96,10 @@ export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
 
   if (datetime) {
     dataPoints.push({
+      id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      text: parseDate(datetime, true),
+      value: formatDate(datetime, `${DEFAULT_DATE_FORMAT} hh:mm:ss`),
       tooltip: 'Datetime',
     });
   }

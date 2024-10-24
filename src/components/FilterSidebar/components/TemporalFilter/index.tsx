@@ -1,4 +1,9 @@
+import DatePicker from 'react-datepicker';
+
 import { FilterData } from '@/context/FilterContext/types';
+import { DEFAULT_DATE_FORMAT, formatDate } from '@/utils/date';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import './styles.scss';
 
@@ -24,25 +29,29 @@ const TemporalFilter = ({
         <div className="date-picker-container">
           {/* Date picker for start date */}
           <label htmlFor="startDate">Start</label>
-          <input
+          <DatePicker
+            showMonthDropdown
+            showYearDropdown
             className="date-picker start-date"
+            dateFormat={DEFAULT_DATE_FORMAT}
             id="startDate"
             name="startDate"
-            type="date"
-            value={value.start}
-            onChange={(e) => onStartDateChange(e.target.value)}
+            selected={value.start ? new Date(value.start) : new Date()}
+            onChange={(date: Date) => onStartDateChange(formatDate(date))}
           />
         </div>
         <div className="date-picker-container">
           {/* Date picker for end date */}
           <label htmlFor="endDate">End</label>
-          <input
+          <DatePicker
+            showMonthDropdown
+            showYearDropdown
             className="date-picker end-date"
+            dateFormat={DEFAULT_DATE_FORMAT}
             id="endDate"
             name="endDate"
-            type="date"
-            value={value.end}
-            onChange={(e) => onEndDateChange(e.target.value)}
+            selected={value.end ? new Date(value.end) : new Date()}
+            onChange={(date: Date) => onEndDateChange(formatDate(date))}
           />
         </div>
       </div>

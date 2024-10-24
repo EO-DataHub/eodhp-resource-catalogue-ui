@@ -125,7 +125,7 @@ interface SpatialExtentObject {
   bbox: SpatialExtents;
   [k: string]: unknown;
 }
-interface TemporalExtentObject {
+export interface TemporalExtentObject {
   interval: TemporalExtents;
   [k: string]: unknown;
   lastUpdated?: string;
