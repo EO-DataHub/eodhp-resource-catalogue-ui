@@ -1,24 +1,12 @@
 import { format } from 'date-fns';
 
-export const DEFAULT_DATE_FORMAT = 'yyyy/mm/dd';
-export const TIME_DATE_FORMAT = `${DEFAULT_DATE_FORMAT}Thh:mm:ss`;
+export const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd';
 
-export const formatDate = (date: string | Date, formatType = DEFAULT_DATE_FORMAT): string => {
-  if (!date) date = new Date();
-  let newDate = date.toLocaleString();
+export const formatDate = (date: string | Date, formatStr = DEFAULT_DATE_FORMAT): string => {
   try {
-    switch (formatType) {
-      case DEFAULT_DATE_FORMAT:
-        newDate = format(new Date(date), 'yyyy-MM-dd');
-        break;
-      case TIME_DATE_FORMAT:
-        newDate = format(new Date(date), 'yyyy-MM-dd') + ' ' + new Date(date).toLocaleTimeString();
-        break;
-      default:
-        throw new Error(`Format type: ${formatType} not implemented`);
-    }
+    const newDate = typeof date === 'string' ? new Date(date) : date;
+    return format(newDate, formatStr);
   } catch (error) {
     throw new Error(error.message);
   }
-  return newDate;
 };

@@ -5,7 +5,7 @@ import { TbAxisX } from 'react-icons/tb';
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
-import { TIME_DATE_FORMAT, formatDate } from './date';
+import { DEFAULT_DATE_FORMAT, formatDate } from './date';
 import { titleFromId } from './genericUtils';
 
 /**
@@ -99,7 +99,7 @@ export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
       id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      value: formatDate(datetime, TIME_DATE_FORMAT),
+      value: formatDate(datetime, `${DEFAULT_DATE_FORMAT} hh:mm:ss`),
       tooltip: 'Datetime',
     });
   }
