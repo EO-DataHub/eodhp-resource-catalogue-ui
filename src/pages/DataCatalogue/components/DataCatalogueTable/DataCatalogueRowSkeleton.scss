@@ -1,0 +1,33 @@
+.skeleton-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 86px 16px 16px;
+  border-bottom: 1px solid #ddd;
+
+  .skeleton-content {
+    flex: 1;
+  }
+
+  .skeleton {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    display: inline-block;
+    height: 20px;
+    width: 100%;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .skeleton-thumbnail {
+    width: 100px;
+    height: 100px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    margin: 0 40px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .skeleton-type {
+    width: 50px;
+  }
+}

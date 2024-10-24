@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { Collection } from '@/typings/stac';
 
+import { DataCatalogueRowSkeleton } from './DataCatalogueRowSkeleton';
+
 type DataCatalogueRowProps = {
   row: Collection;
 };
@@ -50,7 +52,7 @@ export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
   }, [row]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <DataCatalogueRowSkeleton />;
   }
 
   return (
@@ -68,7 +70,7 @@ export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
             <span>
               Parent Catalogue:{' '}
               {breadcrumb.map((parent, index) => (
-                <span key={parent.id}>
+                <span key={`${parent.id}-${row.id}`}>
                   {parent.title !== '' ? parent.title : parent.id}
                   {index < breadcrumb.length - 1 && ' > '}
                 </span>
