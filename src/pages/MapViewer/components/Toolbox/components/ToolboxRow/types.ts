@@ -9,8 +9,9 @@ export interface ToolboxItemProps {
 }
 
 export interface DataPoint {
+  id: string;
   icon: React.FC;
   alt: string;
-  text: string;
+  value: string | ReactNode;
   tooltip: string;
 }

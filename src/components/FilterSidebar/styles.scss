@@ -3,7 +3,7 @@
 .filter-sidebar {
   position: relative;
   width: 100%;
-  overflow-y: auto;
+  overflow: hidden auto;
   background-color: $sidebar-background;
   height: -webkit-fill-available;
 
