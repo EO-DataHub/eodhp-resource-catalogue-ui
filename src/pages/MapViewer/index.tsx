@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import Draggable from 'react-draggable';
 import { FaTable } from 'react-icons/fa6';
 import { VscPreview } from 'react-icons/vsc';
+import { useLocation } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
 import stacBrowserLogo from '@/assets/icons/stac-browser.png';
@@ -17,9 +18,14 @@ import './styles.scss';
 
 const MapViewer = () => {
   const nodeRef = useRef(null);
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const catalogPath = searchParams.get('catalogPath');
 
   const { actions: AppActions } = useApp();
   const { setActiveContent } = AppActions;
+
+  const stacBrowserUrl = `https://${window.location.host}/static-apps/stac-browser/main/index.html#/${import.meta.env.VITE_STAC_ENDPOINT}/${catalogPath ? 'catalogs/' + catalogPath : ''}`;
 
   return (
     <div className="map-viewer">
@@ -40,12 +46,7 @@ const MapViewer = () => {
           className="btn-stac-browser unstyled-button"
           data-tooltip-content="Open in STAC Browser"
           data-tooltip-id="map-buttons"
-          onClick={() =>
-            window.open(
-              `${import.meta.env.VITE_STAC_BROWSER}/#/external/${import.meta.env.VITE_STAC_ENDPOINT}`,
-              '_blank',
-            )
-          }
+          onClick={() => window.open(stacBrowserUrl, '_blank')}
         >
           <img alt="STAC Browser" src={stacBrowserLogo} />
         </button>
