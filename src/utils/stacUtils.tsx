@@ -116,10 +116,10 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
 
 // Extract the first non null date value from potential dates
 export const getStacDate = (dates: ExtractedDates): string => {
-  const firstNonNullDate = Object.entries(dates).find(([key, value]) => value !== null);
+  const firstNonNullDate = Object.entries(dates).find(([, value]) => value !== null);
   let date: string;
   if (firstNonNullDate) {
-    const [key, value] = firstNonNullDate;
+    const [, value] = firstNonNullDate;
     date = value;
   } else {
     date = 'No date provided';
