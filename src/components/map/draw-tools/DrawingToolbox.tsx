@@ -98,10 +98,11 @@ export const DrawingToolbox = ({
           }
 
           const transformedGeometry = geometry.transform(MAP_PROJECTION, DATA_PROJECTION);
-          const geojson = writer.writeGeometryObject(transformedGeometry);
-
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const geojson: any = writer.writeGeometryObject(transformedGeometry);
+          // TODO: Shouldn't need to use any here, for some reason ol is saying this object
+          // does not contain coordinates though it obviously does.
           setAoiFilter(geojson);
-          // TODO Typing here is wrong, coordinates should exist on the object
           addURLParam('aoiCoords', geojson.coordinates[0].toString());
 
           map?.removeInteraction(drawObj as Interaction);
