@@ -5,7 +5,7 @@ import { TbAxisX } from 'react-icons/tb';
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
-import { DEFAULT_DATE_FORMAT, formatDate } from './date';
+import { ExtractedDates, extractDates, formatDate } from './date';
 import { titleFromId } from './genericUtils';
 
 /**
@@ -90,16 +90,15 @@ const handleTemporalDataPoints = (
 export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
   // just return the time
   const dataPoints: DataPoint[] = [];
-  const {
-    properties: { datetime },
-  } = feature;
+  const datetime = feature?.properties?.datetime;
 
   if (datetime) {
+    const dates = extractDates(feature);
     dataPoints.push({
       id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      value: formatDate(datetime, `${DEFAULT_DATE_FORMAT} hh:mm:ss`),
+      value: getStacDate(dates),
       tooltip: 'Datetime',
     });
   }
@@ -113,4 +112,17 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
     (asset) => asset.roles && asset.roles.includes('thumbnail'),
   );
   return thumbnailAsset?.href || 'https://via.placeholder.com/100';
+};
+
+// Extract the first non null date value from potential dates
+export const getStacDate = (dates: ExtractedDates): string => {
+  const firstNonNullDate = Object.entries(dates).find(([key, value]) => value !== null);
+  let date: string;
+  if (firstNonNullDate) {
+    const [key, value] = firstNonNullDate;
+    date = value;
+  } else {
+    date = 'No date provided';
+  }
+  return date;
 };
