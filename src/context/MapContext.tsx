@@ -4,6 +4,7 @@ import {
   ReactNode,
   SetStateAction,
   createContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -51,11 +52,13 @@ const DEFAULT_ZOOM = 7;
 export const MapProvider = ({ initialState = {}, children }: MapProviderProps) => {
   const mapRef = useRef(null);
 
+  const filterContext = useFilters();
+
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const catalogPath = searchParams.get('catalogPath');
 
-  const [mapConfig, setMapConfig] = useState<MapConfig>({
+  const [mapConfig, _setMapConfig] = useState<MapConfig>({
     center: DEFAULT_LON_LAT,
     zoom: DEFAULT_ZOOM,
   });
@@ -84,6 +87,19 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
     [activeFilters],
   );
 
+  useEffect(() => {
+    if (!map) return;
+    map.on('moveend', () => {
+      const view = map.getView();
+      const centre = view.getCenter();
+      filterContext.actions.addURLParam('centre', centre.toString());
+    });
+    map.getView().on('change:resolution', () => {
+      const zoom = map.getView().getZoom();
+      filterContext.actions.addURLParam('mapZoom', zoom.toString());
+    });
+  }, [map, filterContext.actions]);
+
   const getLayers = () => map?.getLayers().getArray();
 
   const getLayerByName = (name: string) => getLayers()?.find((layer) => layer.get('name') === name);
@@ -102,6 +118,11 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
 
     map?.removeLayer(foundLayer as BaseLayer);
     setSelectedLayer(null);
+  };
+
+  const setMapConfig = (config: MapConfig) => {
+    _setMapConfig(config);
+    // TODO make _setMapConfig as a private update state method. This is so that the public setMapConfig can update the URL params
   };
 
   return (

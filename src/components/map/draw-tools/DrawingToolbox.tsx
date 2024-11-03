@@ -38,7 +38,7 @@ export const DrawingToolbox = ({
   drawingSource,
 }: DrawingToolboxProps) => {
   const {
-    actions: { setAoiFilter },
+    actions: { setAoiFilter, addURLParam },
   } = useFilters();
 
   const [isActive, setIsActive] = useState('');
@@ -101,6 +101,8 @@ export const DrawingToolbox = ({
           const geojson = writer.writeGeometryObject(transformedGeometry);
 
           setAoiFilter(geojson);
+          // TODO Typing here is wrong, coordinates should exist on the object
+          addURLParam('aoiCoords', geojson.coordinates[0].toString());
 
           map?.removeInteraction(drawObj as Interaction);
           map?.removeInteraction(snapObj as Interaction);
@@ -109,6 +111,7 @@ export const DrawingToolbox = ({
         });
       } else {
         setAoiFilter(null);
+        // TODO Make method to remove URL param for the aoiCoords
         setIsActive('');
       }
     }

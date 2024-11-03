@@ -22,6 +22,7 @@ export interface FilterContextType {
     setTemporalEndFilter: (end: string) => void;
     setAoiFilter: (geometry: GeoJSONGeometry) => void;
     resetFilters: () => void;
+    addURLParam: (name: string, value: string) => void;
   };
 }
 

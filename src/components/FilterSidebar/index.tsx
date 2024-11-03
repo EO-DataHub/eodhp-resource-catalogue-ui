@@ -17,8 +17,13 @@ const FilterSidebar: React.FC = () => {
 
   const { state: FilterState, actions: FilterActions } = useFilters();
   const { filterOptions: filterOptions, activeFilters: activeFilters } = FilterState;
-  const { setActiveFilters, setTemporalStartFilter, setTemporalEndFilter, resetFilters } =
-    FilterActions;
+  const {
+    setActiveFilters,
+    setTemporalStartFilter,
+    setTemporalEndFilter,
+    resetFilters,
+    addURLParam,
+  } = FilterActions;
 
   const renderFilterComponent = (filter: FilterData) => {
     switch (filter.type) {
@@ -31,9 +36,11 @@ const FilterSidebar: React.FC = () => {
             value={activeFilters.temporal}
             onEndDateChange={(value: string) => {
               setTemporalEndFilter(value);
+              addURLParam('endDate', value);
             }}
             onStartDateChange={(value: string) => {
               setTemporalStartFilter(value);
+              addURLParam('startDate', value);
             }}
           />
         );
@@ -42,18 +49,20 @@ const FilterSidebar: React.FC = () => {
           <TextFilter
             placeholder={filter.name}
             value={activeFilters.textQuery}
-            onFilterChange={(value: string) =>
-              setActiveFilters({ ...activeFilters, textQuery: value })
-            }
+            onFilterChange={(value: string) => {
+              setActiveFilters({ ...activeFilters, textQuery: value });
+              addURLParam('filterText', value);
+            }}
           />
         );
       case 'combobox':
         return (
           <QAFilter
             filterData={filter}
-            onChange={(event) =>
-              setActiveFilters({ ...activeFilters, qualityAssurance: event.target.value })
-            }
+            onChange={(event) => {
+              setActiveFilters({ ...activeFilters, qualityAssurance: event.target.value });
+              addURLParam('qaFilter', event.target.value);
+            }}
           />
         );
       default:
