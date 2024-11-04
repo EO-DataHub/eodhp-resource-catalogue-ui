@@ -70,19 +70,13 @@ const handleTemporalDataPoints = (
   dataPoints: DataPoint[],
 ) => {
   if (!temporal.interval) return;
+  const dates = extractDates(collection);
+  const date = getStacDate(dates);
   dataPoints.push({
     id: `${collection.id}_temporal`,
     icon: IoTimeOutline,
     alt: 'Time Icon',
-    value:
-      temporal?.interval.length > 0 ? (
-        <div>
-          <div>{formatDate(temporal.interval[0][0])} - </div>
-          <div>{formatDate(temporal.interval[0][1])}</div>
-        </div>
-      ) : (
-        'No date given'
-      ),
+    value: date,
     tooltip: 'Temporal Extent',
   });
 };
@@ -114,15 +108,12 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
   return thumbnailAsset?.href || 'https://via.placeholder.com/100';
 };
 
-// Extract the first non null date value from potential dates
+// Given all the dates on a STAC object, return the most relevant date.
 export const getStacDate = (dates: ExtractedDates): string => {
-  const firstNonNullDate = Object.entries(dates).find(([, value]) => value !== null);
-  let date: string;
-  if (firstNonNullDate) {
-    const [, value] = firstNonNullDate;
-    date = value;
-  } else {
-    date = 'No date provided';
-  }
+  let date: string = 'No date provided';
+  if (dates.datetime) date = dates.datetime;
+  if (dates.start && dates.end) date = `${dates.start} - ${dates.end}`;
+  if (dates.start && !dates.end) date = `From ${dates.start} onwards`;
+  if (!dates.start && dates.end) date = `Up to ${dates.end}`;
   return date;
 };
