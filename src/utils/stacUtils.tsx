@@ -5,7 +5,7 @@ import { TbAxisX } from 'react-icons/tb';
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
-import { DEFAULT_DATE_FORMAT, formatDate } from './date';
+import { ExtractedDates, extractDates, formatDate } from './date';
 import { titleFromId } from './genericUtils';
 
 /**
@@ -70,19 +70,13 @@ const handleTemporalDataPoints = (
   dataPoints: DataPoint[],
 ) => {
   if (!temporal.interval) return;
+  const dates = extractDates(collection);
+  const date = getFormattedSTACDateStr(dates);
   dataPoints.push({
     id: `${collection.id}_temporal`,
     icon: IoTimeOutline,
     alt: 'Time Icon',
-    value:
-      temporal?.interval.length > 0 ? (
-        <div>
-          <div>{formatDate(temporal.interval[0][0])} - </div>
-          <div>{formatDate(temporal.interval[0][1])}</div>
-        </div>
-      ) : (
-        'No date given'
-      ),
+    value: date,
     tooltip: 'Temporal Extent',
   });
 };
@@ -90,16 +84,15 @@ const handleTemporalDataPoints = (
 export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
   // just return the time
   const dataPoints: DataPoint[] = [];
-  const {
-    properties: { datetime },
-  } = feature;
+  const datetime = feature?.properties?.datetime;
 
   if (datetime) {
+    const dates = extractDates(feature);
     dataPoints.push({
       id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      value: formatDate(datetime, `${DEFAULT_DATE_FORMAT} hh:mm:ss`),
+      value: getFormattedSTACDateStr(dates),
       tooltip: 'Datetime',
     });
   }
@@ -113,4 +106,14 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
     (asset) => asset.roles && asset.roles.includes('thumbnail'),
   );
   return thumbnailAsset?.href || 'https://via.placeholder.com/100';
+};
+
+// Given all the dates on a STAC object, return the most relevant date as a formatted string.
+export const getFormattedSTACDateStr = (dates: ExtractedDates): string => {
+  let date: string = 'No date provided';
+  if (dates.datetime) date = dates.datetime;
+  if (dates.start && dates.end) date = `${dates.start} - ${dates.end}`;
+  if (dates.start && !dates.end) date = `From ${dates.start} onwards`;
+  if (!dates.start && dates.end) date = `Up to ${dates.end}`;
+  return date;
 };
