@@ -71,7 +71,7 @@ const handleTemporalDataPoints = (
 ) => {
   if (!temporal.interval) return;
   const dates = extractDates(collection);
-  const date = getStacDate(dates);
+  const date = getFormattedSTACDateStr(dates);
   dataPoints.push({
     id: `${collection.id}_temporal`,
     icon: IoTimeOutline,
@@ -92,7 +92,7 @@ export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
       id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      value: getStacDate(dates),
+      value: getFormattedSTACDateStr(dates),
       tooltip: 'Datetime',
     });
   }
@@ -108,8 +108,8 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
   return thumbnailAsset?.href || 'https://via.placeholder.com/100';
 };
 
-// Given all the dates on a STAC object, return the most relevant date.
-export const getStacDate = (dates: ExtractedDates): string => {
+// Given all the dates on a STAC object, return the most relevant date as a formatted string.
+export const getFormattedSTACDateStr = (dates: ExtractedDates): string => {
   let date: string = 'No date provided';
   if (dates.datetime) date = dates.datetime;
   if (dates.start && dates.end) date = `${dates.start} - ${dates.end}`;

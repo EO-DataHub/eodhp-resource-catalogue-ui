@@ -10,7 +10,7 @@ import { Collection } from '@/typings/stac';
 import { extractDates } from '@/utils/date';
 import { formatDateAsISO8601 } from '@/utils/genericUtils';
 import { HttpCodes } from '@/utils/http';
-import { getStacDate } from '@/utils/stacUtils';
+import { getFormattedSTACDateStr } from '@/utils/stacUtils';
 
 import { StacCollectionsResponse } from './types';
 
@@ -50,7 +50,7 @@ export const getStacCollections = async (
     data.collections.forEach((collection) => {
       const dates = extractDates(collection);
       collection.thumbnailUrl = getRandomImage();
-      collection.lastUpdated = getStacDate(dates);
+      collection.lastUpdated = getFormattedSTACDateStr(dates);
       collection.stacUrl = getStacUrl(collection);
     });
     return data.collections;
