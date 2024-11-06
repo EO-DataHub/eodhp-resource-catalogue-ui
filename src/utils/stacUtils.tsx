@@ -34,18 +34,21 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   if (temporal) handleTemporalDataPoints(collection, temporal, dataPoints);
 
   if (license) {
-   dataPoints.push({
+    dataPoints.push({
       id: `${collection.id}_licence`,
       icon: TbLicense,
       alt: 'Licence Icon',
-      value: addLicenceLink(collection).length > 0 ? (
-          <a href={addLicenceLink(collection)} target="_blank" rel="noreferrer">{license}</a>
-      ) : (
-        license
-      ),
+      value:
+        addLicenceLink(collection).length > 0 ? (
+          <a href={addLicenceLink(collection)} rel="noreferrer" target="_blank">
+            {license}
+          </a>
+        ) : (
+          license
+        ),
       tooltip: 'Licence',
     });
-      }
+  }
 
   // Summaries could be anything, so there needs to be some checks and processing.
   // We may not even want this, but it's here for now.
@@ -133,12 +136,12 @@ export const getFormattedSTACDateStr = (dates: ExtractedDates): string => {
 };
 
 export const addLicenceLink = (collection: Collection): string => {
-    let href = "";
-    for (let i = 0; i < collection.links.length; i++) {
-      if (collection.links[i].rel === 'licence') {
-            href += collection.links[i].href;
-            break;
-          }
+  let href = '';
+  for (let i = 0; i < collection.links.length; i++) {
+    if (collection.links[i].rel === 'licence') {
+      href += collection.links[i].href;
+      break;
     }
-    return href;
+  }
+  return href;
 };
