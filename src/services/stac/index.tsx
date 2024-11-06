@@ -7,8 +7,10 @@ import landsat from '@/assets/placeholders/landsat.png';
 import sentinel2 from '@/assets/placeholders/sentinel-2.png';
 import terraclimate from '@/assets/placeholders/terraclimate.png';
 import { Collection } from '@/typings/stac';
+import { extractDates } from '@/utils/date';
 import { formatDateAsISO8601 } from '@/utils/genericUtils';
 import { HttpCodes } from '@/utils/http';
+import { getFormattedSTACDateStr } from '@/utils/stacUtils';
 
 import { StacCollectionsResponse } from './types';
 
@@ -46,8 +48,9 @@ export const getStacCollections = async (
 
     // For each data.collections add a thumbnailUrl, none of collections in the response have these fields
     data.collections.forEach((collection) => {
+      const dates = extractDates(collection);
       collection.thumbnailUrl = getRandomImage();
-      collection.lastUpdated = getRandomDate();
+      collection.lastUpdated = getFormattedSTACDateStr(dates);
       collection.stacUrl = getStacUrl(collection);
     });
     return data.collections;
@@ -142,11 +145,4 @@ const getStacUrl = (collection: Collection): string => {
 const getRandomImage = () => {
   const images = [hgb, landsat, sentinel2, terraclimate];
   return images[Math.floor(Math.random() * images.length)];
-};
-
-// Temporary function to return random last updated date
-const getRandomDate = (): string => {
-  const date = new Date();
-  date.setDate(date.getDate() - Math.floor(Math.random() * 100));
-  return date.toISOString().split('T')[0];
 };

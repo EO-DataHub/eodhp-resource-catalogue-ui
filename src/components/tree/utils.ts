@@ -30,11 +30,14 @@ const filterByTemporal = (node: Collection, activeFilters: FilterActiveFilters) 
 
 const filterBySpatial = (node: Collection, activeFilters: FilterActiveFilters) => {
   const { bbox } = node.extent.spatial;
-  const collectionPolygon = bboxPolygon([bbox[0][0], bbox[0][1], bbox[0][2], bbox[0][3]]);
 
-  if (activeFilters.aoi.type === 'Polygon') {
-    const filterPolygon = polygon(activeFilters.aoi.coordinates);
-    return booleanIntersects(collectionPolygon, filterPolygon);
+  if (bbox.length !== 0) {
+    const collectionPolygon = bboxPolygon([bbox[0][0], bbox[0][1], bbox[0][2], bbox[0][3]]);
+
+    if (activeFilters.aoi.type === 'Polygon') {
+      const filterPolygon = polygon(activeFilters.aoi.coordinates);
+      return booleanIntersects(collectionPolygon, filterPolygon);
+    }
   }
 
   return true;
