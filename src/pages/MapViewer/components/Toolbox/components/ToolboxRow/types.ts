@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 export interface ToolboxItemProps {
   thumbnail: string;
   title: string;
+  licence?: string;
   dataPoints?: DataPoint[];
   onClick: () => void;
   children?: ReactNode;

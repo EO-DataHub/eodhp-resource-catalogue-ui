@@ -48,6 +48,7 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
                     dataPoints={parseCollectionDataPoints(collection)}
                     thumbnail={thumbnailUrl}
                     title={collection.title ? collection.title : collection.id}
+                    licence={collection.licence ? collection.licence as string : 'None found'}
                     onClick={() => handleLeafClick(collection)}
                   />
                 </li>

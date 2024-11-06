@@ -4,7 +4,7 @@ import { ToolboxItemProps } from './types.js';
 
 import './styles.scss';
 
-const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: ToolboxItemProps) => {
+const ToolboxRow = ({ thumbnail, title, licence, dataPoints, onClick, children }: ToolboxItemProps) => {
   return (
     <button className="toolbox-row" onClick={onClick}>
       <div className="toolbox-row__left">
@@ -23,6 +23,7 @@ const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: Toolbox
         {dataPoints?.map((dataPoint) => (
           <div key={dataPoint.id} className="toolbox-row__data-point">
             <dataPoint.icon />
+
             <span className="toolbox-row__data-point-text">{dataPoint.value}</span>
           </div>
         ))}

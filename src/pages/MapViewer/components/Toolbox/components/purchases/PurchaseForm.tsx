@@ -12,7 +12,7 @@ import { StacItem } from '@/typings/stac';
 type FormValues = {
   name: string;
   aoi: string;
-  licence: string;
+  licence?: string;
 };
 
 const PurchaseFormSchema = z.object({

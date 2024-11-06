@@ -171,6 +171,7 @@ export interface StacItem extends Feature<Geometry, StacItemProperties> {
   stac_extensions?: string[];
   id: string;
   collection?: string;
+  licence?: string;
   links: StacLink[];
   assets: { [k: string]: StacAsset };
 }

@@ -5,6 +5,7 @@ import { PurchaseForm } from './PurchaseForm';
 
 describe('PurchaseForm Component', () => {
   const mockSelectedItem: StacItem = {
+    licence: 'test licence',
     stac_version: '1.0.0',
     assets: {},
     id: 'test id',

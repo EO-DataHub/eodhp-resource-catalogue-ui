@@ -66,6 +66,7 @@ const ToolboxItems = () => {
               dataPoints={parseFeatureDataPoints(item)}
               thumbnail={returnFeatureThumbnail(item)}
               title={item.id.toString()}
+              licence={item.licence}
               onClick={() => {
                 setActivePage('assets');
                 setSelectedCollectionItem(item);

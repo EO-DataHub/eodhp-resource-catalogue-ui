@@ -32,6 +32,7 @@ export type TreeCatalog = {
   type: 'Catalog';
   catalogs?: TreeCatalog[]; // sub-catalogs
   collections?: Collection[]; // collections
+  licence?: string;
 };
 
 const Toolbox = () => {

@@ -15,6 +15,7 @@ export type TreeCatalog = {
   id: string;
   title: string;
   type: 'Catalog';
+  licence?: string;
   catalogs?: TreeCatalog[]; // sub-catalogs
   collections?: Collection[]; // collections
 };

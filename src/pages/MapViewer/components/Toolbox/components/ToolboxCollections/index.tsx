@@ -21,6 +21,7 @@ const ToolboxCollections: React.FC = () => {
           dataPoints={parseCollectionDataPoints(collection)}
           thumbnail={collection.thumbnailUrl}
           title={collection.title ? collection.title : collection.id}
+          licence={collection.licence ? collection.licence as string : 'None found'}
           onClick={() => {
             setActivePage('items');
             setSelectedCollection(collection);
