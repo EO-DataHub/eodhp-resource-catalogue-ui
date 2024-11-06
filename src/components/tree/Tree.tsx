@@ -5,12 +5,12 @@ import { useDebounce } from 'react-use';
 import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { Collection } from '@/typings/stac';
+import { updateURL } from '@/utils/urlHandler';
 
 import { TreeNode } from './TreeNode';
 import { filterTree } from './utils';
 
 import './Tree.scss';
-import { updateURL } from '@/utils/urlHandler';
 
 export type TreeCatalog = {
   id: string;

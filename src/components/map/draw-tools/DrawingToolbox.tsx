@@ -14,11 +14,11 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useFilters } from '@/hooks/useFilters';
+import { updateURL } from '@/utils/urlHandler';
 
 import { DrawingTool } from './DrawingTool';
 
 import './DrawingToolbox.scss';
-import { updateURL } from '@/utils/urlHandler';
 
 type DrawingToolboxProps = {
   isDrawingToolboxVisible: boolean;
@@ -39,7 +39,7 @@ export const DrawingToolbox = ({
   drawingSource,
 }: DrawingToolboxProps) => {
   const {
-    actions: { setAoiFilter, addURLParam },
+    actions: { setAoiFilter },
   } = useFilters();
 
   const [isActive, setIsActive] = useState('');
