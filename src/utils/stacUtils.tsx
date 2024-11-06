@@ -74,7 +74,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
   }
 
   // If more than 4 data points were found, return only the first 3
-  if (dataPoints.length > 4) {
+  if (dataPoints.length > 3) {
     return dataPoints.slice(0, 3);
   }
 
