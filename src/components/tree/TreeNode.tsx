@@ -55,8 +55,8 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
                     thumbnail={thumbnailUrl}
                     title={collection.title ? collection.title : collection.id}
                     onClick={async () => {
-                      const a = await fetchFavouritedItems(collection.id);
-                      setFavouritedItems(collection.id, a);
+                      const favouritedItems = await fetchFavouritedItems(collection.id);
+                      setFavouritedItems(collection.id, favouritedItems);
                       handleLeafClick(collection);
                     }}
                   />

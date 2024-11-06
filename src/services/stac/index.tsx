@@ -101,7 +101,8 @@ export const getStacItems = async (
 
 export const fetchFavouritedItems = async (collectionId: string): Promise<string[]> => {
   const workspace = 'james-hinton';
-  const url = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
+  // const url = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
+  const url = `https://dev.eodatahub.org.uk/api/catalogue/manage/catalogs/user-datasets/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
 
   try {
     const response = await fetch(url, {
@@ -126,7 +127,7 @@ export const fetchFavouritedItems = async (collectionId: string): Promise<string
     return itemIds;
   } catch (error) {
     console.error('Error fetching favourited items:', error);
-    throw error;
+    return [];
   }
 };
 
