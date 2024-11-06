@@ -18,6 +18,7 @@ import { useFilters } from '@/hooks/useFilters';
 import { DrawingTool } from './DrawingTool';
 
 import './DrawingToolbox.scss';
+import { updateURL } from '@/utils/urlHandler';
 
 type DrawingToolboxProps = {
   isDrawingToolboxVisible: boolean;
@@ -103,7 +104,7 @@ export const DrawingToolbox = ({
           // TODO: Shouldn't need to use any here, for some reason ol is saying this object
           // does not contain coordinates though it obviously does.
           setAoiFilter(geojson);
-          addURLParam('aoiCoords', geojson.coordinates[0].toString());
+          updateURL({ type: 'aoi', value: geojson.coordinates[0].toString() });
 
           map?.removeInteraction(drawObj as Interaction);
           map?.removeInteraction(snapObj as Interaction);

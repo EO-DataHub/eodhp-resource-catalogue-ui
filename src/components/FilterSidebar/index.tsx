@@ -4,6 +4,7 @@ import { QAFilter } from '@/components/FilterSidebar/components/QAFilter';
 import { FilterData } from '@/context/FilterContext/types';
 import { useApp } from '@/hooks/useApp';
 import { useFilters } from '@/hooks/useFilters';
+import { updateURL } from '@/utils/urlHandler';
 
 import MultiSelectFilter from './components/MultiSelectFilter';
 import TemporalFilter from './components/TemporalFilter';
@@ -17,13 +18,8 @@ const FilterSidebar: React.FC = () => {
 
   const { state: FilterState, actions: FilterActions } = useFilters();
   const { filterOptions: filterOptions, activeFilters: activeFilters } = FilterState;
-  const {
-    setActiveFilters,
-    setTemporalStartFilter,
-    setTemporalEndFilter,
-    resetFilters,
-    addURLParam,
-  } = FilterActions;
+  const { setActiveFilters, setTemporalStartFilter, setTemporalEndFilter, resetFilters } =
+    FilterActions;
 
   const renderFilterComponent = (filter: FilterData) => {
     switch (filter.type) {
@@ -36,11 +32,11 @@ const FilterSidebar: React.FC = () => {
             value={activeFilters.temporal}
             onEndDateChange={(value: string) => {
               setTemporalEndFilter(value);
-              addURLParam('endDate', value);
+              updateURL({ type: 'filter', value: value, filterName: 'endDate' });
             }}
             onStartDateChange={(value: string) => {
               setTemporalStartFilter(value);
-              addURLParam('startDate', value);
+              updateURL({ type: 'filter', value: value, filterName: 'startDate' });
             }}
           />
         );
@@ -51,7 +47,7 @@ const FilterSidebar: React.FC = () => {
             value={activeFilters.textQuery}
             onFilterChange={(value: string) => {
               setActiveFilters({ ...activeFilters, textQuery: value });
-              addURLParam('filterText', value);
+              updateURL({ type: 'filter', value: value, filterName: 'filterText' });
             }}
           />
         );
@@ -61,7 +57,7 @@ const FilterSidebar: React.FC = () => {
             filterData={filter}
             onChange={(event) => {
               setActiveFilters({ ...activeFilters, qualityAssurance: event.target.value });
-              addURLParam('qaFilter', event.target.value);
+              updateURL({ type: 'filter', value: event.target.value, filterName: 'qaFilter' });
             }}
           />
         );

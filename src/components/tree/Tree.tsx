@@ -10,6 +10,7 @@ import { TreeNode } from './TreeNode';
 import { filterTree } from './utils';
 
 import './Tree.scss';
+import { updateURL } from '@/utils/urlHandler';
 
 export type TreeCatalog = {
   id: string;
@@ -67,6 +68,7 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
   const handleLeafClick = (node: Collection) => {
     setSelectedCollection(node);
     setActivePage('items');
+    updateURL({ type: 'catalogue', value: node.id });
   };
 
   return (

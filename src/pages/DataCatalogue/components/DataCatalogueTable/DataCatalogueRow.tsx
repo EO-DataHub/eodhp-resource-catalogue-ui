@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Collection } from '@/typings/stac';
+import { updateURL } from '@/utils/urlHandler';
 
 import { DataCatalogueRowSkeleton } from './DataCatalogueRowSkeleton';
 
@@ -59,7 +60,10 @@ export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
     <button
       key={row.id}
       className="data-catalogue-table__row"
-      onClick={() => window.open(row.stacUrl, '_blank')}
+      onClick={() => {
+        window.open(row.stacUrl, '_blank');
+        updateURL({ type: 'catalogue', value: row.id });
+      }}
     >
       <div className="data-catalogue-table__row-content">
         <div className="data-catalogue-table__row-information">

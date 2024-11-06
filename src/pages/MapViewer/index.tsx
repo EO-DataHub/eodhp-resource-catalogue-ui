@@ -15,6 +15,7 @@ import TimelineFilter from './components/TimelineFilter';
 import Toolbox from './components/Toolbox';
 
 import './styles.scss';
+import { updateURL } from '@/utils/urlHandler';
 
 const MapViewer = () => {
   const nodeRef = useRef(null);
@@ -57,7 +58,10 @@ const MapViewer = () => {
           aria-label="Data Catalogue"
           data-tooltip-content="View Data Catalogue"
           data-tooltip-id="map-buttons"
-          onClick={() => setActiveContent('dataCatalogue')}
+          onClick={() => {
+            setActiveContent('dataCatalogue');
+            updateURL({ type: 'view', value: 'list' });
+          }}
         >
           <FaTable />
         </button>
