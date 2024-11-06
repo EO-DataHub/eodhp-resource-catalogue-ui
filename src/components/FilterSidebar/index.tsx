@@ -4,7 +4,7 @@ import { QAFilter } from '@/components/FilterSidebar/components/QAFilter';
 import { FilterData } from '@/context/FilterContext/types';
 import { useApp } from '@/hooks/useApp';
 import { useFilters } from '@/hooks/useFilters';
-import { updateURL } from '@/utils/urlHandler';
+import { addQueryParam } from '@/utils/urlHandler';
 
 import MultiSelectFilter from './components/MultiSelectFilter';
 import TemporalFilter from './components/TemporalFilter';
@@ -32,11 +32,11 @@ const FilterSidebar: React.FC = () => {
             value={activeFilters.temporal}
             onEndDateChange={(value: string) => {
               setTemporalEndFilter(value);
-              updateURL({ type: 'filter', value: value, filterName: 'endDate' });
+              addQueryParam('endDate', value);
             }}
             onStartDateChange={(value: string) => {
               setTemporalStartFilter(value);
-              updateURL({ type: 'filter', value: value, filterName: 'startDate' });
+              addQueryParam('startDate', value);
             }}
           />
         );
@@ -47,7 +47,7 @@ const FilterSidebar: React.FC = () => {
             value={activeFilters.textQuery}
             onFilterChange={(value: string) => {
               setActiveFilters({ ...activeFilters, textQuery: value });
-              updateURL({ type: 'filter', value: value, filterName: 'filterText' });
+              addQueryParam('filterText', value);
             }}
           />
         );
@@ -57,7 +57,7 @@ const FilterSidebar: React.FC = () => {
             filterData={filter}
             onChange={(event) => {
               setActiveFilters({ ...activeFilters, qualityAssurance: event.target.value });
-              updateURL({ type: 'filter', value: event.target.value, filterName: 'qaFilter' });
+              addQueryParam('qaFilter', event.target.value);
             }}
           />
         );

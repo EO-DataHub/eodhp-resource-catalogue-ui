@@ -19,7 +19,7 @@ import { useDebounce } from 'react-use';
 import { useFilters } from '@/hooks/useFilters';
 import { getStacCollections } from '@/services/stac';
 import { Collection } from '@/typings/stac';
-import { updateURL } from '@/utils/urlHandler';
+import { addQueryParam } from '@/utils/urlHandler';
 
 export type MapContextType = {
   mapConfig: MapConfig;
@@ -90,15 +90,15 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
 
   useEffect(() => {
     if (!map) return;
-    updateURL({ type: 'view', value: 'map' });
+    addQueryParam('view', 'map');
     map.on('moveend', () => {
       const view = map.getView();
       const centre = view.getCenter();
-      updateURL({ type: 'centre', value: centre.toString() });
+      addQueryParam('centre', centre.toString());
     });
     map.getView().on('change:resolution', () => {
       const zoom = map.getView().getZoom();
-      updateURL({ type: 'zoom', value: zoom.toString() });
+      addQueryParam('zoom', zoom.toString());
     });
   }, [map, filterContext.actions]);
 

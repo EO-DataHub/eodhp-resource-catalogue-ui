@@ -49,3 +49,10 @@ export const updateURL = (data: fragmentData) => {
 };
 
 export const extractURLParam = () => {};
+
+export const addQueryParam = (name: string, value: string) => {
+  const searchParams = new URLSearchParams(location.search);
+  searchParams.set(name, value);
+  const newUrl = `${import.meta.env.BASE_URL}?${searchParams.toString()}`;
+  history.replaceState(null, '', newUrl);
+};

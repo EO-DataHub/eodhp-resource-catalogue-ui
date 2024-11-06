@@ -10,7 +10,7 @@ import stacBrowserLogo from '@/assets/icons/stac-browser.png';
 import { MapComponent } from '@/components/Map';
 import { DrawingTools } from '@/components/map/draw-tools/DrawingTools';
 import { useApp } from '@/hooks/useApp';
-import { updateURL } from '@/utils/urlHandler';
+import { addQueryParam } from '@/utils/urlHandler';
 
 import TimelineFilter from './components/TimelineFilter';
 import Toolbox from './components/Toolbox';
@@ -60,7 +60,7 @@ const MapViewer = () => {
           data-tooltip-id="map-buttons"
           onClick={() => {
             setActiveContent('dataCatalogue');
-            updateURL({ type: 'view', value: 'list' });
+            addQueryParam('view', 'list');
           }}
         >
           <FaTable />

@@ -14,7 +14,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useFilters } from '@/hooks/useFilters';
-import { updateURL } from '@/utils/urlHandler';
+import { addQueryParam } from '@/utils/urlHandler';
 
 import { DrawingTool } from './DrawingTool';
 
@@ -104,7 +104,7 @@ export const DrawingToolbox = ({
           // TODO: Shouldn't need to use any here, for some reason ol is saying this object
           // does not contain coordinates though it obviously does.
           setAoiFilter(geojson);
-          updateURL({ type: 'aoi', value: geojson.coordinates[0].toString() });
+          addQueryParam('aoi', geojson.coordinates[0].toString());
 
           map?.removeInteraction(drawObj as Interaction);
           map?.removeInteraction(snapObj as Interaction);

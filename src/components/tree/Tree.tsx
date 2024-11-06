@@ -5,7 +5,7 @@ import { useDebounce } from 'react-use';
 import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { Collection } from '@/typings/stac';
-import { updateURL } from '@/utils/urlHandler';
+import { addQueryParam } from '@/utils/urlHandler';
 
 import { TreeNode } from './TreeNode';
 import { filterTree } from './utils';
@@ -68,7 +68,7 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
   const handleLeafClick = (node: Collection) => {
     setSelectedCollection(node);
     setActivePage('items');
-    updateURL({ type: 'catalogue', value: node.id });
+    addQueryParam('catalogue', node.id);
   };
 
   return (
