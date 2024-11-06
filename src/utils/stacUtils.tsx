@@ -1,6 +1,7 @@
 import { CiCalendarDate } from 'react-icons/ci';
 import { IoTimeOutline } from 'react-icons/io5';
 import { TbAxisX } from 'react-icons/tb';
+import { TbLicense } from "react-icons/tb";
 
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
@@ -18,7 +19,7 @@ import { titleFromId } from './genericUtils';
 export const parseCollectionDataPoints = (collection: Collection): DataPoint[] => {
   const dataPoints: DataPoint[] = [];
 
-  const { lastUpdated, summaries } = collection;
+  const { lastUpdated, summaries, license } = collection;
   const { temporal } = collection.extent;
 
   // Add the Last Updated and Temporal Extent data points
@@ -32,6 +33,22 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     });
   }
   if (temporal) handleTemporalDataPoints(collection, temporal, dataPoints);
+
+  if (license) {
+   dataPoints.push({
+      id: `${collection.id}_licence`,
+      icon: TbLicense,
+      alt: 'Licence Icon',
+      value: addLicenceLink(collection).length > 0 ? (
+        <div>
+          <div><a href={addLicenceLink(collection)} target="_blank">{license}</a></div>
+        </div>
+      ) : (
+        license
+      ),
+      tooltip: 'Licence',
+    });
+      }
 
   // Summaries could be anything, so there needs to be some checks and processing.
   // We may not even want this, but it's here for now.
@@ -56,9 +73,9 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     });
   }
 
-  // If more than 4 data points were found, return only the first 4
-  if (dataPoints.length > 4) {
-    return dataPoints.slice(0, 4);
+  // If more than 4 data points were found, return only the first 3
+  if (dataPoints.length > 3) {
+    return dataPoints.slice(0, 3);
   }
 
   return dataPoints;
@@ -113,4 +130,16 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
     (asset) => asset.roles && asset.roles.includes('thumbnail'),
   );
   return thumbnailAsset?.href || 'https://via.placeholder.com/100';
+};
+
+
+export const addLicenceLink = (collection: Collection): string => {
+    let href = "";
+    for (let i = 0; i < collection.links.length; i++) {
+      if (collection.links[i].rel === 'licence') {
+            href += collection.links[i].href;
+            break;
+          }
+    };
+    return href;
 };
