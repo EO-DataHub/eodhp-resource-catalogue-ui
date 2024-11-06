@@ -101,8 +101,7 @@ export const getStacItems = async (
 
 export const fetchFavouritedItems = async (collectionId: string): Promise<string[]> => {
   const workspace = 'james-hinton';
-  // const url = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
-  const url = `https://dev.eodatahub.org.uk/api/catalogue/manage/catalogs/user-datasets/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
+  const url = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
 
   try {
     const response = await fetch(url, {
@@ -131,9 +130,12 @@ export const fetchFavouritedItems = async (collectionId: string): Promise<string
   }
 };
 
+const VITE_STAC_WORKSPACE_ENDPOINT =
+  'https://dev.eodatahub.org.uk/api/catalogue/manage/catalogs/user-datasets';
+
 export const favouriteItem = async (itemUrl: string): Promise<void> => {
   const workspace = 'james-hinton';
-  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  const url = `${VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
   const payload = {
     url: itemUrl,
   };
@@ -156,7 +158,7 @@ export const favouriteItem = async (itemUrl: string): Promise<void> => {
 
 export const unFavouriteItem = async (itemUrl: string): Promise<void> => {
   const workspace = 'james-hinton';
-  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  const url = `${VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
   const payload = {
     url: itemUrl,
   };
