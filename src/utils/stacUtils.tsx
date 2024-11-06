@@ -1,7 +1,6 @@
 import { CiCalendarDate } from 'react-icons/ci';
 import { IoTimeOutline } from 'react-icons/io5';
-import { TbAxisX } from 'react-icons/tb';
-import { TbLicense } from "react-icons/tb";
+import { TbAxisX, TbLicense } from 'react-icons/tb';
 
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
@@ -40,9 +39,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
       icon: TbLicense,
       alt: 'Licence Icon',
       value: addLicenceLink(collection).length > 0 ? (
-        <div>
-          <div><a href={addLicenceLink(collection)} target="_blank">{license}</a></div>
-        </div>
+          <a href={addLicenceLink(collection)} target="_blank">{license}</a>
       ) : (
         license
       ),
