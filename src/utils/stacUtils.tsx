@@ -39,7 +39,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
       icon: TbLicense,
       alt: 'Licence Icon',
       value: addLicenceLink(collection).length > 0 ? (
-          <a href={addLicenceLink(collection)} target="_blank">{license}</a>
+          <a href={addLicenceLink(collection)} target="_blank" rel="noreferrer">{license}</a>
       ) : (
         license
       ),
@@ -139,6 +139,6 @@ export const addLicenceLink = (collection: Collection): string => {
             href += collection.links[i].href;
             break;
           }
-    };
+    }
     return href;
 };
