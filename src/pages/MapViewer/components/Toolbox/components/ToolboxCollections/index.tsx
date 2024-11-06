@@ -3,7 +3,6 @@ import { useToolbox } from '@/hooks/useToolbox';
 import { parseCollectionDataPoints } from '@/utils/stacUtils';
 
 import ToolboxRow from '../ToolboxRow';
-
 import './styles.scss';
 
 const ToolboxCollections: React.FC = () => {

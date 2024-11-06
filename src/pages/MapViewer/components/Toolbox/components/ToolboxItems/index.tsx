@@ -5,8 +5,9 @@ import { Vector as VectorSource } from 'ol/source';
 import { Stroke, Style } from 'ol/style';
 
 import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
+import { FavouriteButton } from '@/components/FavouriteButton/FavouriteButton';
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
-import { useFilters } from '@/hooks/useFilters';
+import { useCatalogue } from '@/hooks/useCatalogue';
 import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
 import { StacItem } from '@/typings/stac';
@@ -26,14 +27,12 @@ const ToolboxItems = () => {
   } = useToolbox();
 
   const {
-    state: { activeFilters },
-  } = useFilters();
+    state: { favouritedItems },
+  } = useCatalogue();
+
+  console.log('favouritedItems:', favouritedItems);
 
   const { addLayer, removeLayer, map } = useMap();
-
-  if (!activeFilters.aoi) {
-    return <p className="no-items">You have to draw an AOI to view items</p>;
-  }
 
   if (isCollectionItemsPending) {
     return <ToolboxItemSkeleton />;
@@ -118,6 +117,12 @@ const ToolboxItems = () => {
                 >
                   Purchase Item
                 </button>
+
+                <FavouriteButton
+                  isFavourite={favouritedItems[selectedCollection.id]?.has(item.id)}
+                  item={item}
+                />
+
                 <ClipboardButton text={url} />
               </div>
             </ToolboxRow>
