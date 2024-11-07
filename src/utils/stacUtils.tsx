@@ -73,7 +73,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     });
   }
 
-  // If more than 4 data points were found, return only the first 3
+  // If more than 3 data points were found, return only the first 3
   if (dataPoints.length > 3) {
     return dataPoints.slice(0, 3);
   }
