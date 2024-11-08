@@ -40,7 +40,7 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
       alt: 'Licence Icon',
       value:
         addLicenceLink(collection).length > 0 ? (
-          <a href={addLicenceLink(collection)} rel="noreferrer" target="_blank">
+          <a href={addLicenceLink(collection)} rel="noreferrer">
             {license}
           </a>
         ) : (
@@ -136,12 +136,10 @@ export const getFormattedSTACDateStr = (dates: ExtractedDates): string => {
 };
 
 export const addLicenceLink = (collection: Collection): string => {
-  let href = '';
-  for (let i = 0; i < collection.links.length; i++) {
-    if (collection.links[i].rel === 'licence') {
-      href += collection.links[i].href;
-      break;
-    }
+  const licenceLinkHtml = collection.links.find(link => link.rel === 'licence' && link.href.endsWith('.html'));
+  if (licenceLinkHtml) {
+    return licenceLinkHtml.href;
   }
-  return href;
+  const firstLicenceLink = collection.links.find(link => link.rel === 'licence');
+  return firstLicenceLink ? firstLicenceLink.href : '';
 };
