@@ -130,12 +130,10 @@ export const fetchFavouritedItems = async (collectionId: string): Promise<string
   }
 };
 
-const VITE_STAC_WORKSPACE_ENDPOINT =
-  'https://dev.eodatahub.org.uk/api/catalogue/manage/catalogs/user-datasets';
-
 export const favouriteItem = async (itemUrl: string): Promise<void> => {
   const workspace = 'james-hinton';
-  const url = `${VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  console.log('Favouriting via:', url);
   const payload = {
     url: itemUrl,
   };
@@ -158,7 +156,7 @@ export const favouriteItem = async (itemUrl: string): Promise<void> => {
 
 export const unFavouriteItem = async (itemUrl: string): Promise<void> => {
   const workspace = 'james-hinton';
-  const url = `${VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
   const payload = {
     url: itemUrl,
   };
