@@ -1,9 +1,8 @@
 import { Feature, Map } from 'ol';
 import { Geometry } from 'ol/geom';
-import { Draw, Snap } from 'ol/interaction';
 import VectorSource from 'ol/source/Vector';
 
-import { render, screen, userEvent } from '@/utils/renderers';
+import { render, screen } from '@/utils/renderers';
 
 import { DrawingToolbox } from './DrawingToolbox';
 

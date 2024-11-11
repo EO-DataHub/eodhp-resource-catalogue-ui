@@ -58,5 +58,5 @@ export const setQueryParam = (name: string, value: string) => {
 export const getQueryParam = (name: string) => {
   const searchParams = new URLSearchParams(location.search);
   const param = searchParams.get(name);
-  return param
-}
+  return param;
+};
