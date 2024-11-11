@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 
 import { GeoJSONGeometry } from 'ol/format/GeoJSON';
-import { useNavigate } from 'react-router-dom';
 
 import { exampleFilterData } from './placeholderData';
 import {
@@ -40,7 +39,6 @@ const reducer = (state: FilterState, action: FilterAction): FilterState => {
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
 const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
-  const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setFilterOptions = (payload: FilterData[]) => {
@@ -51,12 +49,19 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     dispatch({ type: 'SET_ACTIVE_FILTERS', payload });
   };
 
-  const setTemporalStartFilter = (end: string) => {
+  const setTemporalFilter = (filters: FilterActiveFilters) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      ...filters,
+    });
+  };
+
+  const setTemporalStartFilter = (start: string) => {
     setActiveFilters({
       ...state.activeFilters,
       temporal: {
         ...state.activeFilters.temporal,
-        start: end,
+        start: start,
       },
     });
   };
@@ -88,12 +93,6 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
       aoi: null,
     });
 
-  const addURLParam = (name: string, value: string) => {
-    const queryParams = new URLSearchParams(window.location.search);
-    queryParams.set(name, value);
-    navigate(`?${queryParams.toString()}`, { replace: true });
-  };
-
   const value = {
     state: {
       filterOptions: state.filterOptions,
@@ -106,7 +105,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
       setTemporalEndFilter,
       setAoiFilter,
       resetFilters,
-      addURLParam,
+      setTemporalFilter,
     },
   };
 

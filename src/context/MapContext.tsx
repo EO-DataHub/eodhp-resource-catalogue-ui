@@ -9,17 +9,23 @@ import {
   useState,
 } from 'react';
 
+import { Feature } from 'ol';
 import { Extent } from 'ol/extent';
+import { Geometry } from 'ol/geom';
 import BaseLayer from 'ol/layer/Base';
 import Layer from 'ol/layer/Layer';
+import VectorLayer from 'ol/layer/Vector';
 import Map from 'ol/Map';
+import VectorSource from 'ol/source/Vector';
+import { Fill, Stroke, Style } from 'ol/style';
+import CircleStyle from 'ol/style/Circle';
 import { useLocation } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacCollections } from '@/services/stac';
 import { Collection } from '@/typings/stac';
-import { addQueryParam } from '@/utils/urlHandler';
+import { getQueryParam, setQueryParam } from '@/utils/urlHandler';
 
 export type MapContextType = {
   mapConfig: MapConfig;
@@ -37,6 +43,9 @@ export type MapContextType = {
   setSelectedLayer: Dispatch<SetStateAction<Layer | null>>;
   collections: Collection[];
   setCollections: Dispatch<SetStateAction<Collection[] | null>>;
+  drawingSource: VectorSource<Feature<Geometry>> | undefined;
+  setDrawingSource: (source: VectorSource<Feature<Geometry>> | undefined) => void;
+  vectorLayer: VectorLayer;
 };
 
 type MapProviderProps = {
@@ -53,8 +62,6 @@ const DEFAULT_ZOOM = 7;
 export const MapProvider = ({ initialState = {}, children }: MapProviderProps) => {
   const mapRef = useRef(null);
 
-  const filterContext = useFilters();
-
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const catalogPath = searchParams.get('catalogPath');
@@ -64,9 +71,14 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
     zoom: DEFAULT_ZOOM,
   });
   const [map, setMap] = useState<Map | undefined>();
+  const [initialMapValues, setInitialMapValues] = useState<boolean>(false);
   const [aoi, setAoi] = useState<Extent | null>(null);
   const [collections, setCollections] = useState<Collection[] | null>(null);
   const [selectedLayer, setSelectedLayer] = useState<Layer | null>(null);
+  const [drawingSource, setDrawingSource] = useState<VectorSource<Feature<Geometry>> | undefined>(
+    undefined,
+  );
+  const vectorLayer = useRef(null);
 
   const {
     state: { activeFilters },
@@ -90,17 +102,57 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
 
   useEffect(() => {
     if (!map) return;
-    addQueryParam('view', 'map');
+    const source = new VectorSource();
+
+    const layer = new VectorLayer({
+      source: source,
+      style: {
+        'fill-color': 'rgba(255, 255, 255, 0.2)',
+        'stroke-color': '#ffcc33',
+        'stroke-width': 2,
+        'circle-radius': 7,
+        'circle-fill-color': '#ffcc33',
+      },
+    });
+    layer.set('name', 'aoiLayer');
+    layer.setZIndex(10);
+    layer.setVisible(true);
+
+    map.addLayer(layer);
+    vectorLayer.current = layer;
+
+    if (drawingSource) return;
+    setDrawingSource(source);
+  }, [map, drawingSource]);
+
+  useEffect(() => {
+    if (!map) return;
+    setQueryParam('view', 'map');
     map.on('moveend', () => {
       const view = map.getView();
       const centre = view.getCenter();
-      addQueryParam('centre', centre.toString());
+      setQueryParam('centre', centre.toString());
     });
     map.getView().on('change:resolution', () => {
       const zoom = map.getView().getZoom();
-      addQueryParam('zoom', zoom.toString());
+      setQueryParam('zoom', zoom.toString());
     });
-  }, [map, filterContext.actions]);
+  }, [map]);
+
+  useEffect(() => {
+    if (!map) return;
+    if (initialMapValues) return;
+    const mapView = map.getView();
+    const centre = getQueryParam('centre');
+    if (centre) {
+      mapView.setCenter([parseFloat(centre.split(',')[0]), parseFloat(centre.split(',')[1])]);
+    }
+    const zoom = getQueryParam('zoom');
+    if (zoom) {
+      mapView.setZoom(parseFloat(zoom));
+    }
+    setInitialMapValues(true);
+  }, [map, initialMapValues]);
 
   const getLayers = () => map?.getLayers().getArray();
 
@@ -145,6 +197,9 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
         setSelectedLayer,
         collections,
         setCollections,
+        drawingSource,
+        setDrawingSource,
+        vectorLayer: vectorLayer.current,
         ...initialState,
       }}
     >

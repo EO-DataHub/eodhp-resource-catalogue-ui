@@ -1,4 +1,12 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer, useState } from 'react';
+
+import { Feature } from 'ol';
+import { Polygon } from 'ol/geom';
+import { fromLonLat } from 'ol/proj';
+
+import { useFilters } from '@/hooks/useFilters';
+import { useMap } from '@/hooks/useMap';
+import { getQueryParam } from '@/utils/urlHandler';
 
 import { AppAction, AppContextType, AppProviderProps, AppState } from './types';
 
@@ -22,6 +30,10 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [urlRead, setUrlRead] = useState(false);
+
+  const { actions } = useFilters();
+  const { drawingSource } = useMap();
 
   const setFilterSidebarOpen = (isOpen: boolean) => {
     dispatch({ type: 'SET_FILTER_SIDEBAR_OPEN', payload: isOpen });
@@ -30,6 +42,37 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const setActiveContent = (content: string) => {
     dispatch({ type: 'SET_ACTIVE_CONTENT', payload: content });
   };
+
+  // Read in query params and set if they exist
+  useEffect(() => {
+    if (urlRead) return;
+    if (!drawingSource) return;
+    const startDate = getQueryParam('startDate') || new Date().toISOString();
+    const endDate = getQueryParam('endDate') || new Date().toISOString();
+    const textQuery = getQueryParam('filterText') || '';
+    const qa = getQueryParam('qaFilter') || '';
+    const aoiCoordinatesStr = getQueryParam('aoi') || '';
+    let aoi;
+    if (aoiCoordinatesStr) {
+      const floatArray = aoiCoordinatesStr.split(',').map(parseFloat);
+      const coords = [];
+      for (let i = 0; i < floatArray.length; i += 2) {
+        coords.push(floatArray.slice(i, i + 2));
+      }
+      aoi = { coordinates: [coords], type: 'Polygon' };
+      const transformedCoords = coords.map((coord) => fromLonLat(coord));
+      const polygon = new Polygon([transformedCoords]);
+      const feature = new Feature({ geometry: polygon });
+      drawingSource.addFeature(feature);
+    }
+    actions.setTemporalFilter({
+      temporal: { start: startDate, end: endDate },
+      textQuery,
+      aoi: aoi ? aoi : null,
+      qualityAssurance: qa,
+    });
+    setUrlRead(true);
+  }, [drawingSource, actions, urlRead]);
 
   const value = {
     state,

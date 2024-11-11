@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-import { Feature, Map } from 'ol';
+import { Map } from 'ol';
 import { GeoJSON } from 'ol/format';
-import { Circle, Geometry } from 'ol/geom';
+import { Circle } from 'ol/geom';
 import { Type } from 'ol/geom/Geometry';
 import { fromCircle } from 'ol/geom/Polygon';
 import { Draw, Interaction, Modify, Snap } from 'ol/interaction';
 import { defaults } from 'ol/interaction/defaults';
 import { Options, createBox } from 'ol/interaction/Draw';
-import VectorSource from 'ol/source/Vector';
 import { PiCircle, PiPolygonFill, PiRectangle } from 'react-icons/pi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useFilters } from '@/hooks/useFilters';
-import { addQueryParam } from '@/utils/urlHandler';
+import { useMap } from '@/hooks/useMap';
+import { setQueryParam } from '@/utils/urlHandler';
 
 import { DrawingTool } from './DrawingTool';
 
@@ -23,7 +23,6 @@ import './DrawingToolbox.scss';
 type DrawingToolboxProps = {
   isDrawingToolboxVisible: boolean;
   map: Map;
-  drawingSource: VectorSource<Feature<Geometry>>;
 };
 
 enum Shapes {
@@ -33,11 +32,9 @@ enum Shapes {
   BIN = 'bin',
 }
 
-export const DrawingToolbox = ({
-  isDrawingToolboxVisible,
-  map,
-  drawingSource,
-}: DrawingToolboxProps) => {
+export const DrawingToolbox = ({ isDrawingToolboxVisible, map }: DrawingToolboxProps) => {
+  const { drawingSource } = useMap();
+
   const {
     actions: { setAoiFilter },
   } = useFilters();
@@ -104,7 +101,7 @@ export const DrawingToolbox = ({
           // TODO: Shouldn't need to use any here, for some reason ol is saying this object
           // does not contain coordinates though it obviously does.
           setAoiFilter(geojson);
-          addQueryParam('aoi', geojson.coordinates[0].toString());
+          setQueryParam('aoi', geojson.coordinates[0].toString());
 
           map?.removeInteraction(drawObj as Interaction);
           map?.removeInteraction(snapObj as Interaction);

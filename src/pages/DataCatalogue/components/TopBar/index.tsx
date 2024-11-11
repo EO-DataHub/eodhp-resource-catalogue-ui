@@ -8,7 +8,7 @@ import { useFilters } from '@/hooks/useFilters';
 import { getStacCollections } from '@/services/stac';
 import 'react-responsive-pagination/themes/classic.css';
 import './styles.scss';
-import { addQueryParam } from '@/utils/urlHandler';
+import { setQueryParam } from '@/utils/urlHandler';
 
 const TopBar: React.FC = () => {
   const { search } = useLocation();
@@ -63,7 +63,7 @@ const TopBar: React.FC = () => {
             className="top-bar__actions-icon"
             onClick={() => {
               setActiveContent('map');
-              addQueryParam('view', 'map');
+              setQueryParam('view', 'map');
             }}
           />
         </div>
