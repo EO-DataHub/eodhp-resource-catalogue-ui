@@ -17,8 +17,6 @@ import Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
-import { Fill, Stroke, Style } from 'ol/style';
-import CircleStyle from 'ol/style/Circle';
 import { useLocation } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 

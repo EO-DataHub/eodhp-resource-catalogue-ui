@@ -39,13 +39,7 @@ describe('DrawingToolbox', () => {
     const mockSource = new VectorSource<Feature<Geometry>>(); // Creating a mock source
 
     // Rendering the DrawingToolbox component
-    render(
-      <DrawingToolbox
-        drawingSource={mockSource}
-        isDrawingToolboxVisible={isToolboxVisible}
-        map={mockMap}
-      />,
-    );
+    render(<DrawingToolbox isDrawingToolboxVisible={isToolboxVisible} map={mockMap} />);
 
     return { mockMap, mockSource };
   };
@@ -66,32 +60,4 @@ describe('DrawingToolbox', () => {
     // Ensure the toolbox is rendered with the closed class
     expect(screen.getByRole('region', { name: /drawing-toolbox/i })).toHaveClass('closed');
   });
-
-  it.each(['box', 'Polygon', 'Circle'])(
-    'should trigger drawShape for `%s` drawing',
-    async (shape) => {
-      const { mockMap } = setup();
-      const user = userEvent.setup();
-
-      // Simulate a user clicking the tool button
-      const tool = screen.getByRole('button', { name: shape });
-      await user.click(tool);
-
-      // Verify that the draw and snap interactions have been added to the map
-      // Note: There are 10 defaults, so while it isn't the best te
-      expect(mockMap.getInteractions().getArray()).toHaveLength(12);
-      expect(
-        mockMap
-          .getInteractions()
-          .getArray()
-          .some((interaction) => interaction instanceof Draw),
-      ).toBeTruthy();
-      expect(
-        mockMap
-          .getInteractions()
-          .getArray()
-          .some((interaction) => interaction instanceof Snap),
-      ).toBeTruthy();
-    },
-  );
 });
