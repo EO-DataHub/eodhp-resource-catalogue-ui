@@ -137,11 +137,11 @@ export const getFormattedSTACDateStr = (dates: ExtractedDates): string => {
 
 export const addLicenceLink = (collection: Collection): string => {
   const licenceLinkHtml = collection.links.find(
-    (link) => link.rel === 'licence' && link.href.endsWith('.html'),
+    (link) => link.rel === 'license' && link.href.endsWith('.html'),
   );
   if (licenceLinkHtml) {
     return licenceLinkHtml.href;
   }
-  const firstLicenceLink = collection.links.find((link) => link.rel === 'licence');
+  const firstLicenceLink = collection.links.find((link) => link.rel === 'license');
   return firstLicenceLink ? firstLicenceLink.href : '';
 };
