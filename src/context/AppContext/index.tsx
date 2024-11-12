@@ -47,8 +47,8 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   useEffect(() => {
     if (urlRead) return;
     if (!drawingSource) return;
-    const startDate = getQueryParam('startDate') || new Date().toISOString();
-    const endDate = getQueryParam('endDate') || new Date().toISOString();
+    const startDate = getQueryParam('startDate') || null;
+    const endDate = getQueryParam('endDate') || null;
     const textQuery = getQueryParam('filterText') || '';
     const qa = getQueryParam('qaFilter') || '';
     const aoiCoordinatesStr = getQueryParam('aoi') || '';

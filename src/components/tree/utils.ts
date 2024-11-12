@@ -17,7 +17,6 @@ const filterByTemporal = (node: Collection, activeFilters: FilterActiveFilters) 
   const { start, end } = activeFilters.temporal;
   if (start && end) {
     const collectionTemporal = node.extent.temporal?.interval[0];
-    if (!collectionTemporal) return false;
     const filterStart = new Date(start);
     const filterEnd = new Date(end);
     const collectionStart = new Date(collectionTemporal[0]);
