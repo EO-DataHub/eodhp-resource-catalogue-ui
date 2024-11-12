@@ -35,7 +35,7 @@ const ToolboxItems = () => {
 
       <div className="toolbox__items">
         {selectedCollectionItems?.features?.map((item: StacItem) => {
-          return <ToolboxItem item={item}/>;
+          return <ToolboxItem key={item.id} item={item} />;
         })}
       </div>
     </div>
