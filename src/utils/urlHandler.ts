@@ -14,7 +14,7 @@ const URL_INDICES = {
 };
 
 export const updateURL = (data: fragmentData) => {
-  const pathName = window.location.href.split(import.meta.env.BASE_URL)[1] || '';
+  const pathName = window.location.href.split(import.meta.env.VITE_BASE_PATH)[1] || '';
   const split = pathName.split('/');
   const urlStructure = {};
   Object.keys(URL_INDICES).forEach((key) => {
@@ -43,7 +43,7 @@ export const updateURL = (data: fragmentData) => {
     }
   }
 
-  const newUrl = `${import.meta.env.BASE_URL}${newPath}/${filters}`;
+  const newUrl = `${import.meta.env.VITE_BASE_PATH}${newPath}/${filters}`;
 
   history.replaceState(null, '', newUrl);
 };
@@ -51,8 +51,7 @@ export const updateURL = (data: fragmentData) => {
 export const setQueryParam = (name: string, value: string) => {
   const searchParams = new URLSearchParams(location.search);
   searchParams.set(name, value);
-  console.log(import.meta.env.BASE_URL);
-  const newUrl = `${import.meta.env.BASE_URL}?${searchParams.toString()}`;
+  const newUrl = `${import.meta.env.VITE_BASE_PATH}?${searchParams.toString()}`;
   history.replaceState(null, '', newUrl);
 };
 
