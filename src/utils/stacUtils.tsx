@@ -2,6 +2,7 @@ import { CiCalendarDate } from 'react-icons/ci';
 import { IoTimeOutline } from 'react-icons/io5';
 import { TbAxisX, TbLicense } from 'react-icons/tb';
 
+import placeholder from '@/assets/placeholders/100.png';
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
@@ -130,7 +131,7 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
   const thumbnailAsset = assetsArray.find(
     (asset) => asset.roles && asset.roles.includes('thumbnail'),
   );
-  return thumbnailAsset?.href || 'https://via.placeholder.com/100';
+  return thumbnailAsset?.href || placeholder;
 };
 
 // Given all the dates on a STAC object, return the most relevant date as a formatted string.

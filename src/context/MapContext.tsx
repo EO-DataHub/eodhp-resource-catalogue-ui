@@ -12,11 +12,7 @@ import { Extent } from 'ol/extent';
 import BaseLayer from 'ol/layer/Base';
 import Layer from 'ol/layer/Layer';
 import Map from 'ol/Map';
-import { useLocation } from 'react-router-dom';
-import { useDebounce } from 'react-use';
 
-import { useFilters } from '@/hooks/useFilters';
-import { getStacCollections } from '@/services/stac';
 import { Collection } from '@/typings/stac';
 
 export type MapContextType = {
@@ -51,10 +47,6 @@ const DEFAULT_ZOOM = 7;
 export const MapProvider = ({ initialState = {}, children }: MapProviderProps) => {
   const mapRef = useRef(null);
 
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
-
   const [mapConfig, setMapConfig] = useState<MapConfig>({
     center: DEFAULT_LON_LAT,
     zoom: DEFAULT_ZOOM,
@@ -63,26 +55,6 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
   const [aoi, setAoi] = useState<Extent | null>(null);
   const [collections, setCollections] = useState<Collection[] | null>(null);
   const [selectedLayer, setSelectedLayer] = useState<Layer | null>(null);
-
-  const {
-    state: { activeFilters },
-  } = useFilters();
-
-  useDebounce(
-    () => {
-      const fetchData = async () => {
-        try {
-          const collections = await getStacCollections(catalogPath ?? '', activeFilters.textQuery);
-          setCollections(collections);
-        } catch (error) {
-          console.error('Error fetching collections', error);
-        }
-      };
-      fetchData();
-    },
-    250,
-    [activeFilters],
-  );
 
   const getLayers = () => map?.getLayers().getArray();
 

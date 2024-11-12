@@ -6,7 +6,7 @@ import hgb from '@/assets/placeholders/hgb.png';
 import landsat from '@/assets/placeholders/landsat.png';
 import sentinel2 from '@/assets/placeholders/sentinel-2.png';
 import terraclimate from '@/assets/placeholders/terraclimate.png';
-import { Collection } from '@/typings/stac';
+import { Collection, StacItem } from '@/typings/stac';
 import { extractDates } from '@/utils/date';
 import { formatDateAsISO8601 } from '@/utils/genericUtils';
 import { HttpCodes } from '@/utils/http';
@@ -102,6 +102,103 @@ export const getStacItems = async (
   };
 };
 
+export const fetchFavouritedItems = async (collectionId: string): Promise<string[]> => {
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
+  const url = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.log('Error fetching favourited items:', response);
+    }
+    const data = await response.json();
+
+    const itemIds = data.features.map((item: StacItem) => item.id);
+    return itemIds;
+  } catch (error) {
+    console.error('Error fetching favourited items:', error);
+    return [];
+  }
+};
+
+export const favouriteItem = async (itemUrl: string): Promise<void> => {
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
+  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  const payload = {
+    url: itemUrl,
+  };
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error('Error favouriting item:', error);
+    throw error;
+  }
+};
+
+export const unFavouriteItem = async (itemUrl: string): Promise<void> => {
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
+  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
+  const payload = {
+    url: itemUrl,
+  };
+
+  try {
+    await fetch(url, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error('Error unfavouriting item:', error);
+    throw error;
+  }
+};
+
+const getActiveWorkspace = async (): Promise<string> => {
+  const url = import.meta.env.VITE_WORKSPACE_ENDPOINT;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.log('Error fetching active workspace:', response);
+    }
+    const data = await response.json();
+
+    return data.workspaces[0].name;
+  } catch (error) {
+    console.error('Error fetching active workspace:', error);
+    return 'james-hinton';
+  }
+};
+
 const getStacCatalogUrl = (collection: Collection): string => {
   const selfLink = collection.links.find((link) => link.rel === 'self');
   if (!selfLink?.href) return '';
@@ -139,6 +236,12 @@ const getStacUrl = (collection: Collection): string => {
     console.error('Error fetching STAC collection URL: ', error);
     throw error;
   }
+};
+
+// Return self url
+export const getStacItemUrl = (item: StacItem): string => {
+  const selfLink = item.links.find((link) => link.rel === 'self');
+  return selfLink?.href ?? '';
 };
 
 // Temporary function to return random image

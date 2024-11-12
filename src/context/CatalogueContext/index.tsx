@@ -1,8 +1,5 @@
-import React, { createContext, useEffect, useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
 
-import { useLocation } from 'react-router-dom';
-
-import { getStacCollections } from '@/services/stac';
 import { Collection } from '@/typings/stac';
 
 import {
@@ -14,6 +11,7 @@ import {
 
 const initialState: CatalogueState = {
   collectionSearchResults: [],
+  favouritedItems: {},
   textQuery: '',
   activePage: 1,
 };
@@ -26,6 +24,14 @@ const reducer = (state: CatalogueState, action: CatalogueAction): CatalogueState
       return { ...state, textQuery: action.payload };
     case 'SET_ACTIVE_PAGE':
       return { ...state, activePage: action.payload };
+    case 'SET_FAVOURITED_ITEMS':
+      return {
+        ...state,
+        favouritedItems: {
+          ...state.favouritedItems,
+          [action.payload.collectionId]: new Set(action.payload.itemIds),
+        },
+      };
     default:
       return state;
   }
@@ -35,10 +41,6 @@ const CatalogueContext = createContext<CatalogueContextType | undefined>(undefin
 
 const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
 
   const setCollectionSearchResults = (collections: Collection[]) => {
     dispatch({ type: 'SET_COLLECTION_SEARCH_RESULTS', payload: collections });
@@ -52,19 +54,9 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
     dispatch({ type: 'SET_ACTIVE_PAGE', payload: page });
   };
 
-  useEffect(() => {
-    const fetchInitialCollections = async () => {
-      try {
-        const collections: Collection[] = await getStacCollections(catalogPath ?? '', '');
-        setCollectionSearchResults(collections);
-      } catch (error) {
-        console.error('Error fetching initial collections:', error);
-      }
-    };
-    if (!state.collectionSearchResults.length) {
-      fetchInitialCollections();
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const setFavouritedItems = (collectionId: string, itemIds: string[]) => {
+    dispatch({ type: 'SET_FAVOURITED_ITEMS', payload: { collectionId, itemIds } });
+  };
 
   const value = {
     state,
@@ -72,6 +64,7 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
       setCollectionSearchResults,
       setTextQuery,
       setActivePage,
+      setFavouritedItems,
     },
   };
 
