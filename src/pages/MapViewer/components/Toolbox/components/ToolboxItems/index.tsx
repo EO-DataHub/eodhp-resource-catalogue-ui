@@ -30,8 +30,6 @@ const ToolboxItems = () => {
     state: { favouritedItems },
   } = useCatalogue();
 
-  console.log('favouritedItems:', favouritedItems);
-
   const { addLayer, removeLayer, map } = useMap();
 
   if (isCollectionItemsPending) {

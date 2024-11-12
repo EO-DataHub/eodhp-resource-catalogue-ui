@@ -20,8 +20,6 @@ export const FavouriteButton = ({ isFavourite, item }: FavouriteButtonProps) => 
   const handleClick = () => {
     const selfUrl = getStacItemUrl(item);
 
-    console.log('Item ::', item);
-
     // If not favourited
     if (!isFavourite) {
       setFavouritedItems(item.collection, [...(favouritedItems[item.collection] ?? []), item.id]);

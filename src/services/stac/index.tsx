@@ -129,7 +129,6 @@ export const fetchFavouritedItems = async (collectionId: string): Promise<string
 export const favouriteItem = async (itemUrl: string): Promise<void> => {
   const workspace = (await getActiveWorkspace()) || 'james-hinton';
   const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
-  console.log('Favouriting via:', url);
   const payload = {
     url: itemUrl,
   };
@@ -221,7 +220,6 @@ const renderDateInterval = (startDate: string, endDate?: string): string => {
   return endDate ? `${formattedStartDate}/${formatDateAsISO8601(endDate)}` : formattedStartDate;
 };
 
-// Rename this!!
 const getStacUrl = (collection: Collection): string => {
   let stacUrl: string;
   try {
