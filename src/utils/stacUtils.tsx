@@ -40,7 +40,15 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
       alt: 'Licence Icon',
       value:
         addLicenceLink(collection).length > 0 ? (
-          <a href={addLicenceLink(collection)} rel="noreferrer">
+          <a
+            className="licence-link"
+            href={addLicenceLink(collection)}
+            rel="noreferrer"
+            target="_blank"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
             {license}
           </a>
         ) : (
