@@ -1,12 +1,12 @@
 import { CiCalendarDate } from 'react-icons/ci';
 import { IoTimeOutline } from 'react-icons/io5';
-import { TbAxisX } from 'react-icons/tb';
+import { TbAxisX, TbLicense } from 'react-icons/tb';
 
 import placeholder from '@/assets/placeholders/100.png';
 import { DataPoint } from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow/types';
 import { Collection, StacItem, TemporalExtentObject } from '@/typings/stac';
 
-import { DEFAULT_DATE_FORMAT, formatDate } from './date';
+import { ExtractedDates, extractDates, formatDate } from './date';
 import { titleFromId } from './genericUtils';
 
 /**
@@ -19,7 +19,7 @@ import { titleFromId } from './genericUtils';
 export const parseCollectionDataPoints = (collection: Collection): DataPoint[] => {
   const dataPoints: DataPoint[] = [];
 
-  const { lastUpdated, summaries } = collection;
+  const { lastUpdated, summaries, license } = collection;
   const { temporal } = collection.extent;
 
   // Add the Last Updated and Temporal Extent data points
@@ -33,6 +33,31 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     });
   }
   if (temporal) handleTemporalDataPoints(collection, temporal, dataPoints);
+
+  if (license) {
+    dataPoints.push({
+      id: `${collection.id}_licence`,
+      icon: TbLicense,
+      alt: 'Licence Icon',
+      value:
+        addLicenceLink(collection).length > 0 ? (
+          <a
+            className="licence-link"
+            href={addLicenceLink(collection)}
+            rel="noreferrer"
+            target="_blank"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            {license}
+          </a>
+        ) : (
+          license
+        ),
+      tooltip: 'Licence',
+    });
+  }
 
   // Summaries could be anything, so there needs to be some checks and processing.
   // We may not even want this, but it's here for now.
@@ -57,9 +82,9 @@ export const parseCollectionDataPoints = (collection: Collection): DataPoint[] =
     });
   }
 
-  // If more than 4 data points were found, return only the first 4
-  if (dataPoints.length > 4) {
-    return dataPoints.slice(0, 4);
+  // If more than 3 data points were found, return only the first 3
+  if (dataPoints.length > 3) {
+    return dataPoints.slice(0, 3);
   }
 
   return dataPoints;
@@ -71,19 +96,13 @@ const handleTemporalDataPoints = (
   dataPoints: DataPoint[],
 ) => {
   if (!temporal.interval) return;
+  const dates = extractDates(collection);
+  const date = getFormattedSTACDateStr(dates);
   dataPoints.push({
     id: `${collection.id}_temporal`,
     icon: IoTimeOutline,
     alt: 'Time Icon',
-    value:
-      temporal?.interval.length > 0 ? (
-        <div>
-          <div>{formatDate(temporal.interval[0][0])} - </div>
-          <div>{formatDate(temporal.interval[0][1])}</div>
-        </div>
-      ) : (
-        'No date given'
-      ),
+    value: date,
     tooltip: 'Temporal Extent',
   });
 };
@@ -91,16 +110,15 @@ const handleTemporalDataPoints = (
 export const parseFeatureDataPoints = (feature: StacItem): DataPoint[] => {
   // just return the time
   const dataPoints: DataPoint[] = [];
-  const {
-    properties: { datetime },
-  } = feature;
+  const datetime = feature?.properties?.datetime;
 
   if (datetime) {
+    const dates = extractDates(feature);
     dataPoints.push({
       id: `${feature.collection}_datetime`,
       icon: IoTimeOutline,
       alt: 'Time Icon',
-      value: formatDate(datetime, `${DEFAULT_DATE_FORMAT} hh:mm:ss`),
+      value: getFormattedSTACDateStr(dates),
       tooltip: 'Datetime',
     });
   }
@@ -114,4 +132,25 @@ export const returnFeatureThumbnail = (feature: StacItem): string => {
     (asset) => asset.roles && asset.roles.includes('thumbnail'),
   );
   return thumbnailAsset?.href || placeholder;
+};
+
+// Given all the dates on a STAC object, return the most relevant date as a formatted string.
+export const getFormattedSTACDateStr = (dates: ExtractedDates): string => {
+  let date: string = 'No date provided';
+  if (dates.datetime) date = dates.datetime;
+  if (dates.start && dates.end) date = `${dates.start} - ${dates.end}`;
+  if (dates.start && !dates.end) date = `From ${dates.start} onwards`;
+  if (!dates.start && dates.end) date = `Up to ${dates.end}`;
+  return date;
+};
+
+export const addLicenceLink = (collection: Collection): string => {
+  const licenceLinkHtml = collection.links.find(
+    (link) => link.rel === 'license' && link.href.endsWith('.html'),
+  );
+  if (licenceLinkHtml) {
+    return licenceLinkHtml.href;
+  }
+  const firstLicenceLink = collection.links.find((link) => link.rel === 'license');
+  return firstLicenceLink ? firstLicenceLink.href : '';
 };
