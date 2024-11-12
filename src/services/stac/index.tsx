@@ -100,7 +100,7 @@ export const getStacItems = async (
 };
 
 export const fetchFavouritedItems = async (collectionId: string): Promise<string[]> => {
-  const workspace = getActiveWorkspace() || 'james-hinton';
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
   const url = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/user-datasets/${workspace}/saved-data/collections/${collectionId}/items?limit=99999`;
 
   try {
@@ -127,7 +127,7 @@ export const fetchFavouritedItems = async (collectionId: string): Promise<string
 };
 
 export const favouriteItem = async (itemUrl: string): Promise<void> => {
-  const workspace = getActiveWorkspace() || 'james-hinton';
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
   const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
   console.log('Favouriting via:', url);
   const payload = {
@@ -151,7 +151,7 @@ export const favouriteItem = async (itemUrl: string): Promise<void> => {
 };
 
 export const unFavouriteItem = async (itemUrl: string): Promise<void> => {
-  const workspace = getActiveWorkspace() || 'james-hinton';
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
   const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}`;
   const payload = {
     url: itemUrl,
@@ -193,7 +193,7 @@ const getActiveWorkspace = async (): Promise<string> => {
     return data.workspaces[0].name;
   } catch (error) {
     console.error('Error fetching active workspace:', error);
-    return '';
+    return 'james-hinton';
   }
 };
 
