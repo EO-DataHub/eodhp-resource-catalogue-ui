@@ -125,7 +125,8 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
 
   useEffect(() => {
     if (!map) return;
-    setQueryParam('view', 'map');
+    const view = getQueryParam('view');
+    if (!view) setQueryParam('view', 'map');
     map.on('moveend', () => {
       const view = map.getView();
       const centre = view.getCenter();

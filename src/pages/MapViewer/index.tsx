@@ -60,7 +60,6 @@ const MapViewer = () => {
           data-tooltip-id="map-buttons"
           onClick={() => {
             setActiveContent('dataCatalogue');
-            setQueryParam('view', 'list');
           }}
         >
           <FaTable />

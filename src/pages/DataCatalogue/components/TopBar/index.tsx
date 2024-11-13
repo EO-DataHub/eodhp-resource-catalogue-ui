@@ -63,7 +63,6 @@ const TopBar: React.FC = () => {
             className="top-bar__actions-icon"
             onClick={() => {
               setActiveContent('map');
-              setQueryParam('view', 'map');
             }}
           />
         </div>

@@ -71,6 +71,11 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       aoi: aoi ? aoi : null,
       qualityAssurance: qa,
     });
+
+    // Set view to map / dataCatalogue / qa
+    const view = getQueryParam('view');
+    setActiveContent(view);
+
     setUrlRead(true);
   }, [drawingSource, actions, urlRead]);
 

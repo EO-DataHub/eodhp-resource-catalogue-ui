@@ -8,6 +8,9 @@ import { QualityLegend } from './QualityLegend';
 import { QualityTable } from './QualityTable';
 
 import './QAPanel.scss';
+import { useEffect } from 'react';
+
+import { setQueryParam } from '@/utils/urlHandler';
 
 export type PerformanceData = {
   id: string;
@@ -146,6 +149,13 @@ const QUALITY_DATA: QualityData[] = [
 ];
 
 export const QAPanel = () => {
+  useEffect(() => {
+    setQueryParam('view', 'qa');
+    return () => {
+      setQueryParam('view', 'qa');
+    };
+  }, []);
+
   const {
     actions: { setActiveContent },
   } = useApp();
