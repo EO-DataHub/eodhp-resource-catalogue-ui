@@ -48,15 +48,22 @@ export const updateURL = (data: fragmentData) => {
   history.replaceState(null, '', newUrl);
 };
 
-export const setQueryParam = (name: string, value: string) => {
+export const setQueryParam = (name: string, value: string): void => {
   const searchParams = new URLSearchParams(location.search);
   searchParams.set(name, value);
   const newUrl = `${import.meta.env.VITE_BASE_PATH}?${searchParams.toString()}`;
   history.replaceState(null, '', newUrl);
 };
 
-export const getQueryParam = (name: string) => {
+export const getQueryParam = (name: string): string => {
   const searchParams = new URLSearchParams(location.search);
   const param = searchParams.get(name);
   return param;
+};
+
+export const removeQueryParam = (name: string) => {
+  const searchParams = new URLSearchParams(location.search);
+  searchParams.delete(name);
+  const newUrl = `${import.meta.env.VITE_BASE_PATH}?${searchParams.toString()}`;
+  history.replaceState(null, '', newUrl);
 };

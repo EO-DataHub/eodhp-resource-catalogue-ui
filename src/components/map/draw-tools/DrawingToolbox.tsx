@@ -14,7 +14,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { DATA_PROJECTION, MAP_PROJECTION } from '@/components/Map';
 import { useFilters } from '@/hooks/useFilters';
 import { useMap } from '@/hooks/useMap';
-import { setQueryParam } from '@/utils/urlHandler';
+import { removeQueryParam, setQueryParam } from '@/utils/urlHandler';
 
 import { DrawingTool } from './DrawingTool';
 
@@ -110,7 +110,7 @@ export const DrawingToolbox = ({ isDrawingToolboxVisible, map }: DrawingToolboxP
         });
       } else {
         setAoiFilter(null);
-        // TODO Make method to remove URL param for the aoiCoords
+        removeQueryParam('aoi');
         setIsActive('');
       }
     }
