@@ -152,7 +152,7 @@ export const QAPanel = () => {
   useEffect(() => {
     setQueryParam('view', 'qa');
     return () => {
-      setQueryParam('view', 'qa');
+      setQueryParam('view', 'map');
     };
   }, []);
 

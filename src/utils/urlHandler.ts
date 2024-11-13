@@ -1,57 +1,40 @@
-type fragmentData = {
-  type: 'view' | 'auth' | 'catalogue' | 'centre' | 'zoom' | 'aoi' | 'filter';
-  value: string;
-  filterName?: string;
-};
-
-const URL_INDICES = {
-  view: 0,
-  auth: 1,
-  catalogue: 2,
-  centre: 3,
-  zoom: 4,
-  aoi: 5,
-};
-
-export const updateURL = (data: fragmentData) => {
-  const pathName = window.location.href.split(import.meta.env.VITE_BASE_PATH)[1] || '';
-  const split = pathName.split('/');
-  const urlStructure = {};
-  Object.keys(URL_INDICES).forEach((key) => {
-    urlStructure[key] = {
-      index: URL_INDICES[key],
-      value: split[URL_INDICES[key]] || '',
-    };
-  });
-  if (data.type !== 'filter') urlStructure[data.type].value = data.value;
-
-  const newPath = Object.keys(urlStructure)
-    .sort((a, b) => urlStructure[a].index - urlStructure[b].index)
-    .map((key) => urlStructure[key].value)
-    .join('/');
-
-  let filters = split[split.length - 1] || '';
-  if (data.type === 'filter') {
-    let parsedFilters;
-    try {
-      parsedFilters = JSON.parse(decodeURIComponent(filters));
-    } catch (error) {
-      parsedFilters = {};
-    } finally {
-      parsedFilters[data.filterName] = data.value;
-      filters = encodeURIComponent(JSON.stringify(parsedFilters));
-    }
-  }
-
-  const newUrl = `${import.meta.env.VITE_BASE_PATH}${newPath}/${filters}`;
-
+export const addCatalogueToPath = (name: string) => {
+  let path = import.meta.env.VITE_BASE_PATH;
+  path += `${name}`;
+  const searchParams = new URLSearchParams(location.search);
+  const newUrl = `${path}?${searchParams.toString()}`;
   history.replaceState(null, '', newUrl);
+};
+
+export const getCatalogueFromPath = () => {
+  const catalogue = location.pathname.replace(import.meta.env.VITE_BASE_PATH, '');
+  return catalogue.replace(/\/$/, '').split('/')[0];
+};
+
+export const removeCatalogueFromPath = () => {
+  addCatalogueToPath('');
+};
+
+export const addCollectionToPath = (name: string) => {
+  const catalogue = getCatalogueFromPath();
+  const path = `${catalogue}/${name}`;
+  addCatalogueToPath(path);
+};
+
+export const removeCollectionFromPath = () => {
+  const catalogue = getCatalogueFromPath();
+  addCatalogueToPath(catalogue);
+};
+
+export const getCollectionFromPath = () => {
+  const catalogue = location.pathname.replace(import.meta.env.VITE_BASE_PATH, '');
+  return catalogue.replace(/\/$/, '').split('/')[1];
 };
 
 export const setQueryParam = (name: string, value: string): void => {
   const searchParams = new URLSearchParams(location.search);
   searchParams.set(name, value);
-  const newUrl = `${import.meta.env.VITE_BASE_PATH}?${searchParams.toString()}`;
+  const newUrl = `${location.pathname}?${searchParams.toString()}`;
   history.replaceState(null, '', newUrl);
 };
 
@@ -64,6 +47,6 @@ export const getQueryParam = (name: string): string => {
 export const removeQueryParam = (name: string) => {
   const searchParams = new URLSearchParams(location.search);
   searchParams.delete(name);
-  const newUrl = `${import.meta.env.VITE_BASE_PATH}?${searchParams.toString()}`;
+  const newUrl = `${location.pathname}?${searchParams.toString()}`;
   history.replaceState(null, '', newUrl);
 };

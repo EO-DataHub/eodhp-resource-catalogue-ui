@@ -16,6 +16,7 @@ import { ToolboxItemSkeleton } from './ToolboxItemSkeleton';
 import ToolboxRow from '../ToolboxRow';
 
 import './styles.scss';
+import { addCollectionToPath, removeCatalogueFromPath, removeQueryParam } from '@/utils/urlHandler';
 
 const COLLECTION_SCENE_ID = 'collection-scene';
 
@@ -47,6 +48,7 @@ const ToolboxItems = () => {
           className="toolbox__header-back"
           onClick={() => {
             setActivePage('collections');
+            removeCatalogueFromPath();
           }}
         >
           <span>&lt; Return to Collections</span>
@@ -69,6 +71,7 @@ const ToolboxItems = () => {
               onClick={() => {
                 setActivePage('assets');
                 setSelectedCollectionItem(item);
+                addCollectionToPath(item.id);
 
                 if (item.geometry.type !== 'Polygon') {
                   console.error('Selected item is not a polygon');

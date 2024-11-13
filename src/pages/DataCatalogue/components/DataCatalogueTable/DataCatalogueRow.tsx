@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Collection } from '@/typings/stac';
-import { setQueryParam } from '@/utils/urlHandler';
+import { addCatalogueToPath, setQueryParam } from '@/utils/urlHandler';
 
 import { DataCatalogueRowSkeleton } from './DataCatalogueRowSkeleton';
 
@@ -62,7 +62,7 @@ export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
       className="data-catalogue-table__row"
       onClick={() => {
         window.open(row.stacUrl, '_blank');
-        setQueryParam('catalogue', row.id);
+        addCatalogueToPath(row.id);
       }}
     >
       <div className="data-catalogue-table__row-content">

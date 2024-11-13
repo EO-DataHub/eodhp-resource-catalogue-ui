@@ -2,6 +2,7 @@ import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { useToolbox } from '@/hooks/useToolbox';
 
 import './AssetsPanel.scss';
+import { removeCollectionFromPath } from '@/utils/urlHandler';
 
 type Asset = {
   key: string;
@@ -27,7 +28,13 @@ export const AssetsPanel = () => {
   return (
     <div>
       <div className="toolbox__header">
-        <button className="button-link" onClick={() => setActivePage('items')}>
+        <button
+          className="button-link"
+          onClick={() => {
+            setActivePage('items');
+            removeCollectionFromPath();
+          }}
+        >
           <span>&lt; Return to Items</span>
         </button>
       </div>
