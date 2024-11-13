@@ -199,6 +199,26 @@ const getActiveWorkspace = async (): Promise<string> => {
   }
 };
 
+export const sendPurchaseRequest = async (): Promise<void> => {
+  const workspace = (await getActiveWorkspace()) || 'james-hinton';
+  const url = `${import.meta.env.VITE_STAC_WORKSPACE_ENDPOINT}/${workspace}/ordered-data`;
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({}),
+    });
+  } catch (error) {
+    console.error('Error favouriting item:', error);
+    throw error;
+  }
+};
+
 const getStacCatalogUrl = (collection: Collection): string => {
   const selfLink = collection.links.find((link) => link.rel === 'self');
   if (!selfLink?.href) return '';
