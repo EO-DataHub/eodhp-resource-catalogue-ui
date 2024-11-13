@@ -1,6 +1,5 @@
 import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { useToolbox } from '@/hooks/useToolbox';
-
 import './AssetsPanel.scss';
 import { removeCollectionFromPath } from '@/utils/urlHandler';
 

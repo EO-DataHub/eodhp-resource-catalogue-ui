@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Collection } from '@/typings/stac';
-import { addCatalogueToPath, setQueryParam } from '@/utils/urlHandler';
+import { addCatalogueToPath } from '@/utils/urlHandler';
 
 import { DataCatalogueRowSkeleton } from './DataCatalogueRowSkeleton';
 

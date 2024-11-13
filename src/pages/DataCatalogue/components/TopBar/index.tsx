@@ -8,7 +8,6 @@ import { useFilters } from '@/hooks/useFilters';
 import { getStacCollections } from '@/services/stac';
 import 'react-responsive-pagination/themes/classic.css';
 import './styles.scss';
-import { setQueryParam } from '@/utils/urlHandler';
 
 const TopBar: React.FC = () => {
   const { search } = useLocation();

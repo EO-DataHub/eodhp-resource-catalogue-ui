@@ -11,12 +11,12 @@ import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
 import { StacItem } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
+import { addCollectionToPath, removeCatalogueFromPath } from '@/utils/urlHandler';
 
 import { ToolboxItemSkeleton } from './ToolboxItemSkeleton';
 import ToolboxRow from '../ToolboxRow';
 
 import './styles.scss';
-import { addCollectionToPath, removeCatalogueFromPath, removeQueryParam } from '@/utils/urlHandler';
 
 const COLLECTION_SCENE_ID = 'collection-scene';
 

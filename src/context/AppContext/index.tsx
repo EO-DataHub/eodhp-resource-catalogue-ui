@@ -3,13 +3,10 @@ import React, { createContext, useEffect, useReducer, useState } from 'react';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { fromLonLat } from 'ol/proj';
-import { useLocation } from 'react-router-dom';
 
 import { useFilters } from '@/hooks/useFilters';
 import { useMap } from '@/hooks/useMap';
-import { useToolbox } from '@/hooks/useToolbox';
-import { getStacCollections } from '@/services/stac';
-import { getCatalogueFromPath, getCollectionFromPath, getQueryParam } from '@/utils/urlHandler';
+import { getQueryParam } from '@/utils/urlHandler';
 
 import { AppAction, AppContextType, AppProviderProps, AppState } from './types';
 
@@ -32,16 +29,12 @@ const reducer = (state: AppState, action: AppAction): AppState => {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-  const { search } = useLocation();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [urlRead, setUrlRead] = useState(false);
 
   const {
     actions: { setTemporalFilter },
   } = useFilters();
-  const {
-    actions: { setSelectedCollection },
-  } = useToolbox();
   const { drawingSource } = useMap();
 
   const setFilterSidebarOpen = (isOpen: boolean) => {

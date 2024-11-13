@@ -5,7 +5,7 @@ import { useDebounce } from 'react-use';
 import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { Collection } from '@/typings/stac';
-import { addCatalogueToPath, setQueryParam } from '@/utils/urlHandler';
+import { addCatalogueToPath } from '@/utils/urlHandler';
 
 import { TreeNode } from './TreeNode';
 import { filterTree } from './utils';
