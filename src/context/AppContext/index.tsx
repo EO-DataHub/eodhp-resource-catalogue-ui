@@ -32,7 +32,9 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [urlRead, setUrlRead] = useState(false);
 
-  const { actions } = useFilters();
+  const {
+    actions: { setTemporalFilter },
+  } = useFilters();
   const { drawingSource } = useMap();
 
   const setFilterSidebarOpen = (isOpen: boolean) => {
@@ -65,7 +67,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const feature = new Feature({ geometry: polygon });
       drawingSource.addFeature(feature);
     }
-    actions.setTemporalFilter({
+    setTemporalFilter({
       temporal: { start: startDate, end: endDate },
       textQuery,
       aoi: aoi ? aoi : null,
@@ -77,7 +79,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setActiveContent(view);
 
     setUrlRead(true);
-  }, [drawingSource, actions, urlRead]);
+  }, [drawingSource, setTemporalFilter, urlRead]);
 
   const value = {
     state,
