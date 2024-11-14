@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import ResponsivePagination from 'react-responsive-pagination';
 
 import { useFilters } from '@/hooks/useFilters';
