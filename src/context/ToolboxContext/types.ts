@@ -26,6 +26,8 @@ export interface ToolboxContextType {
     setSelectedCollection: (selectedCollection: Collection) => void;
     setSelectedCollectionItems: (selectedCollectionItems: FeatureCollection) => void;
     setSelectedCollectionItem: (selectedCollectionItem: StacItem) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    returnResultsPage: () => any;
   };
 }
 

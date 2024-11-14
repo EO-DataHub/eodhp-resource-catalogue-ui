@@ -1,3 +1,6 @@
+import ResponsivePagination from 'react-responsive-pagination';
+
+import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { StacItem } from '@/typings/stac';
 
@@ -5,16 +8,29 @@ import ToolboxItem from './ToolboxItem';
 import { ToolboxItemSkeleton } from './ToolboxItemSkeleton';
 
 import './styles.scss';
+import 'react-responsive-pagination/themes/classic.css';
 
 const ToolboxItems = () => {
   const {
     state: { selectedCollection, selectedCollectionItems, isCollectionItemsPending },
-    actions: { setActivePage },
+    actions: { setActivePage, returnResultsPage },
   } = useToolbox();
+
+  const {
+    state: { activeFilters }, // activeFilters.resultsPage
+    actions: { setResultsPage },
+  } = useFilters();
 
   if (isCollectionItemsPending) {
     return <ToolboxItemSkeleton />;
   }
+
+  const returnTotalPages = () => {
+    if (selectedCollectionItems?.context) {
+      return Math.ceil(selectedCollectionItems.context.matched / activeFilters.resultsPerPage);
+    }
+    return 0;
+  };
 
   return (
     <div className="toolbox-content-container">
@@ -28,13 +44,27 @@ const ToolboxItems = () => {
         >
           <span>&lt; Return to Collections</span>
         </button>
-        <div className="toolbox__header-title">
-          {selectedCollection.title ? selectedCollection.title : selectedCollection.id}
-        </div>
+        {selectedCollectionItems?.features?.length > 0 ? (
+          <div className="toolbox__header-title">
+            {selectedCollection.title ? selectedCollection.title : selectedCollection.id}
+          </div>
+        ) : (
+          <div className="toolbox__header-error">
+            {`No items found for ${selectedCollection.title ? selectedCollection.title : selectedCollection.id} that match the current filters`}
+          </div>
+        )}
+        <ResponsivePagination
+          current={activeFilters.resultsPage}
+          total={returnTotalPages()}
+          onPageChange={(e) => {
+            console.log('Page Change:', e);
+            setResultsPage(e);
+          }}
+        />
       </div>
 
       <div className="toolbox__items">
-        {selectedCollectionItems?.features?.map((item: StacItem) => {
+        {returnResultsPage().map((item: StacItem) => {
           return <ToolboxItem key={item.id} item={item} />;
         })}
       </div>

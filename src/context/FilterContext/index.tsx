@@ -22,6 +22,8 @@ const initialState: FilterState = {
     },
     aoi: null,
     qualityAssurance: null,
+    resultsPerPage: 10,
+    resultsPage: 1,
   },
 };
 
@@ -76,6 +78,23 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     });
   };
 
+  // Toolbox Items specific filters
+  // i.e. resultsPage, resultsPerPage, etc.
+  const setResultsPerPage = (resultsPerPage: number) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      resultsPerPage,
+    });
+  };
+
+  const setResultsPage = (resultsPage: number) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      resultsPage,
+    });
+  };
+
+  // General utility functions
   const resetFilters = () =>
     setActiveFilters({
       textQuery: '',
@@ -84,6 +103,9 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
         end: '',
       },
       aoi: null,
+      qualityAssurance: null,
+      resultsPerPage: 10,
+      resultsPage: 1,
     });
 
   const value = {
@@ -97,6 +119,8 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
       setTemporalStartFilter,
       setTemporalEndFilter,
       setAoiFilter,
+      setResultsPerPage,
+      setResultsPage,
       resetFilters,
     },
   };

@@ -91,6 +91,18 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     state.selectedCollection,
   ]);
 
+  // Inside of selectedCollectionItems there is 100 items.
+  // We only want to return 10 at a time, in relation to the active page the user is on. Ignore the resultsPerPage for now.
+  const returnResultsPage = () => {
+    if (state.selectedCollectionItems?.features) {
+      return state.selectedCollectionItems.features.slice(
+        (activeFilters.resultsPage - 1) * 10,
+        activeFilters.resultsPage * 10,
+      );
+    }
+    return [];
+  };
+
   const value = {
     state,
     actions: {
@@ -115,6 +127,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
           payload: selectedCollectionItem,
         });
       },
+      returnResultsPage,
     },
   };
 

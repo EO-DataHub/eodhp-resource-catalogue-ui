@@ -1,3 +1,4 @@
+import placeholder from '@/assets/placeholders/100.png';
 import { titleFromId } from '@/utils/genericUtils';
 
 import { ToolboxItemProps } from './types.js';
@@ -13,7 +14,7 @@ const ToolboxRow = ({ thumbnail, title, dataPoints, onClick, children }: Toolbox
           src={thumbnail}
           onError={(e) => {
             console.error('Error loading image:', thumbnail, e);
-            e.currentTarget.src = 'https://via.placeholder.com/100';
+            e.currentTarget.src = placeholder;
           }}
         />
       </div>
