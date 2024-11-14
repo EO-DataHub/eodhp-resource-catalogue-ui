@@ -4,6 +4,12 @@ import { FeatureCollection } from 'geojson';
 
 import { Collection, StacItem } from '@/typings/stac';
 
+export interface ExtendedFeatureCollection extends FeatureCollection {
+  context?: {
+    matched?: number;
+  };
+}
+
 export interface ToolboxState {
   activePage: string;
   selectedCollection: Collection | null;
@@ -24,7 +30,7 @@ export interface ToolboxContextType {
   actions: {
     setActivePage: (activePage: string) => void;
     setSelectedCollection: (selectedCollection: Collection) => void;
-    setSelectedCollectionItems: (selectedCollectionItems: FeatureCollection) => void;
+    setSelectedCollectionItems: (selectedCollectionItems: ExtendedFeatureCollection) => void;
     setSelectedCollectionItem: (selectedCollectionItem: StacItem) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     returnResultsPage: () => any;

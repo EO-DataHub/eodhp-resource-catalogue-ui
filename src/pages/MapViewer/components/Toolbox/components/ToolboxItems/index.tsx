@@ -26,9 +26,7 @@ const ToolboxItems = () => {
   }
 
   const returnTotalPages = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (selectedCollectionItems?.context) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return Math.ceil(selectedCollectionItems.context.matched / activeFilters.resultsPerPage);
     }
     return 0;

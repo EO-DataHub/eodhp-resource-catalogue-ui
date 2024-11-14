@@ -60,6 +60,12 @@ export const getStacCollections = async (
   }
 };
 
+export interface ExtendedFeatureCollection extends FeatureCollection {
+  context?: {
+    matched?: number;
+  };
+}
+
 // In the future we are going to use `cql2-json`, this item search is temporary
 export const getStacItems = async (
   privateCatalog: string,
@@ -67,7 +73,7 @@ export const getStacItems = async (
   geometry: GeoJSONGeometry,
   startDate: string,
   endDate: string,
-): Promise<FeatureCollection> => {
+): Promise<ExtendedFeatureCollection> => {
   const itemsUrl = privateCatalog
     ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${privateCatalog}/search`
     : `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
