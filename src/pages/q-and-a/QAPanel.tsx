@@ -4,7 +4,7 @@ import { FaMap } from 'react-icons/fa';
 import { MdSatelliteAlt } from 'react-icons/md';
 
 import { useApp } from '@/hooks/useApp';
-import { addViewToURL, setQueryParam } from '@/utils/urlHandler';
+import { addViewToURL } from '@/utils/urlHandler';
 
 import { PerformanceTable } from './PerformanceTable';
 import { QualityLegend } from './QualityLegend';
