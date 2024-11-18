@@ -1,4 +1,7 @@
 // Credit https://github.com/blacha/stac-ts for the STAC typings
+import { FeatureCollection } from 'geojson';
+
+import { StacItem } from './stac';
 
 export type StacVersion = '1.0.0';
 export type StacExtensions = string[];
@@ -104,3 +107,12 @@ export type Temporal = {
   start: string;
   end: string;
 };
+
+declare global {
+  interface ExtendedFeatureCollection extends FeatureCollection {
+    context?: {
+      matched?: number;
+    };
+    features: StacItem[];
+  }
+}

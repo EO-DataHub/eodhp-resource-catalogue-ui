@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { FeatureCollection } from 'geojson';
 import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 
 import hgb from '@/assets/placeholders/hgb.png';
@@ -59,12 +58,6 @@ export const getStacCollections = async (
     throw error;
   }
 };
-
-export interface ExtendedFeatureCollection extends FeatureCollection {
-  context?: {
-    matched?: number;
-  };
-}
 
 // In the future we are going to use `cql2-json`, this item search is temporary
 export const getStacItems = async (
