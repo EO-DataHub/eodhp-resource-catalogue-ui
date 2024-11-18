@@ -68,7 +68,9 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
   const handleLeafClick = (node: Collection) => {
     setSelectedCollection(node);
     setActivePage('items');
-    addCatalogueToPath(node.id);
+    const url = node.links.filter((link) => link.rel === 'self')[0].href;
+    const path = url.split('catalogs/')[1];
+    addCatalogueToPath(`catalogs/${path}`);
   };
 
   return (

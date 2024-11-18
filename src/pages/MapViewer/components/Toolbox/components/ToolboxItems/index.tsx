@@ -11,7 +11,7 @@ import { useMap } from '@/hooks/useMap';
 import { useToolbox } from '@/hooks/useToolbox';
 import { StacItem } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
-import { addCollectionToPath, removeCatalogueFromPath } from '@/utils/urlHandler';
+import { addCatalogueToPath, removeCatalogueFromPath } from '@/utils/urlHandler';
 
 import { ToolboxItemSkeleton } from './ToolboxItemSkeleton';
 import ToolboxRow from '../ToolboxRow';
@@ -71,7 +71,9 @@ const ToolboxItems = () => {
               onClick={() => {
                 setActivePage('assets');
                 setSelectedCollectionItem(item);
-                addCollectionToPath(item.id);
+                const url = item.links.filter((link) => link.rel === 'self')[0].href;
+                const path = url.split('catalogue/')[1];
+                addCatalogueToPath(path);
 
                 if (item.geometry.type !== 'Polygon') {
                   console.error('Selected item is not a polygon');

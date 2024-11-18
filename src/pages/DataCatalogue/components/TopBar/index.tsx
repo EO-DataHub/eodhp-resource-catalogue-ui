@@ -1,6 +1,5 @@
 import { FaMap } from 'react-icons/fa';
 import ResponsivePagination from 'react-responsive-pagination';
-import { useLocation } from 'react-router-dom';
 
 import { useApp } from '@/hooks/useApp';
 import { useCatalogue } from '@/hooks/useCatalogue';
@@ -8,11 +7,10 @@ import { useFilters } from '@/hooks/useFilters';
 import { getStacCollections } from '@/services/stac';
 import 'react-responsive-pagination/themes/classic.css';
 import './styles.scss';
+import { getCatalogueFromURL } from '@/utils/urlHandler';
 
 const TopBar: React.FC = () => {
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
+  const catalogPath = getCatalogueFromURL();
 
   const { actions: AppActions } = useApp();
   const { setActiveContent } = AppActions;

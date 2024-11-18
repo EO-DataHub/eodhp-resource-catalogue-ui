@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { setQueryParam } from '@/utils/urlHandler';
+import { addViewToURL, setQueryParam } from '@/utils/urlHandler';
 
 import DataCatalogueTable from './components/DataCatalogueTable';
 import TopBar from './components/TopBar';
@@ -10,9 +10,9 @@ import './styles.scss';
 const DataCatalogue = () => {
   // Set query params on mount / dismount
   useEffect(() => {
-    setQueryParam('view', 'dataCatalogue');
+    addViewToURL('list');
     return () => {
-      setQueryParam('view', 'map');
+      addViewToURL('map');
     };
   }, []);
 

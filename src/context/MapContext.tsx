@@ -17,13 +17,18 @@ import Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import Map from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
-import { useLocation } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacCollections } from '@/services/stac';
 import { Collection } from '@/typings/stac';
-import { getQueryParam, setQueryParam } from '@/utils/urlHandler';
+import {
+  addViewToURL,
+  getCatalogueFromURL,
+  getQueryParam,
+  getViewFomURL,
+  setQueryParam,
+} from '@/utils/urlHandler';
 
 export type MapContextType = {
   mapConfig: MapConfig;
@@ -60,9 +65,7 @@ const DEFAULT_ZOOM = 7;
 export const MapProvider = ({ initialState = {}, children }: MapProviderProps) => {
   const mapRef = useRef(null);
 
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
+  const catalogPath = getCatalogueFromURL();
 
   const [mapConfig, _setMapConfig] = useState<MapConfig>({
     center: DEFAULT_LON_LAT,
@@ -125,8 +128,8 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
 
   useEffect(() => {
     if (!map) return;
-    const view = getQueryParam('view');
-    if (!view) setQueryParam('view', 'map');
+    const view = getViewFomURL();
+    if (!view) addViewToURL('map');
     map.on('moveend', () => {
       const view = map.getView();
       const centre = view.getCenter();

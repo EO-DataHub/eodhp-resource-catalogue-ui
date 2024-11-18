@@ -4,7 +4,7 @@ import { FaMap } from 'react-icons/fa';
 import { MdSatelliteAlt } from 'react-icons/md';
 
 import { useApp } from '@/hooks/useApp';
-import { setQueryParam } from '@/utils/urlHandler';
+import { addViewToURL, setQueryParam } from '@/utils/urlHandler';
 
 import { PerformanceTable } from './PerformanceTable';
 import { QualityLegend } from './QualityLegend';
@@ -150,9 +150,9 @@ const QUALITY_DATA: QualityData[] = [
 
 export const QAPanel = () => {
   useEffect(() => {
-    setQueryParam('view', 'qa');
+    addViewToURL('qa');
     return () => {
-      setQueryParam('view', 'map');
+      addViewToURL('map');
     };
   }, []);
 

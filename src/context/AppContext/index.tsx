@@ -6,7 +6,8 @@ import { fromLonLat } from 'ol/proj';
 
 import { useFilters } from '@/hooks/useFilters';
 import { useMap } from '@/hooks/useMap';
-import { getQueryParam } from '@/utils/urlHandler';
+import { useToolbox } from '@/hooks/useToolbox';
+import { getQueryParam, getViewFomURL } from '@/utils/urlHandler';
 
 import { AppAction, AppContextType, AppProviderProps, AppState } from './types';
 
@@ -30,12 +31,16 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [urlRead, setUrlRead] = useState(false);
+  const [filtersRead, setFiltersRead] = useState(false);
+  const [collectionsRead, setCollectionsRead] = useState(false);
 
   const {
     actions: { setTemporalFilter },
   } = useFilters();
-  const { drawingSource } = useMap();
+  const {
+    actions: { setSelectedCollection, setActivePage },
+  } = useToolbox();
+  const { drawingSource, collections } = useMap();
 
   const setFilterSidebarOpen = (isOpen: boolean) => {
     dispatch({ type: 'SET_FILTER_SIDEBAR_OPEN', payload: isOpen });
@@ -47,7 +52,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   // Read in query params and set if they exist
   useEffect(() => {
-    if (urlRead) return;
+    if (filtersRead) return;
     if (!drawingSource) return;
     const startDate = getQueryParam('startDate') || null;
     const endDate = getQueryParam('endDate') || null;
@@ -73,13 +78,22 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       aoi: aoi ? aoi : null,
       qualityAssurance: qa,
     });
+    setFiltersRead(true);
+  }, [drawingSource, filtersRead, setTemporalFilter]);
 
-    // Set view to map / dataCatalogue / qa
-    const view = getQueryParam('view');
-    setActiveContent(view);
+  useEffect(() => {
+    if (collectionsRead) return;
 
-    setUrlRead(true);
-  }, [drawingSource, setTemporalFilter, urlRead]);
+    const viewStr = getViewFomURL();
+    const viewMap = {
+      map: 'map',
+      list: 'dataCatalogue',
+      qa: 'qa',
+    };
+    setActiveContent(viewMap[viewStr]);
+
+    setCollectionsRead(true);
+  }, [collections, collectionsRead, setActivePage, setSelectedCollection]);
 
   const value = {
     state,

@@ -1,11 +1,11 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
 import { FeatureCollection } from 'geojson';
-import { useLocation } from 'react-router-dom';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacItems } from '@/services/stac';
 import { Collection, StacItem } from '@/typings/stac';
+import { getCatalogueFromURL } from '@/utils/urlHandler';
 
 import { ToolboxAction, ToolboxContextType, ToolboxProviderProps, ToolboxState } from './types';
 
@@ -44,9 +44,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     state: { activeFilters },
   } = useFilters();
 
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
+  const catalogPath = getCatalogueFromURL();
 
   const setSelectedCollectionItems = (selectedCollectionItems: FeatureCollection) => {
     dispatch({

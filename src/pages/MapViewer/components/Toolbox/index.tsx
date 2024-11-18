@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { FaRegWindowMinimize } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
 
 import { Tree } from '@/components/tree/Tree';
 import { useToolbox } from '@/hooks/useToolbox';
 import { Collection, Link } from '@/typings/stac';
+import { getCatalogueFromURL } from '@/utils/urlHandler';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
@@ -15,7 +15,6 @@ import ToolboxItems from './components/ToolboxItems';
 import './styles.scss';
 
 const CATALOG_URL = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs`;
-const ROOT_CATALOG_URL = `${CATALOG_URL}/supported-datasets/catalogs`;
 
 // Utility function to fetch data from a given URL
 const fetchData = async (url: string) => {
@@ -39,11 +38,9 @@ const Toolbox = () => {
   const [treeData, setTreeData] = useState<TreeCatalog[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
 
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
+  const catalogPath = getCatalogueFromURL();
 
-  const catalogUrl = catalogPath ? `${CATALOG_URL}/${catalogPath}` : ROOT_CATALOG_URL;
+  const catalogUrl = catalogPath ? `${CATALOG_URL}/${catalogPath}` : CATALOG_URL;
 
   const {
     state: { activePage },
