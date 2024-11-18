@@ -17,7 +17,7 @@ const ToolboxItems = () => {
   } = useToolbox();
 
   const {
-    state: { activeFilters }, // activeFilters.resultsPage
+    state: { activeFilters },
     actions: { setResultsPage },
   } = useFilters();
 
@@ -57,7 +57,6 @@ const ToolboxItems = () => {
           current={activeFilters.resultsPage}
           total={returnTotalPages()}
           onPageChange={(e) => {
-            console.log('Page Change:', e);
             setResultsPage(e);
           }}
         />

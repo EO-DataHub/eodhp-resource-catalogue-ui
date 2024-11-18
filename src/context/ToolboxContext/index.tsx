@@ -73,7 +73,6 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
             activeFilters.temporal.start,
             activeFilters.temporal.end,
           );
-          console.log('Set Selected Collection Items:', items);
           setSelectedCollectionItems(items);
           setCollectionItemsPending(false);
         } catch (error) {
@@ -99,7 +98,6 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
         (activeFilters.resultsPage - 1) * 10,
         activeFilters.resultsPage * 10,
       );
-      console.log('returnResultsPageOutput:', returnResultsPageOutput);
       return returnResultsPageOutput;
     }
     return [];

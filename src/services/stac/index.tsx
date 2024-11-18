@@ -73,7 +73,7 @@ export const getStacItems = async (
 
   const data = {
     collections: [collection.id],
-    limit: 100,
+    limit: 200,
     catalog_paths: [getStacCatalogUrl(collection)],
     intersects: geometry,
   };
