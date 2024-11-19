@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { FeatureCollection } from 'geojson';
 import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 
 import hgb from '@/assets/placeholders/hgb.png';
@@ -67,14 +66,14 @@ export const getStacItems = async (
   geometry: GeoJSONGeometry,
   startDate: string,
   endDate: string,
-): Promise<FeatureCollection> => {
+): Promise<ExtendedFeatureCollection> => {
   const itemsUrl = privateCatalog
     ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${privateCatalog}/search`
     : `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
 
   const data = {
     collections: [collection.id],
-    limit: 100,
+    limit: 200,
     catalog_paths: [getStacCatalogUrl(collection)],
     intersects: geometry,
   };
