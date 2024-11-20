@@ -1,9 +1,8 @@
 import { bboxPolygon, booleanIntersects, polygon } from '@turf/turf';
 
 import { FilterActiveFilters } from '@/context/FilterContext/types';
+import { TreeCatalog } from '@/pages/MapViewer/components/Toolbox';
 import { Collection } from '@/typings/stac';
-
-import { TreeCatalog } from './Tree';
 
 export const CATALOG = 'Catalog';
 

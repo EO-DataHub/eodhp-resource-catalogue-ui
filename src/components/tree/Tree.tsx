@@ -1,27 +1,19 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 
 import { useDebounce } from 'react-use';
 
 import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
+import { TreeCatalog } from '@/pages/MapViewer/components/Toolbox';
 import { Collection } from '@/typings/stac';
-import { addCatalogueToPath } from '@/utils/urlHandler';
 
+import { TreeHeader } from './TreeHeader';
 import { TreeNode } from './TreeNode';
 import { filterTree } from './utils';
-
 import './Tree.scss';
 
-export type TreeCatalog = {
-  id: string;
-  title: string;
-  type: 'Catalog';
-  catalogs?: TreeCatalog[]; // sub-catalogs
-  collections?: Collection[]; // collections
-};
-
 type TreeProps = {
-  treeData: TreeCatalog[];
+  treeData: TreeCatalog[]; // This is the flat list from the API
   expandedNodes: { [key: string]: boolean };
   setExpandedNodes: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 };
@@ -43,40 +35,157 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
     [activeFilters],
   );
 
-  // Debounce the filtering of the tree
+  const buildTree = async (flatCatalogs: TreeCatalog[]): Promise<TreeCatalog[]> => {
+    const idToCatalog: { [id: string]: TreeCatalog } = {};
+    const rootCatalogs: TreeCatalog[] = [];
+
+    flatCatalogs.forEach((catalog) => {
+      idToCatalog[catalog.id] = { ...catalog, catalogs: [], collections: [] };
+    });
+
+    for (const catalog of flatCatalogs) {
+      const parentId = getParentId(catalog);
+      if (parentId && parentId !== 'root' && idToCatalog[parentId]) {
+        idToCatalog[parentId].catalogs.push(idToCatalog[catalog.id]);
+      } else {
+        rootCatalogs.push(idToCatalog[catalog.id]);
+      }
+    }
+
+    await Promise.all(
+      flatCatalogs.map(async (catalog) => {
+        const currentCatalog = idToCatalog[catalog.id];
+        const childLinks = currentCatalog.links.filter((link) => link.rel === 'child');
+
+        await Promise.all(
+          childLinks.map(async (link) => {
+            if (link.href.includes('/collections/')) {
+              try {
+                const response = await fetch(link.href);
+                const collection = await response.json();
+                currentCatalog.collections.push(collection);
+              } catch (error) {
+                console.error(`Failed to fetch collection at ${link.href}:`, error);
+              }
+            }
+          }),
+        );
+      }),
+    );
+
+    return rootCatalogs;
+  };
+
+  const getParentId = (catalog: TreeCatalog): string | null => {
+    const parentLink = catalog.links.find((link) => link.rel === 'parent');
+    if (parentLink) {
+      const hrefParts = parentLink.href.split('/catalogs/');
+      if (hrefParts.length > 1) {
+        const pathParts = hrefParts[1].split('/');
+        return pathParts[pathParts.length - 1];
+      }
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    const parseURL = () => {
+      const path = window.location.pathname;
+      const basePath = import.meta.env.VITE_BASE_PATH || '';
+      let relativePath = path;
+      if (basePath && path.startsWith(basePath)) {
+        relativePath = path.slice(basePath.length);
+      }
+
+      // Remove the suffix /map or /list if present
+      relativePath = relativePath.replace(/\/(map|list)$/, '');
+
+      const pathParts = relativePath.split('/').filter(Boolean);
+      const catalogsIndex = pathParts.indexOf('catalogs');
+      let catalogPathParts = [];
+      if (catalogsIndex !== -1) {
+        catalogPathParts = pathParts.slice(catalogsIndex + 1);
+      }
+
+      const initialExpandedNodes: { [key: string]: boolean } = {};
+      catalogPathParts.forEach((catalogId) => {
+        initialExpandedNodes[catalogId] = true;
+      });
+
+      setExpandedNodes(initialExpandedNodes);
+    };
+
+    parseURL();
+
+    const handlePopState = () => {
+      parseURL();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [setExpandedNodes]);
+
   useDebounce(
     () => {
       if (treeData.length > 0) {
-        const filteredData = treeData
-          .map((catalog) => filter(catalog))
-          .filter(Boolean) as TreeCatalog[];
-        setFilteredTreeData(filteredData);
+        (async () => {
+          const tree = await buildTree(treeData);
+          const filteredData = tree
+            .map((catalog) => filter(catalog))
+            .filter(Boolean) as TreeCatalog[];
+          setFilteredTreeData(filteredData);
+          console.log('Filtered Tree Data:', filteredData);
+        })();
       }
     },
     300,
     [treeData, activeFilters, filter],
   );
 
-  // Toggle the expansion state of a catalog node
-  const toggleExpand = (nodeId: string) => {
+  const toggleExpand = (node: TreeCatalog | Collection) => {
+    // Toggle expansion state
     setExpandedNodes((prevState) => ({
       ...prevState,
-      [nodeId]: !prevState[nodeId], // Toggle the expanded state of this node
+      [node.id]: !prevState[node.id],
     }));
+
+    // Update the URL
+    const url = node.links.find((link) => link.rel === 'self')?.href;
+    if (url) {
+      const path = url.split('catalogs/')[1];
+      const currentPath = window.location.pathname;
+      // Preserve the suffix (/map or /list)
+      const suffixMatch = currentPath.match(/\/(map|list)$/);
+      const suffix = suffixMatch ? suffixMatch[0] : '';
+      const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
+      window.history.pushState({}, '', newPath);
+    }
   };
 
   const handleLeafClick = (node: Collection) => {
     setSelectedCollection(node);
     setActivePage('items');
-    const url = node.links.filter((link) => link.rel === 'self')[0].href;
-    const path = url.split('catalogs/')[1];
-    addCatalogueToPath(`catalogs/${path}`);
+
+    const url = node.links.find((link) => link.rel === 'self')?.href;
+    if (url) {
+      const path = url.split('catalogs/')[1];
+      const currentPath = window.location.pathname;
+      // preserve the suffix (/map or /list)
+      const suffixMatch = currentPath.match(/\/(map|list)$/);
+      const suffix = suffixMatch ? suffixMatch[0] : '';
+      const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
+      window.history.pushState({}, '', newPath);
+    }
   };
 
   return (
     <div>
+      <TreeHeader />
       {filteredTreeData ? (
-        <ul className="branch">
+        <ul className="branch root">
           {filteredTreeData.map((catalog) => (
             <TreeNode
               key={catalog.id}
@@ -88,7 +197,9 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
           ))}
         </ul>
       ) : (
-        <div>Loading...</div>
+        <div className="spinner-container">
+          <div className="spinner" />
+        </div>
       )}
     </div>
   );

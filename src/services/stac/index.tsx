@@ -18,12 +18,12 @@ import { StacCollectionsResponse } from './types';
 // 2. Or, retrieve a limited number of collections and paginate on the server side
 // The latter requires more network requests, however it's more efficient for large datasets
 export const getStacCollections = async (
-  privateCatalog: string,
+  catalogPath: string,
   searchQuery: string = '',
   limit: number = 99999,
 ): Promise<Collection[]> => {
-  const url = privateCatalog
-    ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${privateCatalog}/collections?limit=${limit}&q=${searchQuery}`
+  const url = catalogPath
+    ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${catalogPath}/collections?limit=${limit}&q=${searchQuery}`
     : `${import.meta.env.VITE_STAC_ENDPOINT}/collections?limit=${limit}&q=${searchQuery}`;
 
   try {

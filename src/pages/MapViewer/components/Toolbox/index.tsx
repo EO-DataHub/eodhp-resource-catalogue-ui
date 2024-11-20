@@ -4,8 +4,8 @@ import { FaRegWindowMinimize } from 'react-icons/fa';
 
 import { Tree } from '@/components/tree/Tree';
 import { useToolbox } from '@/hooks/useToolbox';
+import { StacLink } from '@/typings/common';
 import { Collection, Link } from '@/typings/stac';
-import { getCatalogueFromURL } from '@/utils/urlHandler';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
@@ -29,6 +29,7 @@ export type TreeCatalog = {
   id: string;
   title: string;
   type: 'Catalog';
+  links: StacLink[];
   catalogs?: TreeCatalog[]; // sub-catalogs
   collections?: Collection[]; // collections
 };
@@ -38,9 +39,7 @@ const Toolbox = () => {
   const [treeData, setTreeData] = useState<TreeCatalog[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
 
-  const catalogPath = getCatalogueFromURL();
-
-  const catalogUrl = catalogPath ? `${CATALOG_URL}/${catalogPath}` : CATALOG_URL;
+  const catalogUrl = CATALOG_URL;
 
   const {
     state: { activePage },

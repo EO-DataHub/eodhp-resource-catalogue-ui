@@ -3,7 +3,6 @@ import ResponsivePagination from 'react-responsive-pagination';
 import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { StacItem } from '@/typings/stac';
-import { removeCatalogueFromPath } from '@/utils/urlHandler';
 
 import ToolboxItem from './ToolboxItem';
 import { ToolboxItemSkeleton } from './ToolboxItemSkeleton';
@@ -41,7 +40,6 @@ const ToolboxItems = () => {
           className="toolbox__header-back"
           onClick={() => {
             setActivePage('collections');
-            removeCatalogueFromPath();
           }}
         >
           <span>&lt; Return to Collections</span>

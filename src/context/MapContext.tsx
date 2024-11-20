@@ -98,7 +98,7 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
       fetchData();
     },
     250,
-    [activeFilters],
+    [activeFilters.textQuery],
   );
 
   useEffect(() => {
