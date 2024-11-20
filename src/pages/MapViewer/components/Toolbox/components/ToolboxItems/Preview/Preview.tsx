@@ -24,7 +24,7 @@ const Preview = ({ item }: PreviewProps) => {
     return () => {
       map.removeLayer(layerRef.current);
     };
-  }, [item]);
+  }, [item, map]);
 
   const handleClick = (event) => {
     event.stopPropagation();
