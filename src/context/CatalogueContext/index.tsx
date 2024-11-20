@@ -13,6 +13,7 @@ import {
 
 const initialState: CatalogueState = {
   collectionSearchResults: [],
+  favouritedItems: {},
   textQuery: '',
   activePage: 1,
 };
@@ -25,6 +26,14 @@ const reducer = (state: CatalogueState, action: CatalogueAction): CatalogueState
       return { ...state, textQuery: action.payload };
     case 'SET_ACTIVE_PAGE':
       return { ...state, activePage: action.payload };
+    case 'SET_FAVOURITED_ITEMS':
+      return {
+        ...state,
+        favouritedItems: {
+          ...state.favouritedItems,
+          [action.payload.collectionId]: new Set(action.payload.itemIds),
+        },
+      };
     default:
       return state;
   }
@@ -63,12 +72,17 @@ const CatalogueProvider: React.FC<CatalogueProviderProps> = ({ children }) => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const setFavouritedItems = (collectionId: string, itemIds: string[]) => {
+    dispatch({ type: 'SET_FAVOURITED_ITEMS', payload: { collectionId, itemIds } });
+  };
+
   const value = {
     state,
     actions: {
       setCollectionSearchResults,
       setTextQuery,
       setActivePage,
+      setFavouritedItems,
     },
   };
 

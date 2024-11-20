@@ -1,7 +1,5 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
-import { FeatureCollection } from 'geojson';
-
 import { useFilters } from '@/hooks/useFilters';
 import { getStacItems } from '@/services/stac';
 import { Collection, StacItem } from '@/typings/stac';
@@ -46,7 +44,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
 
   const catalogPath = getCatalogueFromURL();
 
-  const setSelectedCollectionItems = (selectedCollectionItems: FeatureCollection) => {
+  const setSelectedCollectionItems = (selectedCollectionItems: ExtendedFeatureCollection) => {
     dispatch({
       type: 'SET_SELECTED_COLLECTION_ITEMS',
       payload: selectedCollectionItems,
@@ -89,6 +87,19 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     state.selectedCollection,
   ]);
 
+  // Inside of selectedCollectionItems there is 100 items.
+  // We only want to return 10 at a time, in relation to the active page the user is on. Ignore the resultsPerPage for now.
+  const returnResultsPage = () => {
+    if (state.selectedCollectionItems?.features) {
+      const returnResultsPageOutput = state.selectedCollectionItems.features.slice(
+        (activeFilters.resultsPage - 1) * 10,
+        activeFilters.resultsPage * 10,
+      );
+      return returnResultsPageOutput;
+    }
+    return [];
+  };
+
   const value = {
     state,
     actions: {
@@ -101,7 +112,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
           payload: selectedCollection,
         });
       },
-      setSelectedCollectionItems: (selectedCollectionItems: FeatureCollection) => {
+      setSelectedCollectionItems: (selectedCollectionItems: ExtendedFeatureCollection) => {
         dispatch({
           type: 'SET_SELECTED_COLLECTION_ITEMS',
           payload: selectedCollectionItems,
@@ -113,6 +124,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
           payload: selectedCollectionItem,
         });
       },
+      returnResultsPage,
     },
   };
 

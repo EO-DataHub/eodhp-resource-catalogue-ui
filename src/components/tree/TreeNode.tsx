@@ -1,5 +1,8 @@
-import folder from '@/assets/icons/folder.png';
+import { MdExpandLess, MdExpandMore } from 'react-icons/md';
+
+import { useCatalogue } from '@/hooks/useCatalogue';
 import ToolboxRow from '@/pages/MapViewer/components/Toolbox/components/ToolboxRow';
+import { fetchFavouritedItems } from '@/services/stac';
 import { Collection } from '@/typings/stac';
 import { parseCollectionDataPoints } from '@/utils/stacUtils';
 
@@ -17,13 +20,17 @@ const CATALOG = 'Catalog';
 export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }: TreeNodeProps) => {
   const label = node?.title?.trim() !== '' ? node?.title : node?.id;
 
+  const {
+    actions: { setFavouritedItems },
+  } = useCatalogue();
+
   if (node.type === CATALOG) {
     const isExpanded = expandedNodes[node.id] ?? false;
 
     return (
-      <li key={node.id}>
+      <li key={node.id} className="leaf">
         <button className="node" onClick={() => toggleExpand(node.id)}>
-          {isExpanded ? '[-]' : '[+]'} {label}
+          {isExpanded ? <MdExpandLess /> : <MdExpandMore />} {label}
         </button>
 
         {isExpanded ? (
@@ -39,7 +46,7 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
             ))}
             {node.collections?.map((collection) => {
               // Extract the thumbnail URL from the assets object
-              const thumbnailUrl = collection.assets?.thumbnail?.href ?? folder;
+              const thumbnailUrl = '';
 
               return (
                 <li key={collection.id}>
@@ -48,7 +55,11 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
                     dataPoints={parseCollectionDataPoints(collection)}
                     thumbnail={thumbnailUrl}
                     title={collection.title ? collection.title : collection.id}
-                    onClick={() => handleLeafClick(collection)}
+                    onClick={async () => {
+                      const favouritedItems = await fetchFavouritedItems(collection.id);
+                      setFavouritedItems(collection.id, favouritedItems);
+                      handleLeafClick(collection);
+                    }}
                   />
                 </li>
               );

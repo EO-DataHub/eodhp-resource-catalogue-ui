@@ -21,6 +21,8 @@ export interface FilterContextType {
     setTemporalStartFilter: (start: string) => void;
     setTemporalEndFilter: (end: string) => void;
     setAoiFilter: (geometry: GeoJSONGeometry) => void;
+    setResultsPerPage: (resultsPerPage: number) => void;
+    setResultsPage: (resultsPage: number) => void;
     resetFilters: () => void;
     setTemporalFilter: (filters: FilterActiveFilters) => void;
   };
@@ -51,4 +53,6 @@ export interface FilterActiveFilters {
   temporal: Temporal;
   aoi: GeoJSONGeometry;
   qualityAssurance?: string;
+  resultsPerPage?: number;
+  resultsPage?: number;
 }

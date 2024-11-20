@@ -6,7 +6,7 @@
 
 .toolbox__items {
   overflow-y: auto;
-  height: calc(100% - 50px);
+  height: calc(100% - 150px);
 }
 
 .no-items {
@@ -19,8 +19,33 @@
 .button-wrapper {
   display: flex;
   justify-content: space-between;
+  margin-top: 0.25rem;
 
   & .purchase-btn {
     padding: 0.5rem;
+  }
+
+  button {
+    background-color: white;
+    border-radius: 5px;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgb(222 226 230);
+    color: #2a3559;
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
