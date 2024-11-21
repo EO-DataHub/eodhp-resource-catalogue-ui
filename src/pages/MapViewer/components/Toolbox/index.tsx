@@ -84,10 +84,8 @@ const Toolbox = () => {
   useEffect(() => {
     const fetchRoots = async () => {
       try {
-        const parsedRootCatalogUrl = new URL(catalogUrl);
-        parsedRootCatalogUrl.searchParams.set('limit', '99999');
-
-        const rootsResponse = await fetchData(parsedRootCatalogUrl.toString());
+        const parsedRootCatalogUrl = catalogUrl + '?limit=99999';
+        const rootsResponse = await fetchData(parsedRootCatalogUrl);
 
         const catalogs = rootsResponse.catalogs ? rootsResponse.catalogs : [rootsResponse];
 
