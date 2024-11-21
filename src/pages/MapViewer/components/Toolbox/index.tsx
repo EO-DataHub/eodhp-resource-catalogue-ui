@@ -18,6 +18,7 @@ const CATALOG_URL = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs`;
 
 // Utility function to fetch data from a given URL
 const fetchData = async (url: string) => {
+  console.log('Searching url', url);
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Error fetching data');
@@ -83,7 +84,10 @@ const Toolbox = () => {
   useEffect(() => {
     const fetchRoots = async () => {
       try {
-        const rootsResponse = await fetchData(catalogUrl);
+        const parsedRootCatalogUrl = new URL(catalogUrl);
+        parsedRootCatalogUrl.searchParams.set('limit', '99999');
+
+        const rootsResponse = await fetchData(parsedRootCatalogUrl.toString());
 
         const catalogs = rootsResponse.catalogs ? rootsResponse.catalogs : [rootsResponse];
 
