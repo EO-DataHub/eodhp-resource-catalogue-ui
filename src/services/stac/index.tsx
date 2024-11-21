@@ -29,7 +29,7 @@ export const getStacCollections = async (
   try {
     const response = await fetch(url, {
       method: 'GET',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

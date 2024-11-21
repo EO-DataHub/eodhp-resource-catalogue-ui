@@ -22,8 +22,6 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
   const label = node?.title?.trim() !== '' ? node?.title : node?.id;
 
   if (node.type === CATALOG) {
-    if (!node.catalogs?.length && !node.collections?.length) return null;
-
     const isExpanded = expandedNodes[node.id] ?? false;
 
     return (
