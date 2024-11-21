@@ -60,7 +60,7 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      if (state.selectedCollection && activeFilters.aoi) {
+      if (state.selectedCollection) {
         try {
           setCollectionItemsPending(true);
           const items = await getStacItems(
