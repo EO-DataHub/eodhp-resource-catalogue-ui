@@ -6,6 +6,7 @@ import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { TreeCatalog } from '@/pages/MapViewer/components/Toolbox';
 import { Collection } from '@/typings/stac';
+import { fetchPathPartsFromUrl } from '@/utils/genericUtils';
 
 import { TreeHeader } from './TreeHeader';
 import { TreeNode } from './TreeNode';
@@ -90,22 +91,7 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
 
   useEffect(() => {
     const parseURL = () => {
-      const path = window.location.pathname;
-      const basePath = import.meta.env.VITE_BASE_PATH || '';
-      let relativePath = path;
-      if (basePath && path.startsWith(basePath)) {
-        relativePath = path.slice(basePath.length);
-      }
-
-      // Remove the suffix /map or /list if present
-      relativePath = relativePath.replace(/\/(map|list)$/, '');
-
-      const pathParts = relativePath.split('/').filter(Boolean);
-      const catalogsIndex = pathParts.indexOf('catalogs');
-      let catalogPathParts = [];
-      if (catalogsIndex !== -1) {
-        catalogPathParts = pathParts.slice(catalogsIndex + 1);
-      }
+      const catalogPathParts = fetchPathPartsFromUrl();
 
       const initialExpandedNodes: { [key: string]: boolean } = {};
       catalogPathParts.forEach((catalogId) => {
@@ -145,14 +131,7 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
     [treeData, activeFilters, filter],
   );
 
-  const toggleExpand = (node: TreeCatalog | Collection) => {
-    // Toggle expansion state
-    setExpandedNodes((prevState) => ({
-      ...prevState,
-      [node.id]: !prevState[node.id],
-    }));
-
-    // Update the URL
+  const updateUrl = (node: TreeCatalog | Collection) => {
     const url = node.links.find((link) => link.rel === 'self')?.href;
     if (url) {
       const path = url.split('catalogs/')[1];
@@ -165,20 +144,18 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
     }
   };
 
+  const toggleExpand = (node: TreeCatalog | Collection) => {
+    setExpandedNodes((prevState) => ({
+      ...prevState,
+      [node.id]: !prevState[node.id],
+    }));
+    updateUrl(node);
+  };
+
   const handleLeafClick = (node: Collection) => {
     setSelectedCollection(node);
     setActivePage('items');
-
-    const url = node.links.find((link) => link.rel === 'self')?.href;
-    if (url) {
-      const path = url.split('catalogs/')[1];
-      const currentPath = window.location.pathname;
-      // preserve the suffix (/map or /list)
-      const suffixMatch = currentPath.match(/\/(map|list)$/);
-      const suffix = suffixMatch ? suffixMatch[0] : '';
-      const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
-      window.history.pushState({}, '', newPath);
-    }
+    updateUrl(node);
   };
 
   return (

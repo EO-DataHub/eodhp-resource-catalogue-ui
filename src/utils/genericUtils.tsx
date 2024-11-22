@@ -44,3 +44,20 @@ export const titleFromId = (key: string): string => {
 
   return key;
 };
+
+export const fetchPathPartsFromUrl = () => {
+  const path = window.location.pathname;
+  const basePath = import.meta.env.VITE_BASE_PATH || '';
+  let relativePath = path;
+  if (basePath && path.startsWith(basePath)) {
+    relativePath = path.slice(basePath.length);
+  }
+  relativePath = relativePath.replace(/\/(map|list)$/, '');
+  const pathParts = relativePath.split('/').filter(Boolean);
+  const catalogsIndex = pathParts.indexOf('catalogs');
+  let catalogPathParts = [];
+  if (catalogsIndex !== -1) {
+    catalogPathParts = pathParts.slice(catalogsIndex + 1);
+  }
+  return catalogPathParts;
+};

@@ -6,6 +6,7 @@ import { Tree } from '@/components/tree/Tree';
 import { useToolbox } from '@/hooks/useToolbox';
 import { StacLink } from '@/typings/common';
 import { Collection, Link } from '@/typings/stac';
+import { fetchPathPartsFromUrl } from '@/utils/genericUtils';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
@@ -18,7 +19,6 @@ const CATALOG_URL = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs`;
 
 // Utility function to fetch data from a given URL
 const fetchData = async (url: string) => {
-  console.log('Searching url', url);
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Error fetching data');
@@ -44,7 +44,24 @@ const Toolbox = () => {
 
   const {
     state: { activePage },
+    actions: { setActivePage, setSelectedCollection },
   } = useToolbox();
+
+  const fetchFromPath = async () => {
+    const catalogPathParts = fetchPathPartsFromUrl();
+
+    if (catalogPathParts[catalogPathParts.length - 2] === 'collections') {
+      const collection = await fetchData(
+        `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${catalogPathParts.join('/')}`,
+      );
+      setSelectedCollection(collection);
+      setActivePage('items');
+    }
+  };
+
+  useEffect(() => {
+    fetchFromPath();
+  }, []);
 
   // Recursive function to fetch and build the tree structure
   const fetchCatalog = useCallback(async (url: string): Promise<TreeCatalog> => {
