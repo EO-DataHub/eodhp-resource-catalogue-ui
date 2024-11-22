@@ -16,9 +16,6 @@ const ToolboxItems = () => {
     actions: { setActivePage, returnResultsPage },
   } = useToolbox();
 
-  // console.log('Selected Collection', selectedCollection);
-  // console.log('Selected Collection Items', selectedCollectionItems);
-
   const {
     state: { activeFilters },
     actions: { setResultsPage },

@@ -1,7 +1,7 @@
 // Credit https://github.com/blacha/stac-ts for the STAC typings
 import { FeatureCollection } from 'geojson';
 
-import { StacItem } from './stac';
+import { Collection, StacItem } from './stac';
 
 export type StacVersion = '1.0.0';
 export type StacExtensions = string[];
@@ -115,4 +115,13 @@ declare global {
     };
     features: StacItem[];
   }
+
+  export type TreeCatalog = {
+    id: string;
+    title: string;
+    type: 'Catalog';
+    links: StacLink[];
+    catalogs?: TreeCatalog[]; // sub-catalogs
+    collections?: Collection[]; // collections
+  };
 }

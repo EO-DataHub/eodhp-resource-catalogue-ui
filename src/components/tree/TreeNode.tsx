@@ -1,13 +1,8 @@
-import {
-  MdExpandLess,
-  MdExpandMore,
-  MdFolder,
-  MdFolderOpen,
-  MdInsertDriveFile,
-} from 'react-icons/md';
+import { MdExpandLess, MdExpandMore, MdFolder, MdFolderOpen } from 'react-icons/md';
 
-import { TreeCatalog } from '@/pages/MapViewer/components/Toolbox';
 import { Collection } from '@/typings/stac';
+
+import { CollectionItem } from './CollectionItem';
 
 type TreeNodeProps = {
   node: TreeCatalog | Collection;
@@ -44,7 +39,7 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
           <button className="node-label">{label}</button>
         </div>
 
-        {isExpanded ? (
+        {isExpanded && (
           <ul className="branch">
             {node.catalogs?.map((subCatalog) => (
               <TreeNode
@@ -56,32 +51,17 @@ export const TreeNode = ({ node, toggleExpand, expandedNodes, handleLeafClick }:
               />
             ))}
             {node.collections?.map((collection) => (
-              <li key={collection.id} className="leaf">
-                <div
-                  className="collection-item"
-                  role="button"
-                  tabIndex={0}
-                  onClick={async () => {
-                    handleLeafClick(collection);
-                  }}
-                  onKeyPress={async (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleLeafClick(collection);
-                    }
-                  }}
-                >
-                  <span className="collection-icon">
-                    <MdInsertDriveFile />
-                  </span>
-                  <span className="collection-label">
-                    {collection.title ? collection.title : collection.id}
-                  </span>
-                </div>
-              </li>
+              <CollectionItem
+                key={collection.id}
+                collection={collection}
+                handleLeafClick={handleLeafClick}
+              />
             ))}
           </ul>
-        ) : null}
+        )}
       </li>
     );
+  } else {
+    return null;
   }
 };
