@@ -3,13 +3,13 @@ import { useRef } from 'react';
 import Draggable from 'react-draggable';
 import { FaTable } from 'react-icons/fa6';
 import { VscPreview } from 'react-icons/vsc';
-import { useLocation } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
 import stacBrowserLogo from '@/assets/icons/stac-browser.png';
 import { MapComponent } from '@/components/Map';
 import { DrawingTools } from '@/components/map/draw-tools/DrawingTools';
 import { useApp } from '@/hooks/useApp';
+import { getCatalogueFromURL } from '@/utils/urlHandler';
 
 import TimelineFilter from './components/TimelineFilter';
 import Toolbox from './components/Toolbox';
@@ -18,9 +18,7 @@ import './styles.scss';
 
 const MapViewer = () => {
   const nodeRef = useRef(null);
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
+  const catalogPath = getCatalogueFromURL();
 
   const { actions: AppActions } = useApp();
   const { setActiveContent } = AppActions;
@@ -57,7 +55,9 @@ const MapViewer = () => {
           aria-label="Data Catalogue"
           data-tooltip-content="View Data Catalogue"
           data-tooltip-id="map-buttons"
-          onClick={() => setActiveContent('dataCatalogue')}
+          onClick={() => {
+            setActiveContent('dataCatalogue');
+          }}
         >
           <FaTable />
         </button>

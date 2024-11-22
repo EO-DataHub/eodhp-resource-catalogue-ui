@@ -1,6 +1,5 @@
 import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { useToolbox } from '@/hooks/useToolbox';
-
 import './AssetsPanel.scss';
 
 type Asset = {
@@ -27,7 +26,12 @@ export const AssetsPanel = () => {
   return (
     <div>
       <div className="toolbox__header">
-        <button className="button-link" onClick={() => setActivePage('items')}>
+        <button
+          className="button-link"
+          onClick={() => {
+            setActivePage('items');
+          }}
+        >
           <span>&lt; Return to Items</span>
         </button>
       </div>
