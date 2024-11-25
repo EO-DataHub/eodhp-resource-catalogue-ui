@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './styles.scss';
 
 import STACLayer from 'ol-stac/layer/STAC';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearchLocation } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip';
 
 import { MapContext } from '@/context/MapContext';
@@ -27,7 +27,7 @@ const Preview = ({ item }: PreviewProps) => {
   };
 
   return (
-    <div>
+    <div className="preview">
       <Tooltip id="preview-button" />
       <button
         className="btn"
@@ -35,7 +35,7 @@ const Preview = ({ item }: PreviewProps) => {
         data-tooltip-id="preview-button"
         onClick={handleClick}
       >
-        <FaSearch />
+        <FaSearchLocation style={{ color: '#2a3559', width: 21, height: 18 }} />
       </button>
     </div>
   );
