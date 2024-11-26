@@ -38,17 +38,17 @@ enableMocking().then(() => {
   root.render(
     <React.StrictMode>
       <BrowserRouter>
-        <AppProvider>
-          <CatalogueProvider>
-            <FilterProvider>
-              <MapProvider>
-                <ToolboxProvider>
+        <CatalogueProvider>
+          <FilterProvider>
+            <MapProvider>
+              <ToolboxProvider>
+                <AppProvider>
                   <App />
-                </ToolboxProvider>
-              </MapProvider>
-            </FilterProvider>
-          </CatalogueProvider>
-        </AppProvider>
+                </AppProvider>
+              </ToolboxProvider>
+            </MapProvider>
+          </FilterProvider>
+        </CatalogueProvider>
       </BrowserRouter>
     </React.StrictMode>,
   );

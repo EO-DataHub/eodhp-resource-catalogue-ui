@@ -1,9 +1,21 @@
+import React, { useEffect } from 'react';
+
+import { addViewToURL } from '@/utils/urlHandler';
+
 import DataCatalogueTable from './components/DataCatalogueTable';
 import TopBar from './components/TopBar';
 
 import './styles.scss';
 
 const DataCatalogue = () => {
+  // Set query params on mount / dismount
+  useEffect(() => {
+    addViewToURL('list');
+    return () => {
+      addViewToURL('map');
+    };
+  }, []);
+
   return (
     <div className="data-catalogue">
       <TopBar />

@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
+
 import { FaMap } from 'react-icons/fa';
 import { MdSatelliteAlt } from 'react-icons/md';
 
 import { useApp } from '@/hooks/useApp';
+import { addViewToURL } from '@/utils/urlHandler';
 
 import { PerformanceTable } from './PerformanceTable';
 import { QualityLegend } from './QualityLegend';
@@ -146,6 +149,13 @@ const QUALITY_DATA: QualityData[] = [
 ];
 
 export const QAPanel = () => {
+  useEffect(() => {
+    addViewToURL('qa');
+    return () => {
+      addViewToURL('map');
+    };
+  }, []);
+
   const {
     actions: { setActiveContent },
   } = useApp();

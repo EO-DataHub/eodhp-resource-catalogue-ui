@@ -24,6 +24,7 @@ export interface FilterContextType {
     setResultsPerPage: (resultsPerPage: number) => void;
     setResultsPage: (resultsPage: number) => void;
     resetFilters: () => void;
+    setTemporalFilter: (filters: FilterActiveFilters) => void;
   };
 }
 

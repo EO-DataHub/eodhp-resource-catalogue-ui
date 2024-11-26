@@ -44,7 +44,7 @@ const ToolboxItems = () => {
         >
           <span>&lt; Return to Collections</span>
         </button>
-        {selectedCollectionItems?.features?.length > 0 ? (
+        {!isCollectionItemsPending && selectedCollectionItems?.features?.length > 0 ? (
           <div className="toolbox__header-title">
             {selectedCollection.title ? selectedCollection.title : selectedCollection.id}
           </div>

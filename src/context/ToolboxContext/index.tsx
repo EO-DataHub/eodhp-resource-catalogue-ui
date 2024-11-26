@@ -1,10 +1,9 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-
-import { useLocation } from 'react-router-dom';
+import React, { createContext, useCallback, useEffect, useReducer } from 'react';
 
 import { useFilters } from '@/hooks/useFilters';
 import { getStacItems } from '@/services/stac';
 import { Collection, StacItem } from '@/typings/stac';
+import { getCatalogueFromURL } from '@/utils/urlHandler';
 
 import { ToolboxAction, ToolboxContextType, ToolboxProviderProps, ToolboxState } from './types';
 
@@ -15,7 +14,6 @@ const initialState: ToolboxState = {
     type: 'FeatureCollection',
     features: [],
   },
-
   selectedCollectionItem: null,
   isCollectionItemsPending: false,
 };
@@ -32,6 +30,8 @@ const reducer = (state: ToolboxState, action: ToolboxAction): ToolboxState => {
       return { ...state, selectedCollectionItem: action.payload };
     case 'SET_COLLECTION_ITEMS_PENDING':
       return { ...state, isCollectionItemsPending: action.payload };
+    default:
+      return state;
   }
 };
 
@@ -43,27 +43,47 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     state: { activeFilters },
   } = useFilters();
 
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
+  const catalogPath = getCatalogueFromURL();
 
-  const setSelectedCollectionItems = (selectedCollectionItems: ExtendedFeatureCollection) => {
-    dispatch({
-      type: 'SET_SELECTED_COLLECTION_ITEMS',
-      payload: selectedCollectionItems,
-    });
-  };
+  const setSelectedCollectionItems = useCallback(
+    (selectedCollectionItems: ExtendedFeatureCollection) => {
+      dispatch({
+        type: 'SET_SELECTED_COLLECTION_ITEMS',
+        payload: selectedCollectionItems,
+      });
+    },
+    [],
+  );
 
-  const setCollectionItemsPending = (isPending: boolean) => {
+  const setCollectionItemsPending = useCallback((isPending: boolean) => {
     dispatch({
       type: 'SET_COLLECTION_ITEMS_PENDING',
       payload: isPending,
     });
-  };
+  }, []);
+
+  // Memoize the action functions using useCallback
+  const setActivePage = useCallback((activePage: string) => {
+    dispatch({ type: 'SET_ACTIVE_PAGE', payload: activePage });
+  }, []);
+
+  const setSelectedCollection = useCallback((selectedCollection: Collection) => {
+    dispatch({
+      type: 'SET_SELECTED_COLLECTION',
+      payload: selectedCollection,
+    });
+  }, []);
+
+  const setSelectedCollectionItem = useCallback((selectedCollectionItem: StacItem) => {
+    dispatch({
+      type: 'SET_SELECTED_COLLECTION_ITEM',
+      payload: selectedCollectionItem,
+    });
+  }, []);
 
   useEffect(() => {
     const fetchItems = async () => {
-      if (state.selectedCollection && activeFilters.aoi) {
+      if (state.selectedCollection) {
         try {
           setCollectionItemsPending(true);
           const items = await getStacItems(
@@ -88,11 +108,11 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
     activeFilters.temporal.start,
     catalogPath,
     state.selectedCollection,
+    setCollectionItemsPending,
+    setSelectedCollectionItems,
   ]);
 
-  // Inside of selectedCollectionItems there is 100 items.
-  // We only want to return 10 at a time, in relation to the active page the user is on. Ignore the resultsPerPage for now.
-  const returnResultsPage = () => {
+  const returnResultsPage = useCallback(() => {
     if (state.selectedCollectionItems?.features) {
       const returnResultsPageOutput = state.selectedCollectionItems.features.slice(
         (activeFilters.resultsPage - 1) * 10,
@@ -101,32 +121,15 @@ const ToolboxProvider: React.FC<ToolboxProviderProps> = ({ children }) => {
       return returnResultsPageOutput;
     }
     return [];
-  };
+  }, [activeFilters.resultsPage, state.selectedCollectionItems?.features]);
 
   const value = {
     state,
     actions: {
-      setActivePage: (activePage: string) => {
-        dispatch({ type: 'SET_ACTIVE_PAGE', payload: activePage });
-      },
-      setSelectedCollection: (selectedCollection: Collection) => {
-        dispatch({
-          type: 'SET_SELECTED_COLLECTION',
-          payload: selectedCollection,
-        });
-      },
-      setSelectedCollectionItems: (selectedCollectionItems: ExtendedFeatureCollection) => {
-        dispatch({
-          type: 'SET_SELECTED_COLLECTION_ITEMS',
-          payload: selectedCollectionItems,
-        });
-      },
-      setSelectedCollectionItem: (selectedCollectionItem: StacItem) => {
-        dispatch({
-          type: 'SET_SELECTED_COLLECTION_ITEM',
-          payload: selectedCollectionItem,
-        });
-      },
+      setActivePage,
+      setSelectedCollection,
+      setSelectedCollectionItems,
+      setSelectedCollectionItem,
       returnResultsPage,
     },
   };

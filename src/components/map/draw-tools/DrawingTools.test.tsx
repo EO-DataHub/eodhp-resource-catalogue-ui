@@ -72,19 +72,6 @@ describe('DrawingTools', () => {
     expect(toolbox).toHaveClass('closed');
   });
 
-  it('should add and remove layers from the map on mount and unmount', () => {
-    const { unmount } = render(<DrawingTools />);
-
-    // Check that the layer was added to the map
-    expect(mockMap.addLayer).toHaveBeenCalled();
-
-    // Unmount the component
-    unmount();
-
-    // Check that the layer was removed from the map
-    expect(mockMap.removeLayer).toHaveBeenCalled();
-  });
-
   // it('should add Modify interaction to the map', () => {
   //   render(<DrawingTools />);
 

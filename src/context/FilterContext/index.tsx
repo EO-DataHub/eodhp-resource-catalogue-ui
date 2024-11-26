@@ -51,12 +51,19 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
     dispatch({ type: 'SET_ACTIVE_FILTERS', payload });
   };
 
-  const setTemporalStartFilter = (end: string) => {
+  const setTemporalFilter = (filters: FilterActiveFilters) => {
+    setActiveFilters({
+      ...state.activeFilters,
+      ...filters,
+    });
+  };
+
+  const setTemporalStartFilter = (start: string) => {
     setActiveFilters({
       ...state.activeFilters,
       temporal: {
         ...state.activeFilters.temporal,
-        start: end,
+        start: start,
       },
     });
   };
@@ -122,6 +129,7 @@ const FilterProvider: React.FC<FilterProviderProps> = ({ children }) => {
       setResultsPerPage,
       setResultsPage,
       resetFilters,
+      setTemporalFilter,
     },
   };
 

@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FaRegWindowMinimize } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
 
 import { Tree } from '@/components/tree/Tree';
 import { useToolbox } from '@/hooks/useToolbox';
-import { Collection, Link } from '@/typings/stac';
+import { useTreeData } from '@/hooks/useTreeData';
+import { fetchData, fetchPathPartsFromUrl } from '@/utils/genericUtils';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
@@ -14,104 +14,32 @@ import ToolboxItems from './components/ToolboxItems';
 
 import './styles.scss';
 
-const CATALOG_URL = `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs`;
-const ROOT_CATALOG_URL = `${CATALOG_URL}/supported-datasets/catalogs`;
-
-// Utility function to fetch data from a given URL
-const fetchData = async (url: string) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error('Error fetching data');
-  }
-  return response.json();
-};
-
-export type TreeCatalog = {
-  id: string;
-  title: string;
-  type: 'Catalog';
-  catalogs?: TreeCatalog[]; // sub-catalogs
-  collections?: Collection[]; // collections
-};
-
 const Toolbox = () => {
-  const [toolboxVisible, setToolboxVisible] = useState(true); // TODO: Move to context
-  const [treeData, setTreeData] = useState<TreeCatalog[]>([]);
+  const [toolboxVisible, setToolboxVisible] = useState(true);
   const [expandedNodes, setExpandedNodes] = useState<{ [key: string]: boolean }>({});
 
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const catalogPath = searchParams.get('catalogPath');
-
-  const catalogUrl = catalogPath ? `${CATALOG_URL}/${catalogPath}` : ROOT_CATALOG_URL;
+  const treeData = useTreeData();
 
   const {
     state: { activePage },
+    actions: { setActivePage, setSelectedCollection },
   } = useToolbox();
 
-  // Recursive function to fetch and build the tree structure
-  const fetchCatalog = useCallback(async (url: string): Promise<TreeCatalog> => {
-    try {
-      const catalogData = await fetchData(url);
-
-      // Check if the current catalog has sub-catalogs or collections
-      const subCatalogs: TreeCatalog[] = await Promise.all(
-        catalogData?.links
-          ?.filter((link) => link.rel === 'child' && !link.href.includes('/collections'))
-          .map((link: Link) => fetchCatalog(link.href)) || [],
-      );
-
-      const collectionUrl = catalogData?.links
-        ?.filter((link) => link.rel === 'data')
-        .filter((link) => link.href.includes('/collections'))
-        .map((link) => link.href)[0];
-
-      let collections: Collection[] = [];
-      if (collectionUrl) {
-        const collectionsResponse = await fetchData(collectionUrl);
-        collections = collectionsResponse.collections;
-      }
-
-      // Return the catalog with its children (sub-catalogs and collections)
-      return {
-        ...catalogData,
-        catalogs: subCatalogs,
-        collections,
-      };
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  // Fetch the ROOTS array of URLs when the component mounts
   useEffect(() => {
-    const fetchRoots = async () => {
-      try {
-        const rootsResponse = await fetchData(catalogUrl);
+    const fetchFromPath = async () => {
+      const catalogPathParts = fetchPathPartsFromUrl();
 
-        const catalogs = rootsResponse.catalogs ? rootsResponse.catalogs : [rootsResponse];
-
-        const rootCatalogUrls = catalogs?.reduce((acc, obj) => {
-          const selfLink = obj.links.find((link: Link) => link.rel === 'self');
-
-          if (selfLink) {
-            acc.push(selfLink.href);
-          }
-
-          return acc;
-        }, []);
-
-        const topLevelCatalogs = await Promise.all(
-          rootCatalogUrls.map((url: string) => fetchCatalog(url)),
+      if (catalogPathParts[catalogPathParts.length - 2] === 'collections') {
+        const collection = await fetchData(
+          `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${catalogPathParts.join('/')}`,
         );
-        setTreeData(topLevelCatalogs);
-      } catch (error) {
-        console.error(error);
+        setSelectedCollection(collection);
+        setActivePage('items');
       }
     };
 
-    fetchRoots();
-  }, [catalogUrl, fetchCatalog]);
+    fetchFromPath();
+  }, [setSelectedCollection, setActivePage]);
 
   const renderContent = () => {
     switch (activePage) {
@@ -146,7 +74,7 @@ const Toolbox = () => {
         </button>
       </div>
 
-      {toolboxVisible ? <div className="toolbox__content">{renderContent()}</div> : null}
+      {toolboxVisible && <div className="toolbox__content">{renderContent()}</div>}
     </div>
   );
 };

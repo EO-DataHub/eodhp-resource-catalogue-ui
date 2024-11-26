@@ -3,8 +3,6 @@ import { bboxPolygon, booleanIntersects, polygon } from '@turf/turf';
 import { FilterActiveFilters } from '@/context/FilterContext/types';
 import { Collection } from '@/typings/stac';
 
-import { TreeCatalog } from './Tree';
-
 export const CATALOG = 'Catalog';
 
 const COLLECTION = 'Collection';
@@ -101,4 +99,57 @@ export const filterTree = (
     }
   }
   return null;
+};
+
+export const getParentId = (catalog: TreeCatalog): string | null => {
+  const parentLink = catalog.links.find((link) => link.rel === 'parent');
+  if (parentLink) {
+    const hrefParts = parentLink.href.split('/catalogs/');
+    if (hrefParts.length > 1) {
+      const pathParts = hrefParts[1].split('/');
+      return pathParts[pathParts.length - 1];
+    }
+  }
+  return null;
+};
+
+export const buildTree = async (flatCatalogs: TreeCatalog[]): Promise<TreeCatalog[]> => {
+  const idToCatalog: { [id: string]: TreeCatalog } = {};
+  const rootCatalogs: TreeCatalog[] = [];
+
+  flatCatalogs.forEach((catalog) => {
+    idToCatalog[catalog.id] = { ...catalog, catalogs: [], collections: [] };
+  });
+
+  for (const catalog of flatCatalogs) {
+    const parentId = getParentId(catalog);
+    if (parentId && parentId !== 'root' && idToCatalog[parentId]) {
+      idToCatalog[parentId].catalogs.push(idToCatalog[catalog.id]);
+    } else {
+      rootCatalogs.push(idToCatalog[catalog.id]);
+    }
+  }
+
+  await Promise.all(
+    flatCatalogs.map(async (catalog) => {
+      const currentCatalog = idToCatalog[catalog.id];
+      const childLinks = currentCatalog.links.filter((link) => link.rel === 'child');
+
+      await Promise.all(
+        childLinks.map(async (link) => {
+          if (link.href.includes('/collections/')) {
+            try {
+              const response = await fetch(link.href);
+              const collection = await response.json();
+              currentCatalog.collections.push(collection);
+            } catch (error) {
+              console.error(`Failed to fetch collection at ${link.href}:`, error);
+            }
+          }
+        }),
+      );
+    }),
+  );
+
+  return rootCatalogs;
 };
