@@ -61,22 +61,21 @@ const ToolboxItem = ({ item }: ToolboxItemProps) => {
 
   const hasThumbnail = () => {
     const assets = item.assets;
-    let thumbnails = []
+    let thumbnails = [];
     Object.entries(assets).forEach(([key, a]) => {
-      if (key === "thumbnail") {
-        thumbnails.push(a)
+      if (key === 'thumbnail') {
+        thumbnails.push(a);
         return;
       }
-      const asset = new Asset(a); 
-      if (!asset.hasRole(["overview", "thumbnail"])) return;
-      thumbnails.push(a)
-    })
+      const asset = new Asset(a);
+      if (!asset.hasRole(['overview', 'thumbnail'])) return;
+      thumbnails.push(a);
+    });
     if (thumbnails.length === 0) {
-      thumbnails = item.links.filter(l => l.rel === "preview")
+      thumbnails = item.links.filter((l) => l.rel === 'preview');
     }
-  return !!thumbnails.length
-  }
-
+    return !!thumbnails.length;
+  };
 
   return (
     <ToolboxRow
