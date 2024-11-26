@@ -29,7 +29,7 @@ export const getStacCollections = async (
   try {
     const response = await fetch(url, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -108,7 +108,7 @@ export const fetchFavouritedItems = async (collectionId: string): Promise<string
   try {
     const response = await fetch(url, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -138,7 +138,7 @@ export const favouriteItem = async (itemUrl: string): Promise<void> => {
   try {
     await fetch(url, {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -161,7 +161,7 @@ export const unFavouriteItem = async (itemUrl: string): Promise<void> => {
   try {
     await fetch(url, {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -179,7 +179,7 @@ const getActiveWorkspace = async (): Promise<string> => {
   try {
     const response = await fetch(url, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -205,7 +205,7 @@ export const sendPurchaseRequest = async (): Promise<void> => {
   try {
     await fetch(url, {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
