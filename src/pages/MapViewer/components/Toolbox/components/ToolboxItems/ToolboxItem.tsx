@@ -130,7 +130,7 @@ const ToolboxItem = ({ item }: ToolboxItemProps) => {
         />
 
         <ClipboardButton text={url} />
-        <Preview item={item} />
+        {item.assets.thumbnail && <Preview item={item} />}
       </div>
     </ToolboxRow>
   );
