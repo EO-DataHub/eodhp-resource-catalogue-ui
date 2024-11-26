@@ -1,3 +1,5 @@
+import { Collection } from '@/typings/stac';
+
 export const addCatalogueToPath = (name: string) => {
   const view = getViewFomURL();
   const basePath = import.meta.env.VITE_BASE_PATH;
@@ -22,11 +24,20 @@ export const getCatalogueFromURL = (): string | undefined => {
   return undefined;
 };
 
+export const getCollectionFromURL = (): string | undefined => {
+  const path = location.pathname;
+
+  const match = path.match(/\/collections\/([^/]+)/);
+  if (match) return `${match[1]}`;
+
+  return undefined;
+};
+
 export const removeCatalogueFromPath = () => {
   addCatalogueToPath('');
 };
 
-type ViewOptions = 'map' | 'list' | 'qa' | string;
+type ViewOptions = 'map' | 'list' | 'qa' | 'dataset' | string;
 
 export const addViewToURL = (view: ViewOptions): void => {
   let path = window.location.pathname;
@@ -34,7 +45,7 @@ export const addViewToURL = (view: ViewOptions): void => {
   const endPath = splitPath[splitPath.length - 1];
 
   // Check if the current end of the path matches a view option
-  if (['map', 'list', 'qa'].includes(endPath)) {
+  if (['map', 'list', 'qa', 'dataset'].includes(endPath)) {
     // Replace the existing view option with the new one
     path = `${splitPath.slice(0, -1).join('/')}/${view}`;
   } else {
@@ -73,4 +84,16 @@ export const removeQueryParam = (name: string) => {
   searchParams.delete(name);
   const newUrl = `${location.pathname}?${searchParams.toString()}`;
   history.replaceState(null, '', newUrl);
+};
+
+export const updateUrl = (node: TreeCatalog | Collection) => {
+  const url = node.links.find((link) => link.rel === 'self')?.href;
+  if (url) {
+    const path = url.split('catalogs/')[1];
+    const currentPath = window.location.pathname;
+    const suffixMatch = currentPath.match(/\/(map|list)$/);
+    const suffix = suffixMatch ? suffixMatch[0] : '';
+    const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
+    window.history.pushState({}, '', newPath);
+  }
 };

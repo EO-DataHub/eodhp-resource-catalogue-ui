@@ -6,6 +6,7 @@ import { useFilters } from '@/hooks/useFilters';
 import { useToolbox } from '@/hooks/useToolbox';
 import { Collection } from '@/typings/stac';
 import { fetchPathPartsFromUrl } from '@/utils/genericUtils';
+import { updateUrl } from '@/utils/urlHandler';
 
 import { TreeHeader } from './TreeHeader';
 import { TreeNode } from './TreeNode';
@@ -76,18 +77,6 @@ export const Tree = ({ treeData, expandedNodes, setExpandedNodes }: TreeProps) =
     300,
     [treeData, activeFilters, filter],
   );
-
-  const updateUrl = (node: TreeCatalog | Collection) => {
-    const url = node.links.find((link) => link.rel === 'self')?.href;
-    if (url) {
-      const path = url.split('catalogs/')[1];
-      const currentPath = window.location.pathname;
-      const suffixMatch = currentPath.match(/\/(map|list)$/);
-      const suffix = suffixMatch ? suffixMatch[0] : '';
-      const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
-      window.history.pushState({}, '', newPath);
-    }
-  };
 
   const toggleExpand = (node: TreeCatalog | Collection) => {
     setExpandedNodes((prevState) => ({

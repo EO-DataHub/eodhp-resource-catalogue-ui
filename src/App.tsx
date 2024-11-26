@@ -9,6 +9,8 @@ import DataCatalogue from '@/pages/DataCatalogue';
 import MapViewer from '@/pages/MapViewer';
 import { QAPanel } from '@/pages/q-and-a/QAPanel';
 
+import DatasetDetails from './pages/DatasetDetails/DatasetDetails';
+
 const App: React.FC = () => {
   const { state: AppState, actions: AppActions } = useApp();
   const { filterSidebarOpen, activeContent } = AppState;
@@ -40,6 +42,7 @@ const App: React.FC = () => {
         <MapViewer />
         {activeContent === 'dataCatalogue' ? <DataCatalogue /> : null}
         {activeContent === 'qa' ? <QAPanel /> : null}
+        {activeContent === 'dataset' ? <DatasetDetails /> : null}
       </div>
     </main>
   );

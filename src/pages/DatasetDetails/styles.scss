@@ -1,0 +1,13 @@
+@import '@/styles/main';
+
+.dataset-details {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  z-index: 99999;
+  background-color: #efefef;
+}
