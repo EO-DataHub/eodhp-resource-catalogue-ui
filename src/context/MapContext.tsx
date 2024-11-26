@@ -16,7 +16,10 @@ import BaseLayer from 'ol/layer/Base';
 import Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import Map from 'ol/Map';
+import Overlay from 'ol/Overlay';
+import { fromLonLat } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
+import STACLayer from 'ol-stac';
 import { useDebounce } from 'react-use';
 
 import { useFilters } from '@/hooks/useFilters';
@@ -46,6 +49,8 @@ export type MapContextType = {
   setSelectedLayer: Dispatch<SetStateAction<Layer | null>>;
   collections: Collection[];
   setCollections: Dispatch<SetStateAction<Collection[] | null>>;
+  addPreviewLayer: (layer: STACLayer) => void;
+  removePreviewLayer: () => void;
   drawingSource: VectorSource<Feature<Geometry>> | undefined;
   setDrawingSource: (source: VectorSource<Feature<Geometry>> | undefined) => void;
   vectorLayer: VectorLayer;
@@ -176,6 +181,48 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
     setSelectedLayer(null);
   };
 
+  const previewLayerRef = useRef(null);
+  const previewOverlayRef = useRef(null);
+  const addPreviewLayer = (layer: STACLayer) => {
+    if (previewLayerRef.current) {
+      map.removeLayer(previewLayerRef.current);
+      map.removeOverlay(previewOverlayRef.current);
+    }
+    map.addLayer(layer);
+    map.getView().fit(layer.getExtent());
+    previewLayerRef.current = layer;
+
+    const data = layer.getData();
+
+    const button = document.createElement('button');
+    button.textContent = 'X';
+    button.style.cursor = 'pointer';
+    button.style.backgroundColor = 'red';
+    button.style.color = 'white';
+    button.style.border = 'none';
+    button.style.borderRadius = '50%';
+
+    // Create an overlay for the button
+    const position = fromLonLat([data.bbox[2], data.bbox[3]]);
+    const overlay = new Overlay({
+      element: button,
+      positioning: 'center-center',
+      position,
+    });
+    map.addOverlay(overlay);
+    previewOverlayRef.current = overlay;
+
+    button.onclick = () => {
+      removePreviewLayer();
+      map.removeOverlay(overlay);
+    };
+  };
+
+  const removePreviewLayer = () => {
+    if (!previewLayerRef.current) return;
+    map.removeLayer(previewLayerRef.current);
+    previewLayerRef.current = null;
+  };
   const setMapConfig = (config: MapConfig) => {
     _setMapConfig(config);
     // TODO make _setMapConfig as a private update state method. This is so that the public setMapConfig can update the URL params
@@ -199,6 +246,8 @@ export const MapProvider = ({ initialState = {}, children }: MapProviderProps) =
         setSelectedLayer,
         collections,
         setCollections,
+        addPreviewLayer,
+        removePreviewLayer,
         drawingSource,
         setDrawingSource,
         vectorLayer: vectorLayer.current,

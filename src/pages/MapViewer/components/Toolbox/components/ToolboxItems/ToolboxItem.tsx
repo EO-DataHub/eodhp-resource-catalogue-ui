@@ -17,6 +17,7 @@ import { sendPurchaseRequest } from '@/services/stac';
 import { StacItem } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
 
+import Preview from './Preview/Preview';
 import ToolboxRow from '../ToolboxRow';
 
 const COLLECTION_SCENE_ID = 'collection-scene';
@@ -129,6 +130,7 @@ const ToolboxItem = ({ item }: ToolboxItemProps) => {
         />
 
         <ClipboardButton text={url} />
+        <Preview item={item} />
       </div>
     </ToolboxRow>
   );
