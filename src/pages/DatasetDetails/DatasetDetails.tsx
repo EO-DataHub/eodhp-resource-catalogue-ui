@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
+import { Map } from 'ol';
+import { FaMap } from 'react-icons/fa';
+
+import { useApp } from '@/hooks/useApp';
 import { useMap } from '@/hooks/useMap';
 import { Collection } from '@/typings/stac';
 import { fetchData } from '@/utils/genericUtils';
 import { addViewToURL, getCollectionFromURL } from '@/utils/urlHandler';
 
 import './styles.scss';
+import FeatureList from './components/FeatureList/FeatureList';
 import FeatureMap from './components/FeatureMap/FeatureMap';
 import DataTable from './components/Tables/DataTable';
 
@@ -14,10 +19,15 @@ const DatasetDetails = () => {
   const [collection, setCollection] = useState<Collection>(null);
   const [items, setItems] = useState(null);
   const [metaData, setMetadata] = useState(null);
+  const [featureMap, setFeatureMap] = useState<Map>();
+
+  const { actions: AppActions } = useApp();
+  const { setActiveContent } = AppActions;
 
   useEffect(() => {
     addViewToURL('dataset');
     const collectionId = getCollectionFromURL();
+    if (!collections) return;
     const _collection = collections.filter((c) => c.id === collectionId)[0];
     setCollection(_collection);
 
@@ -53,7 +63,6 @@ const DatasetDetails = () => {
       data['general'][key] = value;
     });
     setMetadata(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection]);
 
   const renderMetadata = () => {
@@ -66,6 +75,12 @@ const DatasetDetails = () => {
   if (!collection) return;
   return (
     <div className="dataset-details">
+      <FaMap
+        className="dataset-details-back"
+        onClick={() => {
+          setActiveContent('map');
+        }}
+      />
       <h1>{collection.title}</h1>
       <h3>{collection.type}</h3>
       <div>
@@ -89,8 +104,9 @@ const DatasetDetails = () => {
           </div>
         </div>
       </div>
-      <div>
-        <FeatureMap items={items} />
+      <div className="dataset-details-features">
+        <FeatureMap featureMap={featureMap} items={items} setFeatureMap={setFeatureMap} />
+        <FeatureList items={items} />
       </div>
       <div>
         <h2>Metadata</h2>

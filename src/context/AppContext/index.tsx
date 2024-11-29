@@ -89,7 +89,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       map: 'map',
       list: 'dataCatalogue',
       qa: 'qa',
-      // dataset: 'dataset',
+      dataset: 'dataset',
     };
     setActiveContent(viewMap[viewStr]);
 
