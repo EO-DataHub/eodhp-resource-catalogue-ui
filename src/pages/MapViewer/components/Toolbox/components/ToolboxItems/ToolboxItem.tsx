@@ -6,6 +6,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Stroke, Style } from 'ol/style';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
+import { Asset } from 'stac-js';
 
 import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { FavouriteButton } from '@/components/FavouriteButton/FavouriteButton';
@@ -17,6 +18,7 @@ import { sendPurchaseRequest } from '@/services/stac';
 import { StacItem } from '@/typings/stac';
 import { parseFeatureDataPoints, returnFeatureThumbnail } from '@/utils/stacUtils';
 
+import Preview from './Preview/Preview';
 import ToolboxRow from '../ToolboxRow';
 
 const COLLECTION_SCENE_ID = 'collection-scene';
@@ -56,6 +58,24 @@ const ToolboxItem = ({ item }: ToolboxItemProps) => {
       setPurchaseState('initial');
     }, 1000);
   }, [purchaseState]);
+
+  const hasThumbnail = () => {
+    const assets = item.assets;
+    let thumbnails = [];
+    Object.entries(assets).forEach(([key, a]) => {
+      if (key === 'thumbnail') {
+        thumbnails.push(a);
+        return;
+      }
+      const asset = new Asset(a);
+      if (!asset.hasRole(['overview', 'thumbnail'])) return;
+      thumbnails.push(a);
+    });
+    if (thumbnails.length === 0) {
+      thumbnails = item.links.filter((l) => l.rel === 'preview');
+    }
+    return !!thumbnails.length;
+  };
 
   return (
     <ToolboxRow
@@ -129,6 +149,7 @@ const ToolboxItem = ({ item }: ToolboxItemProps) => {
         />
 
         <ClipboardButton text={url} />
+        {hasThumbnail() && <Preview item={item} />}
       </div>
     </ToolboxRow>
   );
