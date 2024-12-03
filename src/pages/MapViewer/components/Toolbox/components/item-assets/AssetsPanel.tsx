@@ -1,11 +1,11 @@
+import React, { useState } from 'react';
+
 import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { useToolbox } from '@/hooks/useToolbox';
-import './AssetsPanel.scss';
 
-type Asset = {
-  key: string;
-  value: string;
-};
+import { TiTilerCustomisationPanel } from './components/VisualiseAsset/TiTilerCustomisationPanel';
+import { VisualiseAssetButton } from './components/VisualiseAsset/VisualiseAssetButton';
+import './AssetsPanel.scss';
 
 export const AssetsPanel = () => {
   const {
@@ -13,44 +13,65 @@ export const AssetsPanel = () => {
     actions: { setActivePage },
   } = useToolbox();
 
-  // Reduce the object of objects down to an array of key/value objects e.g.
-  // [{ cloud: 'https:/....' }, ..., { saturated_pixel: 'https:/....' }]
-  // If at a later date we decide we want more from the StacAsset object displayed
-  // we can just add that to the new object added to the `acc` array.
-  const assets = Object.keys(selectedCollectionItem.assets).reduce<Asset[]>((acc, key) => {
-    acc = [...acc, { key, value: selectedCollectionItem.assets[key].href }];
+  const [expandedAssetKey, setExpandedAssetKey] = useState(null);
 
+  const assets = Object.keys(selectedCollectionItem.assets).reduce((acc, key) => {
+    acc = [...acc, { key, value: selectedCollectionItem.assets[key] }];
     return acc;
   }, []);
 
+  const toggleCustomisationPanel = (assetKey) => {
+    setExpandedAssetKey(expandedAssetKey === assetKey ? null : assetKey);
+  };
+
   return (
     <div>
-      <div className="toolbox__header">
+      <div>
         <button
-          className="button-link"
+          className="toolbox__header-back"
           onClick={() => {
             setActivePage('items');
           }}
         >
           <span>&lt; Return to Items</span>
         </button>
+        <div className="toolbox__header-title">Assets List </div>
       </div>
 
-      <ul>
+      <div className="asset-list-container">
         {assets && assets.length > 0 ? (
-          assets.map((asset) => (
-            <li key={asset.key} className="asset-row">
-              <label className="label" htmlFor={asset.key}>
-                {asset.key}:
-              </label>
-              <input readOnly id={asset.key} type="text" value={asset.value} />
-              <ClipboardButton text={asset.value} />
-            </li>
-          ))
+          <ul className="asset-list">
+            {assets.map((asset) => (
+              <li key={asset.key} className="asset-row">
+                <div className="asset-info">
+                  <label className="asset-label" htmlFor={asset.key}>
+                    {asset.key}
+                  </label>
+                  <input
+                    readOnly
+                    className="asset-input"
+                    id={asset.key}
+                    title={asset.value.href}
+                    type="text"
+                    value={asset.value.href}
+                  />
+                </div>
+                <div className="asset-buttons">
+                  <ClipboardButton text={asset.value.href} />
+                  <VisualiseAssetButton onClick={() => toggleCustomisationPanel(asset.key)} />
+                </div>
+                {expandedAssetKey === asset.key && (
+                  <div className="customisation-panel">
+                    <TiTilerCustomisationPanel asset={asset.value} />
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p>No assets to show</p>
+          <p className="no-assets">No assets to show</p>
         )}
-      </ul>
+      </div>
     </div>
   );
 };
