@@ -10,7 +10,7 @@ const FeatureList = ({ items }: FeatureListProps) => {
   const renderItem = (item: StacItem) => {
     return (
       <div className="dataset-details-list-item">
-        <h2>{item.id}</h2>
+        <h2 className="dataset-details-list-content">{item.id}</h2>
       </div>
     );
   };

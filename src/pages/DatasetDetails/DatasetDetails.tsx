@@ -5,9 +5,11 @@ import { FaMap } from 'react-icons/fa';
 
 import { useApp } from '@/hooks/useApp';
 import { useMap } from '@/hooks/useMap';
+import { fetchFromPath } from '@/services/stac';
 import { Collection } from '@/typings/stac';
+import { formatDate } from '@/utils/date';
 import { fetchData } from '@/utils/genericUtils';
-import { addViewToURL, getCollectionFromURL } from '@/utils/urlHandler';
+import { addViewToURL } from '@/utils/urlHandler';
 
 import './styles.scss';
 import FeatureList from './components/FeatureList/FeatureList';
@@ -26,19 +28,18 @@ const DatasetDetails = () => {
 
   useEffect(() => {
     addViewToURL('dataset');
-    const collectionId = getCollectionFromURL();
-    if (!collections) return;
-    const _collection = collections.filter((c) => c.id === collectionId)[0];
-    setCollection(_collection);
 
-    const retrieveItems = async () => {
+    const fetchCollection = async () => {
+      const _collection = await fetchFromPath();
+      setCollection(_collection);
+
       const itemLinks = _collection.links.filter((link) => link.rel === 'items');
       const promises = itemLinks.map((link) => fetchData(link.href));
       const response = await Promise.all(promises);
       const _items = response[0].features;
       setItems(_items);
     };
-    retrieveItems();
+    fetchCollection();
 
     return () => {
       addViewToURL('map');
@@ -65,11 +66,77 @@ const DatasetDetails = () => {
     setMetadata(data);
   }, [collection]);
 
+  const renderHeaders = () => {
+    return (
+      <div>
+        <h1 className="dataset-details-title">{collection.title}</h1>
+        <h3 className="dataset-details-type">{collection.type}</h3>
+      </div>
+    );
+  };
+
+  const renderDescription = () => {
+    return (
+      <>
+        <h2 className="dataset-details-title">Description</h2>
+        <div>{collection.description}</div>
+      </>
+    );
+  };
+
+  const renderKeywords = () => {
+    return (
+      <div className="dataset-details-keywords-container">
+        {collection.keywords.map((keyword) => (
+          <div key={keyword} className="dataset-details-keywords">
+            {keyword}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderLicense = () => {
+    return (
+      <div className="dataset-details-group">
+        <div className="dataset-details-title">License</div>
+        <div className="dataset-details-item">{collection.license}</div>
+      </div>
+    );
+  };
+
+  const renderTemporal = () => {
+    return (
+      <div className="dataset-details-group">
+        <div className="dataset-details-title">Temporal extent</div>
+        <div className="dataset-details-item">
+          {formatDate(collection.extent.temporal.interval[0][0])} -{' '}
+          {formatDate(collection.extent.temporal.interval[0][1])}
+        </div>
+      </div>
+    );
+  };
+
+  const renderFeatures = () => {
+    return (
+      <div className="dataset-details-features">
+        <FeatureMap featureMap={featureMap} items={items} setFeatureMap={setFeatureMap} />
+        <FeatureList items={items} />
+      </div>
+    );
+  };
+
   const renderMetadata = () => {
     if (!metaData) return;
-    return Object.entries(metaData).map(([key, value]) => {
-      return <DataTable key={key} data={value} header={key} />;
-    });
+
+    return (
+      <>
+        <h2 className="dataset-details-title">Metadata</h2>
+        {Object.entries(metaData).map(([key, value]) => {
+          return <DataTable key={key} data={value} header={key} />;
+        })}
+      </>
+    );
   };
 
   if (!collection) return;
@@ -81,37 +148,17 @@ const DatasetDetails = () => {
           setActiveContent('map');
         }}
       />
-      <h1>{collection.title}</h1>
-      <h3>{collection.type}</h3>
+      {renderHeaders()}
       <div>
-        <h2>Description</h2>
-        <div>{collection.description}</div>
-        <div>
-          {collection.keywords.map((keyword) => (
-            <div key={keyword}>{keyword}</div>
-          ))}
-        </div>
+        {renderDescription()}
+        {renderKeywords()}
       </div>
       <div>
-        <div>
-          <div>License</div>
-          <div>{collection.license}</div>
-        </div>
-        <div>
-          <div>Temporal extent</div>
-          <div>
-            {collection.extent.temporal.interval[0]} - {collection.extent.temporal.interval[1]}
-          </div>
-        </div>
+        {renderLicense()}
+        {renderTemporal()}
+        {renderFeatures()}
       </div>
-      <div className="dataset-details-features">
-        <FeatureMap featureMap={featureMap} items={items} setFeatureMap={setFeatureMap} />
-        <FeatureList items={items} />
-      </div>
-      <div>
-        <h2>Metadata</h2>
-        {renderMetadata()}
-      </div>
+      <div>{renderMetadata()}</div>
     </div>
   );
 };

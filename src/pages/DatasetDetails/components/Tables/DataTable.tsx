@@ -14,17 +14,17 @@ const headerMap = {
 const DataTable = ({ header, data }: DataTableProps) => {
   return (
     <div className="dataset-details-table-container">
-      <h2>{headerMap[header]}</h2>
+      <h2 className="dataset-details-title">{headerMap[header]}</h2>
       <div className="dataset-details-table">
         {Object.entries(data).map(([key, value]) => {
           return (
             <div key={key} className="dataset-details-table-row">
-              <div>{key}</div>
-              <div>
+              <div className="dataset-details-title">{key}</div>
+              <ul className="dataset-details-item">
                 {value.map((v) => (
-                  <div key={v}>{v}</div>
+                  <li key={v}>{v}</li>
                 ))}
-              </div>
+              </ul>
             </div>
           );
         })}

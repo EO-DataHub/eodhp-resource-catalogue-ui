@@ -2,10 +2,12 @@
 
 .dataset-details {
   position: absolute;
-  top: -20px;
+  padding: 10px;
+  top: -30px;
   right: 0;
   display: flex;
   flex-direction: column;
+  gap: 30px;
   width: 100%;
   z-index: 99999;
   background-color: #efefef;
@@ -20,16 +22,30 @@
     z-index: 1000;
   }
 
-  &-table {
-    border: 1px solid black;
+  &-type {
+    font-size: 18px;
+  }
+
+  &-keywords {
+    background-color: lightgrey;
+    padding: 3px 5px;
+    border-radius: 12px;
 
     &-container {
-      margin: 10px;
-    }
-
-    &-row {
-      border: 1px solid green;
       display: flex;
+      gap: 10px;
+    }
+  }
+
+  &-table {
+    &-row {
+      padding: 2px 5px;
+      border: 1px solid lightgrey;
+      display: flex;
+
+      &:hover {
+        background-color: rgb(235, 231, 231);
+      }
     }
   }
 
@@ -38,16 +54,48 @@
   }
 
   &-map {
-    flex-grow: 6;
+    width: 100% !important;
+    min-height: 500px;
   }
 
   &-list {
-    flex-grow: 1;
-    width: min-content;
+    overflow-y: auto;
+    max-height: 500px;
+    min-width: max-content;
     &-item {
       border: 1px solid grey;
       margin: 5px;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 40px;
+
+      &:hover {
+        background-color: rgb(235, 231, 231);
+      }
     }
+    &-content {
+      color: rgb(43, 43, 136);
+      max-width: 100%;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &-title {
+    font-size: 20px;
+    flex: 1;
+  }
+
+  &-item {
+    flex: 1;
+  }
+
+  &-group {
+    margin: 5px 0px;
+    display: flex;
+    align-items: baseline;
+    justify-content: left;
   }
 }
 
