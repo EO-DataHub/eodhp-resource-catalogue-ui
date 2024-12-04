@@ -34,12 +34,14 @@ export const CollectionItem = ({ collection, handleLeafClick }: CollectionItemPr
           }
         }}
       >
-        <span className="collection-icon">
-          <MdInsertDriveFile />
-        </span>
-        <span className="collection-label">
-          {collection.title ? collection.title : collection.id}
-        </span>
+        <div>
+          <span className="collection-icon">
+            <MdInsertDriveFile />
+          </span>
+          <span className="collection-label">
+            {collection.title ? collection.title : collection.id}
+          </span>
+        </div>
 
         <FaInfoCircle onClick={(e) => viewDatasetDetails(e)} />
       </div>
