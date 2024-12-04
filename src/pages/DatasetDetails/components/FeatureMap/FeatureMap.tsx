@@ -41,7 +41,7 @@ const FeatureMap = ({ items, featureMap, setFeatureMap }: FeatureMapProps) => {
     return () => {
       map.setTarget(null);
     };
-  }, []);
+  }, [setFeatureMap]);
 
   useEffect(() => {
     if (!items || !featureMap) return;
