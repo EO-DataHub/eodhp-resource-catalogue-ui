@@ -112,6 +112,8 @@ declare global {
   interface ExtendedFeatureCollection extends FeatureCollection {
     context?: {
       matched?: number;
+      returned?: number;
+      limit?: number;
     };
     features: StacItem[];
   }

@@ -90,15 +90,15 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
 
     if (assetType === 'core') {
       // For COG assets
-      const baseUrl = `https://dev.eodatahub.org.uk/titiler/core/cog/preview`;
+      const baseUrl = `https://dev.eodatahub.org.uk/titiler/core`;
       const params = new URLSearchParams();
       params.append('url', asset.href);
       if (bidx) params.append('bidx', bidx ? bidx.toString() : '0');
       if (rescale) params.append('rescale', rescale);
       if (colormapName) params.append('colormap_name', colormapName);
 
-      previewUrl = `${baseUrl}?${params.toString()}`;
-      tileUrl = `${baseUrl}/{z}/{x}/{y}?${params.toString()}`;
+      previewUrl = `${baseUrl}/cog/preview?${params.toString()}`;
+      tileUrl = `${baseUrl}/cog/tiles/${tileMatrixSetId}/{z}/{x}/{y}?${params.toString()}`;
     } else if (assetType === 'xarray') {
       // For XArray assets
       const baseUrl = `https://dev.eodatahub.org.uk/titiler/xarray/tiles`;
@@ -122,9 +122,9 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   const approximateRescaleValue = async () => {
     let url = '';
     if (assetType === 'core') {
-      url = `https://dev.eodatahub.org.uk/titiler/core/cog/info?url=${encodeURIComponent(
+      url = `https://dev.eodatahub.org.uk/titiler/core/cog/statistics?url=${encodeURIComponent(
         asset.href,
-      )}`;
+      )}&bidx=${bidx}`;
     } else if (assetType === 'xarray') {
       url = `https://dev.eodatahub.org.uk/titiler/xarray/info?url=${encodeURIComponent(
         asset.href,
@@ -136,31 +136,49 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
 
     if (data.attrs && data.attrs.valid_min && data.attrs.valid_max) {
       setRescale(`${data.attrs.valid_min},${data.attrs.valid_max}`);
-    } else {
-      console.error('Could not determine min and max values for rescale');
+      return;
     }
+
+    const bandKey = availableBands[bidx - 1][0];
+    if (data[bandKey].min && data[bandKey].max) {
+      setRescale(`${data[bandKey].min},${data[bandKey].max}`);
+      return;
+    }
+
+    console.error('Could not approximate rescale value.');
   };
 
   const retrieveHistogramResults = async () => {
     let url = '';
+    let formattedData;
     if (assetType === 'xarray') {
       url = `https://dev.eodatahub.org.uk/titiler/xarray/histogram?url=${encodeURIComponent(
         asset.href,
       )}&variable=${variable}&reference=${isKerchunk}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Format data for Recharts
+      formattedData = data.map((item) => ({
+        bucketMidpoint: (item.bucket[0] + item.bucket[1]) / 2,
+        value: item.value,
+      }));
     } else if (assetType === 'core') {
-      url = `https://dev.eodatahub.org.uk/titiler/core/cog/histogram?url=${encodeURIComponent(
+      url = `https://dev.eodatahub.org.uk/titiler/core/cog/statistics?url=${encodeURIComponent(
         asset.href,
       )}&bidx=${bidx}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Format data for Recharts
+      const bandKey = availableBands[bidx - 1][0];
+      formattedData = data[bandKey].histogram[0].map((item, index) => ({
+        bucketMidpoint: data[bandKey].histogram[1][index],
+        value: item,
+      }));
     }
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Format data for Recharts
-    const formattedData = data.map((item) => ({
-      bucketMidpoint: (item.bucket[0] + item.bucket[1]) / 2,
-      value: item.value,
-    }));
 
     setHistogramData(formattedData);
   };
@@ -205,7 +223,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
                 onChange={(e) => setBidx(Number(e.target.value))}
               >
                 {availableBands.map(([key, description], index) => (
-                  <option key={key} value={index}>
+                  <option key={key} value={index + 1}>
                     {key} - {description}
                   </option>
                 ))}
@@ -270,7 +288,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
               <XAxis
                 dataKey="bucketMidpoint"
                 domain={['dataMin', 'dataMax']}
-                tickFormatter={(value) => value.toFixed(2)}
+                tickFormatter={(value) => value.toFixed(1)}
                 type="number"
               />
               <YAxis />
