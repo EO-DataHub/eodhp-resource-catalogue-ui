@@ -1,8 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './TiTilerCustomisationPanel.scss';
 
+import { GiHistogram } from 'react-icons/gi';
 import { TbMathMaxMin } from 'react-icons/tb';
 import { Tooltip } from 'react-tooltip';
+import {
+  Bar,
+  BarChart,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { StacAsset } from '@/typings/common';
@@ -17,8 +26,6 @@ import {
 type TiTilerCustomisationPanelProps = {
   asset: StacAsset;
 };
-
-// https://dev.eodatahub.org.uk/titiler/xarray/tiles/0/0/0?url=https%3A%2F%2Fdap.ceda.ac.uk%2Fneodc%2Feocis%2Fdata%2Fglobal_and_regional%2Fsea_surface_temperature%2FCDR_v3%2FAnalysis%2FL4%2Fv3.0.1%2F2024%2F03%2F31%2F20240331120000-ESACCI-L4_GHRSST-SSTdepth-OSTIA-GLOB_ICDR3.0-v02.0-fv01.0.nc&tileMatrixSetId=WebMercatorQuad&reference=false&rescale=200%2C400&colormap_name=plasma
 
 export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelProps) => {
   // State variables
@@ -38,7 +45,10 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   const [availableBands, setAvailableBands] = useState([]);
   const [availableVariables, setAvailableVariables] = useState([]);
   const [variable, setVariable] = useState('');
-  const [bidx, setBidx] = useState('');
+  const [bidx, setBidx] = useState(0);
+
+  // Histogram data
+  const [histogramData, setHistogramData] = useState([]);
 
   // Fetch available variables or bands based on asset type
   useEffect(() => {
@@ -80,14 +90,14 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
 
     if (assetType === 'core') {
       // For COG assets
-      const baseUrl = `https://dev.eodatahub.org.uk/titiler/core/cog/tiles/${tileMatrixSetId}`;
+      const baseUrl = `https://dev.eodatahub.org.uk/titiler/core/cog/preview`;
       const params = new URLSearchParams();
       params.append('url', asset.href);
-      if (bidx) params.append('bidx', bidx);
+      if (bidx) params.append('bidx', bidx ? bidx.toString() : '0');
       if (rescale) params.append('rescale', rescale);
       if (colormapName) params.append('colormap_name', colormapName);
 
-      previewUrl = `${baseUrl}/0/0/0?${params.toString()}`;
+      previewUrl = `${baseUrl}?${params.toString()}`;
       tileUrl = `${baseUrl}/{z}/{x}/{y}?${params.toString()}`;
     } else if (assetType === 'xarray') {
       // For XArray assets
@@ -112,9 +122,13 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   const approximateRescaleValue = async () => {
     let url = '';
     if (assetType === 'core') {
-      url = `https://dev.eodatahub.org.uk/titiler/core/cog/info?url=${encodeURIComponent(asset.href)}`;
+      url = `https://dev.eodatahub.org.uk/titiler/core/cog/info?url=${encodeURIComponent(
+        asset.href,
+      )}`;
     } else if (assetType === 'xarray') {
-      url = `https://dev.eodatahub.org.uk/titiler/xarray/info?url=${encodeURIComponent(asset.href)}&variable=${variable}&reference=${isKerchunk}`;
+      url = `https://dev.eodatahub.org.uk/titiler/xarray/info?url=${encodeURIComponent(
+        asset.href,
+      )}&variable=${variable}&reference=${isKerchunk}`;
     }
 
     const response = await fetch(url);
@@ -125,6 +139,30 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
     } else {
       console.error('Could not determine min and max values for rescale');
     }
+  };
+
+  const retrieveHistogramResults = async () => {
+    let url = '';
+    if (assetType === 'xarray') {
+      url = `https://dev.eodatahub.org.uk/titiler/xarray/histogram?url=${encodeURIComponent(
+        asset.href,
+      )}&variable=${variable}&reference=${isKerchunk}`;
+    } else if (assetType === 'core') {
+      url = `https://dev.eodatahub.org.uk/titiler/core/cog/histogram?url=${encodeURIComponent(
+        asset.href,
+      )}&bidx=${bidx}`;
+    }
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Format data for Recharts
+    const formattedData = data.map((item) => ({
+      bucketMidpoint: (item.bucket[0] + item.bucket[1]) / 2,
+      value: item.value,
+    }));
+
+    setHistogramData(formattedData);
   };
 
   // Handle unknown asset types
@@ -161,10 +199,14 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
           {availableBands.length > 0 && (
             <div className="form-group">
               <label htmlFor="band-index-select">Band Index</label>
-              <select id="band-index-select" value={bidx} onChange={(e) => setBidx(e.target.value)}>
-                {availableBands.map(([index, description]) => (
-                  <option key={index} value={index}>
-                    {index} - {description}
+              <select
+                id="band-index-select"
+                value={bidx}
+                onChange={(e) => setBidx(Number(e.target.value))}
+              >
+                {availableBands.map(([key, description], index) => (
+                  <option key={key} value={index}>
+                    {key} - {description}
                   </option>
                 ))}
               </select>
@@ -202,13 +244,42 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
           <Tooltip id="rescale-button" />
           <button
             data-tooltip-content="Use min and max values from the data"
-            data-tooltip-id="copy-button"
+            data-tooltip-id="rescale-button"
             onClick={approximateRescaleValue}
           >
             <TbMathMaxMin />
           </button>
+          <Tooltip id="histogram-button" />
+
+          <button
+            data-tooltip-content="See histogram"
+            data-tooltip-id="histogram-button"
+            onClick={retrieveHistogramResults}
+          >
+            <GiHistogram />
+          </button>
         </div>
       </div>
+
+      {/* Histogram Chart */}
+      {histogramData.length > 0 && (
+        <div className="histogram-chart">
+          <h3>Histogram</h3>
+          <ResponsiveContainer height={200} width="100%">
+            <BarChart data={histogramData}>
+              <XAxis
+                dataKey="bucketMidpoint"
+                domain={['dataMin', 'dataMax']}
+                tickFormatter={(value) => value.toFixed(2)}
+                type="number"
+              />
+              <YAxis />
+              <RechartsTooltip />
+              <Bar dataKey="value" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       <div className="form-group">
         <label htmlFor="colormap-select">Colormap</label>

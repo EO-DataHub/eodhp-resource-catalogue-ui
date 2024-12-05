@@ -11,8 +11,6 @@ export const isAssetKerchunk = (asset) => {
     isKerchunk = true;
   }
 
-  console.log('Is asset kerchunk?', isKerchunk);
-
   return isKerchunk;
 };
 
