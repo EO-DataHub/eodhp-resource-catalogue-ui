@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import { useApp } from '@/hooks/useApp';
 import { Collection } from '@/typings/stac';
-import { addCatalogueToPath } from '@/utils/urlHandler';
+import { updateUrl } from '@/utils/urlHandler';
 
 import { DataCatalogueRowSkeleton } from './DataCatalogueRowSkeleton';
 
@@ -16,6 +17,8 @@ type ParentData = {
 };
 
 export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
+  const { actions } = useApp();
+  const { setActiveContent } = actions;
   const [breadcrumb, setBreadcrumb] = useState<ParentData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,8 +64,8 @@ export const DataCatalogueRow = ({ row }: DataCatalogueRowProps) => {
       key={row.id}
       className="data-catalogue-table__row"
       onClick={() => {
-        window.open(row.stacUrl, '_blank');
-        addCatalogueToPath(row.id);
+        updateUrl(row);
+        setActiveContent('dataset');
       }}
     >
       <div className="data-catalogue-table__row-content">

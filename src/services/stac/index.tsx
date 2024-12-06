@@ -7,7 +7,7 @@ import sentinel2 from '@/assets/placeholders/sentinel-2.png';
 import terraclimate from '@/assets/placeholders/terraclimate.png';
 import { Collection, StacItem } from '@/typings/stac';
 import { extractDates } from '@/utils/date';
-import { formatDateAsISO8601 } from '@/utils/genericUtils';
+import { fetchData, fetchPathPartsFromUrl, formatDateAsISO8601 } from '@/utils/genericUtils';
 import { HttpCodes } from '@/utils/http';
 import { getFormattedSTACDateStr } from '@/utils/stacUtils';
 
@@ -267,4 +267,14 @@ export const getStacItemUrl = (item: StacItem): string => {
 const getRandomImage = () => {
   const images = [hgb, landsat, sentinel2, terraclimate];
   return images[Math.floor(Math.random() * images.length)];
+};
+
+export const fetchFromPath = async () => {
+  const catalogPathParts = fetchPathPartsFromUrl();
+  if (catalogPathParts[catalogPathParts.length - 2] === 'collections') {
+    const collection = await fetchData(
+      `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${catalogPathParts.join('/')}`,
+    );
+    return collection;
+  }
 };

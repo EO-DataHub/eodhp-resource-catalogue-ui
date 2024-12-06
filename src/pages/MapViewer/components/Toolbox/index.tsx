@@ -5,7 +5,7 @@ import { FaRegWindowMinimize } from 'react-icons/fa';
 import { Tree } from '@/components/tree/Tree';
 import { useToolbox } from '@/hooks/useToolbox';
 import { useTreeData } from '@/hooks/useTreeData';
-import { fetchData, fetchPathPartsFromUrl } from '@/utils/genericUtils';
+import { fetchFromPath } from '@/services/stac';
 
 import { AssetsPanel } from './components/item-assets/AssetsPanel';
 import { PurchaseFormPanel } from './components/purchases/PurchaseFormPanel';
@@ -26,19 +26,15 @@ const Toolbox = () => {
   } = useToolbox();
 
   useEffect(() => {
-    const fetchFromPath = async () => {
-      const catalogPathParts = fetchPathPartsFromUrl();
+    const func = async () => {
+      const collection = await fetchFromPath();
+      if (!collection) return;
 
-      if (catalogPathParts[catalogPathParts.length - 2] === 'collections') {
-        const collection = await fetchData(
-          `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${catalogPathParts.join('/')}`,
-        );
-        setSelectedCollection(collection);
-        setActivePage('items');
-      }
+      setSelectedCollection(collection);
+      setActivePage('items');
     };
 
-    fetchFromPath();
+    func();
   }, [setSelectedCollection, setActivePage]);
 
   const renderContent = () => {

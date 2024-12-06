@@ -1,3 +1,7 @@
+import React from 'react';
+
+import { AppProvider } from '@/context/AppContext';
+import { ToolboxProvider } from '@/context/ToolboxContext';
 import { HttpResponse, http, server } from '@/mocks/server';
 import { Collection } from '@/typings/stac';
 import { render, screen, waitFor } from '@/utils/renderers';
@@ -30,7 +34,15 @@ const mockRow: Collection = {
 
 describe('DataCatalogueRow', () => {
   it('should render loading state initially', () => {
-    render(<DataCatalogueRow row={mockRow} />);
+    render(
+      <React.StrictMode>
+        <ToolboxProvider>
+          <AppProvider>
+            <DataCatalogueRow row={mockRow} />
+          </AppProvider>
+        </ToolboxProvider>
+      </React.StrictMode>,
+    );
 
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
@@ -42,7 +54,15 @@ describe('DataCatalogueRow', () => {
       }),
     );
 
-    render(<DataCatalogueRow row={mockRow} />);
+    render(
+      <React.StrictMode>
+        <ToolboxProvider>
+          <AppProvider>
+            <DataCatalogueRow row={mockRow} />
+          </AppProvider>
+        </ToolboxProvider>
+      </React.StrictMode>,
+    );
 
     await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
 
@@ -59,7 +79,15 @@ describe('DataCatalogueRow', () => {
       }),
     );
 
-    render(<DataCatalogueRow row={mockRow} />);
+    render(
+      <React.StrictMode>
+        <ToolboxProvider>
+          <AppProvider>
+            <DataCatalogueRow row={mockRow} />
+          </AppProvider>
+        </ToolboxProvider>
+      </React.StrictMode>,
+    );
 
     await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
 
