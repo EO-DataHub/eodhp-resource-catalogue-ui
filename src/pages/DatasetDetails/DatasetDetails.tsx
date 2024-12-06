@@ -14,6 +14,7 @@ import { addViewToURL } from '@/utils/urlHandler';
 import './styles.scss';
 import FeatureList from './components/FeatureList/FeatureList';
 import FeatureMap from './components/FeatureMap/FeatureMap';
+import QA from './components/QA/QA';
 import DataTable from './components/Tables/DataTable';
 
 const DatasetDetails = () => {
@@ -159,6 +160,7 @@ const DatasetDetails = () => {
         {renderFeatures()}
       </div>
       <div>{renderMetadata()}</div>
+      <QA />
     </div>
   );
 };

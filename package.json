@@ -32,6 +32,7 @@
     "leaflet": "^1.9.4",
     "ol-stac": "^1.0.0-beta.10",
     "optionator": "^0.9.4",
+    "rdflib": "^2.2.35",
     "react": "^18.3.1",
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
