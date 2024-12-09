@@ -27,7 +27,7 @@ const ToolboxItems = () => {
 
   const returnTotalPages = () => {
     if (selectedCollectionItems?.context) {
-      return Math.ceil(selectedCollectionItems.context.matched / activeFilters.resultsPerPage);
+      return Math.ceil(selectedCollectionItems.context.returned / activeFilters.resultsPerPage);
     }
     return 0;
   };
