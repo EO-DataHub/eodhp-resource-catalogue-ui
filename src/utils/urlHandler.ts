@@ -91,7 +91,7 @@ export const updateUrl = (node: TreeCatalog | Collection) => {
   if (url) {
     const path = url.split('catalogs/')[1];
     const currentPath = window.location.pathname;
-    const suffixMatch = currentPath.match(/\/(map|list)$/);
+    const suffixMatch = currentPath.match(/\/(map|list|dataset|qa)$/);
     const suffix = suffixMatch ? suffixMatch[0] : '';
     const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
     window.history.pushState({}, '', newPath);

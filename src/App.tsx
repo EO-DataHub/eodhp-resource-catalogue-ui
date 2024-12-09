@@ -6,10 +6,9 @@ import { Axe } from '@/components/Axe';
 import FilterSidebar from '@/components/FilterSidebar';
 import { useApp } from '@/hooks/useApp';
 import DataCatalogue from '@/pages/DataCatalogue';
+import DatasetDetails from '@/pages/DatasetDetails/DatasetDetails';
 import MapViewer from '@/pages/MapViewer';
 import { QAPanel } from '@/pages/q-and-a/QAPanel';
-
-import DatasetDetails from './pages/DatasetDetails/DatasetDetails';
 
 const App: React.FC = () => {
   const { state: AppState, actions: AppActions } = useApp();
