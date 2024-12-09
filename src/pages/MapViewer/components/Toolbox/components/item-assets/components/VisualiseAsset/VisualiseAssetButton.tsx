@@ -1,4 +1,3 @@
-// VisualiseAssetButton.tsx
 import { TbMapCog } from 'react-icons/tb';
 import { Tooltip } from 'react-tooltip';
 
