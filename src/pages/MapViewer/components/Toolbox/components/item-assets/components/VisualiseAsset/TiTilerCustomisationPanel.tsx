@@ -17,6 +17,12 @@ import { ClipboardButton } from '@/components/clipboard/ClipboardButton';
 import { StacAsset } from '@/typings/common';
 
 import {
+  fetchAvailableBands,
+  fetchAvailableVariables,
+  fetchHistogramData,
+  fetchStatisticsForRescale,
+} from './titilerServices';
+import {
   availableColourMaps,
   availableProjections,
   determineAssetType,
@@ -29,6 +35,7 @@ type TiTilerCustomisationPanelProps = {
 
 export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelProps) => {
   const assetType = useMemo(() => determineAssetType(asset), [asset]);
+  const isKerchunk = useMemo(() => isAssetKerchunk(asset), [asset]);
 
   // URLs
   const [generatedUrl, setGeneratedUrl] = useState('');
@@ -40,9 +47,8 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   const [colormapName, setColormapName] = useState('');
 
   // Asset-specific
-  const isKerchunk = useMemo(() => isAssetKerchunk(asset), [asset]);
-  const [availableBands, setAvailableBands] = useState([]);
-  const [availableVariables, setAvailableVariables] = useState([]);
+  const [availableBands, setAvailableBands] = useState<Array<[string, string]>>([]);
+  const [availableVariables, setAvailableVariables] = useState<string[]>([]);
   const [variable, setVariable] = useState('');
   const [bidx, setBidx] = useState(1);
 
@@ -66,29 +72,13 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       setVariablesError('');
       try {
         if (assetType === 'core') {
-          const url = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}/cog/info?url=${encodeURIComponent(
-            asset.href,
-          )}`;
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error('Failed to fetch band information.');
-          }
-          const data = await response.json();
-          setAvailableBands(data.band_descriptions || []);
+          const bands = await fetchAvailableBands(asset.href);
+          setAvailableBands(bands);
         } else if (assetType === 'xarray') {
-          const baseUrl = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/variables`;
-          const params = new URLSearchParams();
-          params.append('url', asset.href);
-          if (isKerchunk) params.append('reference', 'true');
-
-          const response = await fetch(`${baseUrl}?${params.toString()}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch variables.');
-          }
-          const data = await response.json();
-          setAvailableVariables(data || []);
-          if (data.length > 0 && !variable) {
-            setVariable(data[0]);
+          const vars = await fetchAvailableVariables(asset.href, isKerchunk);
+          setAvailableVariables(vars || []);
+          if (vars.length > 0 && !variable) {
+            setVariable(vars[0]);
           }
         }
       } catch (error) {
@@ -150,36 +140,15 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
     setLoadingRescale(true);
     setRescaleError('');
     try {
-      let url = '';
-      if (assetType === 'core') {
-        url = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}/cog/statistics?url=${encodeURIComponent(
-          asset.href,
-        )}&bidx=${bidx}`;
-      } else if (assetType === 'xarray') {
-        url = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/info?url=${encodeURIComponent(
-          asset.href,
-        )}&variable=${variable}&reference=${isKerchunk}`;
-      }
-
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Failed to fetch statistics for rescale approximation.');
-      }
-
-      const data = await response.json();
-
-      // Check for XArray attrs
-      if (data.attrs && data.attrs.valid_min && data.attrs.valid_max) {
-        setRescale(`${data.attrs.valid_min},${data.attrs.valid_max}`);
-      } else {
-        // Check for Core band statistics
-        const bandKey = availableBands[bidx - 1]?.[0];
-        if (bandKey && data[bandKey]?.min !== undefined && data[bandKey]?.max !== undefined) {
-          setRescale(`${data[bandKey].min},${data[bandKey].max}`);
-        } else {
-          throw new Error('Could not approximate rescale value from data.');
-        }
-      }
+      const result = await fetchStatisticsForRescale(
+        asset.href,
+        assetType,
+        variable,
+        isKerchunk,
+        bidx,
+        availableBands,
+      );
+      setRescale(result);
     } catch (error) {
       setRescaleError(error.message);
     } finally {
@@ -192,45 +161,15 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
     setLoadingHistogram(true);
     setHistogramError('');
     try {
-      let url = '';
-      let formattedData = [];
-
-      if (assetType === 'xarray') {
-        url = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/histogram?url=${encodeURIComponent(
-          asset.href,
-        )}&variable=${variable}&reference=${isKerchunk}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error('Failed to fetch histogram data.');
-        }
-        const data = await response.json();
-
-        formattedData = data.map((item) => ({
-          bucketMidpoint: (item.bucket[0] + item.bucket[1]) / 2,
-          value: item.value,
-        }));
-      } else if (assetType === 'core') {
-        url = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}/cog/statistics?url=${encodeURIComponent(
-          asset.href,
-        )}&bidx=${bidx}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error('Failed to fetch histogram data.');
-        }
-        const data = await response.json();
-
-        const bandKey = availableBands[bidx - 1]?.[0];
-        if (bandKey && data[bandKey]?.histogram) {
-          formattedData = data[bandKey].histogram[0].map((val: number, index: number) => ({
-            bucketMidpoint: data[bandKey].histogram[1][index],
-            value: val,
-          }));
-        } else {
-          throw new Error('Histogram data not found for the selected band.');
-        }
-      }
-
-      setHistogramData(formattedData);
+      const data = await fetchHistogramData(
+        asset.href,
+        assetType,
+        variable,
+        isKerchunk,
+        bidx,
+        availableBands,
+      );
+      setHistogramData(data);
     } catch (error) {
       setHistogramError(error.message);
     } finally {
