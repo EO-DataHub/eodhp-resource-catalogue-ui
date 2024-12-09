@@ -105,9 +105,14 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   useEffect(() => {
     let previewUrl = '';
     let tileUrl = '';
+    let baseUrl = '';
 
     if (assetType === 'core') {
-      const baseUrl = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
+      if (import.meta.env.VITE_TITILER_CORE_ENDPOINT.startsWith('http')) {
+        baseUrl = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
+      } else {
+        baseUrl = `${import.meta.env.BASE_URL}${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
+      }
       const params = new URLSearchParams();
       params.append('url', asset.href);
       params.append('bidx', bidx.toString());
@@ -117,7 +122,12 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       previewUrl = `${baseUrl}/cog/preview?${params.toString()}`;
       tileUrl = `${baseUrl}/cog/tiles/${tileMatrixSetId}/{z}/{x}/{y}?${params.toString()}`;
     } else if (assetType === 'xarray') {
-      const baseUrl = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
+      if (import.meta.env.VITE_TITILER_XARRAY_ENDPOINT.startsWith('http')) {
+        baseUrl = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
+      } else {
+        baseUrl = `${import.meta.env.BASE_URL}${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
+      }
+
       const params = new URLSearchParams();
       params.append('url', asset.href);
       if (variable) params.append('variable', variable);
@@ -125,7 +135,6 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       params.append('reference', isKerchunk.toString());
       if (rescale) params.append('rescale', rescale);
       if (colormapName) params.append('colormap_name', colormapName);
-
       previewUrl = `${baseUrl}/0/0/0?${params.toString()}`;
       tileUrl = `${baseUrl}/{z}/{x}/{y}?${params.toString()}`;
     }
