@@ -112,7 +112,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
         baseUrl = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
       } else {
         const currentDomain = window.location.hostname;
-        baseUrl = `${currentDomain}${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
+        baseUrl = `https://${currentDomain}${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
       }
       const params = new URLSearchParams();
       params.append('url', asset.href);
@@ -127,7 +127,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
         baseUrl = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
       } else {
         const currentDomain = window.location.hostname;
-        baseUrl = `${currentDomain}${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
+        baseUrl = `https://${currentDomain}${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
       }
 
       const params = new URLSearchParams();
