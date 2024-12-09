@@ -6,6 +6,7 @@ import { Axe } from '@/components/Axe';
 import FilterSidebar from '@/components/FilterSidebar';
 import { useApp } from '@/hooks/useApp';
 import DataCatalogue from '@/pages/DataCatalogue';
+import DatasetDetails from '@/pages/DatasetDetails/DatasetDetails';
 import MapViewer from '@/pages/MapViewer';
 import { QAPanel } from '@/pages/q-and-a/QAPanel';
 
@@ -40,6 +41,7 @@ const App: React.FC = () => {
         <MapViewer />
         {activeContent === 'dataCatalogue' ? <DataCatalogue /> : null}
         {activeContent === 'qa' ? <QAPanel /> : null}
+        {activeContent === 'dataset' ? <DatasetDetails /> : null}
       </div>
     </main>
   );

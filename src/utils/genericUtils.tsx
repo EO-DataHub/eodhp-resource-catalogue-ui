@@ -52,7 +52,7 @@ export const fetchPathPartsFromUrl = () => {
   if (basePath && path.startsWith(basePath)) {
     relativePath = path.slice(basePath.length);
   }
-  relativePath = relativePath.replace(/\/(map|list)$/, '');
+  relativePath = relativePath.replace(/\/(map|list|dataset|qa)$/, '');
   const pathParts = relativePath.split('/').filter(Boolean);
   const catalogsIndex = pathParts.indexOf('catalogs');
   let catalogPathParts = [];
