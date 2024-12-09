@@ -30,6 +30,7 @@ export const determineAssetType = (asset) => {
 export const availableProjections = [
   'WebMercatorQuad',
   'WorldMercatorWGS84Quad',
+  'BritishNationalGrid',
   'WGS1984Quad',
   'WorldCRS84Quad',
   'CanadianNAD83_LCC',
