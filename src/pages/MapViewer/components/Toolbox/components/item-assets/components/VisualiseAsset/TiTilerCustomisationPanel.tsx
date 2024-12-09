@@ -44,7 +44,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   const [availableBands, setAvailableBands] = useState([]);
   const [availableVariables, setAvailableVariables] = useState([]);
   const [variable, setVariable] = useState('');
-  const [bidx, setBidx] = useState(0);
+  const [bidx, setBidx] = useState(1);
 
   // Histogram data
   const [histogramData, setHistogramData] = useState([]);
@@ -110,7 +110,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       const baseUrl = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
       const params = new URLSearchParams();
       params.append('url', asset.href);
-      if (bidx) params.append('bidx', bidx.toString());
+      params.append('bidx', bidx.toString());
       if (rescale) params.append('rescale', rescale);
       if (colormapName) params.append('colormap_name', colormapName);
 
@@ -273,11 +273,11 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
             <label htmlFor="band-index-select">Band Index</label>
             <select
               id="band-index-select"
-              value={bidx}
-              onChange={(e) => setBidx(Number(e.target.value))}
+              value={bidx - 1}
+              onChange={(e) => setBidx(Number(e.target.value) + 1)}
             >
               {availableBands.map(([key, description]: [string, string], index: number) => (
-                <option key={key} value={index + 1}>
+                <option key={key} value={index}>
                   {key} - {description}
                 </option>
               ))}
