@@ -28,9 +28,10 @@ type TiTilerCustomisationPanelProps = {
 };
 
 export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelProps) => {
-  // State variables
+  // Determine asset type
   const assetType = useMemo(() => determineAssetType(asset), [asset]);
 
+  // State for generated URLs
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [generatedPreviewUrl, setGeneratedPreviewUrl] = useState('');
 
@@ -41,7 +42,6 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
 
   // Asset-specific parameters
   const isKerchunk = useMemo(() => isAssetKerchunk(asset), [asset]);
-
   const [availableBands, setAvailableBands] = useState([]);
   const [availableVariables, setAvailableVariables] = useState([]);
   const [variable, setVariable] = useState('');
@@ -50,26 +50,26 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
   // Histogram data
   const [histogramData, setHistogramData] = useState([]);
 
-  // Fetch available variables or bands based on asset type
+  // Fetch available variables or bands depending on the asset type
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (assetType === 'core') {
-          const response = await fetch(
-            `https://dev.eodatahub.org.uk/titiler/core/cog/info?url=${encodeURIComponent(
-              asset.href,
-            )}`,
-          );
+          const url = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}/cog/info?url=${encodeURIComponent(
+            asset.href,
+          )}`;
+          const response = await fetch(url);
           const data = await response.json();
           setAvailableBands(data.band_descriptions || []);
         } else if (assetType === 'xarray') {
-          const baseUrl = `https://dev.eodatahub.org.uk/titiler/xarray/variables`;
+          const baseUrl = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/variables`;
           const params = new URLSearchParams();
           params.append('url', asset.href);
           if (isKerchunk) params.append('reference', 'true');
 
           const response = await fetch(`${baseUrl}?${params.toString()}`);
           const data = await response.json();
+
           setAvailableVariables(data || []);
           if (data.length > 0 && !variable) {
             setVariable(data[0]);
@@ -83,26 +83,23 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
     fetchData();
   }, [asset.href, assetType, isKerchunk, variable]);
 
-  // Generate the TiTiler URL whenever parameters change
+  // Generate tile/preview URLs whenever parameters change
   useEffect(() => {
     let previewUrl = '';
     let tileUrl = '';
 
     if (assetType === 'core') {
-      // For COG assets
-      const baseUrl = `https://dev.eodatahub.org.uk/titiler/core`;
+      const baseUrl = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}`;
       const params = new URLSearchParams();
       params.append('url', asset.href);
-      if (bidx) params.append('bidx', bidx ? bidx.toString() : '0');
+      if (bidx) params.append('bidx', bidx.toString());
       if (rescale) params.append('rescale', rescale);
       if (colormapName) params.append('colormap_name', colormapName);
 
       previewUrl = `${baseUrl}/cog/preview?${params.toString()}`;
       tileUrl = `${baseUrl}/cog/tiles/${tileMatrixSetId}/{z}/{x}/{y}?${params.toString()}`;
     } else if (assetType === 'xarray') {
-      // For XArray assets
-      const baseUrl = `https://dev.eodatahub.org.uk/titiler/xarray/tiles`;
-
+      const baseUrl = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/tiles`;
       const params = new URLSearchParams();
       params.append('url', asset.href);
       if (variable) params.append('variable', variable);
@@ -111,6 +108,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       if (rescale) params.append('rescale', rescale);
       if (colormapName) params.append('colormap_name', colormapName);
 
+      // Note: preview URL uses a fixed zoom level for demonstration
       previewUrl = `${baseUrl}/0/0/0?${params.toString()}`;
       tileUrl = `${baseUrl}/{z}/{x}/{y}?${params.toString()}`;
     }
@@ -119,121 +117,127 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
     setGeneratedPreviewUrl(previewUrl);
   }, [assetType, asset.href, tileMatrixSetId, rescale, colormapName, variable, isKerchunk, bidx]);
 
+  // Approximate rescale values based on data statistics
   const approximateRescaleValue = async () => {
-    let url = '';
-    if (assetType === 'core') {
-      url = `https://dev.eodatahub.org.uk/titiler/core/cog/statistics?url=${encodeURIComponent(
-        asset.href,
-      )}&bidx=${bidx}`;
-    } else if (assetType === 'xarray') {
-      url = `https://dev.eodatahub.org.uk/titiler/xarray/info?url=${encodeURIComponent(
-        asset.href,
-      )}&variable=${variable}&reference=${isKerchunk}`;
+    try {
+      let url = '';
+      if (assetType === 'core') {
+        url = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}/cog/statistics?url=${encodeURIComponent(
+          asset.href,
+        )}&bidx=${bidx}`;
+      } else if (assetType === 'xarray') {
+        url = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/info?url=${encodeURIComponent(
+          asset.href,
+        )}&variable=${variable}&reference=${isKerchunk}`;
+      }
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // XArray response with attrs
+      if (data.attrs && data.attrs.valid_min && data.attrs.valid_max) {
+        setRescale(`${data.attrs.valid_min},${data.attrs.valid_max}`);
+        return;
+      }
+
+      // Core asset band statistics
+      const bandKey = availableBands[bidx - 1]?.[0];
+      if (bandKey && data[bandKey]?.min && data[bandKey]?.max) {
+        setRescale(`${data[bandKey].min},${data[bandKey].max}`);
+        return;
+      }
+
+      console.error('Could not approximate rescale value.');
+    } catch (error) {
+      console.error('Error approximating rescale value:', error);
     }
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.attrs && data.attrs.valid_min && data.attrs.valid_max) {
-      setRescale(`${data.attrs.valid_min},${data.attrs.valid_max}`);
-      return;
-    }
-
-    const bandKey = availableBands[bidx - 1][0];
-    if (data[bandKey].min && data[bandKey].max) {
-      setRescale(`${data[bandKey].min},${data[bandKey].max}`);
-      return;
-    }
-
-    console.error('Could not approximate rescale value.');
   };
 
+  // Retrieve histogram data
   const retrieveHistogramResults = async () => {
-    let url = '';
-    let formattedData;
-    if (assetType === 'xarray') {
-      url = `https://dev.eodatahub.org.uk/titiler/xarray/histogram?url=${encodeURIComponent(
-        asset.href,
-      )}&variable=${variable}&reference=${isKerchunk}`;
+    try {
+      let url = '';
+      let formattedData = [];
 
-      const response = await fetch(url);
-      const data = await response.json();
+      if (assetType === 'xarray') {
+        url = `${import.meta.env.VITE_TITILER_XARRAY_ENDPOINT}/histogram?url=${encodeURIComponent(
+          asset.href,
+        )}&variable=${variable}&reference=${isKerchunk}`;
 
-      // Format data for Recharts
-      formattedData = data.map((item) => ({
-        bucketMidpoint: (item.bucket[0] + item.bucket[1]) / 2,
-        value: item.value,
-      }));
-    } else if (assetType === 'core') {
-      url = `https://dev.eodatahub.org.uk/titiler/core/cog/statistics?url=${encodeURIComponent(
-        asset.href,
-      )}&bidx=${bidx}`;
+        const response = await fetch(url);
+        const data = await response.json();
 
-      const response = await fetch(url);
-      const data = await response.json();
+        // Format data for Recharts
+        formattedData = data.map((item) => ({
+          bucketMidpoint: (item.bucket[0] + item.bucket[1]) / 2,
+          value: item.value,
+        }));
+      } else if (assetType === 'core') {
+        url = `${import.meta.env.VITE_TITILER_CORE_ENDPOINT}/cog/statistics?url=${encodeURIComponent(
+          asset.href,
+        )}&bidx=${bidx}`;
 
-      // Format data for Recharts
-      const bandKey = availableBands[bidx - 1][0];
-      formattedData = data[bandKey].histogram[0].map((item, index) => ({
-        bucketMidpoint: data[bandKey].histogram[1][index],
-        value: item,
-      }));
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const bandKey = availableBands[bidx - 1]?.[0];
+        if (bandKey && data[bandKey]?.histogram) {
+          formattedData = data[bandKey].histogram[0].map((val: number, index: number) => ({
+            bucketMidpoint: data[bandKey].histogram[1][index],
+            value: val,
+          }));
+        }
+      }
+
+      setHistogramData(formattedData);
+    } catch (error) {
+      console.error('Error retrieving histogram data:', error);
     }
-
-    setHistogramData(formattedData);
   };
 
-  // Handle unknown asset types
   if (assetType === 'unknown') {
     return <p>Unsupported asset type.</p>;
   }
 
   return (
     <div className="titiler-customisation-panel">
-      {/* Asset-specific form fields */}
-      {assetType === 'xarray' && (
-        <>
-          {availableVariables.length > 0 && (
-            <div className="form-group">
-              <label htmlFor="variable-select">Variable</label>
-              <select
-                id="variable-select"
-                value={variable}
-                onChange={(e) => setVariable(e.target.value)}
-              >
-                {availableVariables.map((varName) => (
-                  <option key={varName} value={varName}>
-                    {varName}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </>
+      {/* XArray Variable Selection */}
+      {assetType === 'xarray' && availableVariables.length > 0 && (
+        <div className="form-group">
+          <label htmlFor="variable-select">Variable</label>
+          <select
+            id="variable-select"
+            value={variable}
+            onChange={(e) => setVariable(e.target.value)}
+          >
+            {availableVariables.map((varName: string) => (
+              <option key={varName} value={varName}>
+                {varName}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
 
-      {assetType === 'core' && (
-        <>
-          {availableBands.length > 0 && (
-            <div className="form-group">
-              <label htmlFor="band-index-select">Band Index</label>
-              <select
-                id="band-index-select"
-                value={bidx}
-                onChange={(e) => setBidx(Number(e.target.value))}
-              >
-                {availableBands.map(([key, description], index) => (
-                  <option key={key} value={index + 1}>
-                    {key} - {description}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </>
+      {/* Core Band Selection */}
+      {assetType === 'core' && availableBands.length > 0 && (
+        <div className="form-group">
+          <label htmlFor="band-index-select">Band Index</label>
+          <select
+            id="band-index-select"
+            value={bidx}
+            onChange={(e) => setBidx(Number(e.target.value))}
+          >
+            {availableBands.map(([key, description]: [string, string], index: number) => (
+              <option key={key} value={index + 1}>
+                {key} - {description}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
 
-      {/* Common form fields */}
+      {/* Tile Matrix Set */}
       <div className="form-group">
         <label htmlFor="tile-matrix-set-select">Tile Matrix Set</label>
         <select
@@ -241,7 +245,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
           value={tileMatrixSetId}
           onChange={(e) => setTileMatrixSetId(e.target.value)}
         >
-          {availableProjections.map((projection) => (
+          {availableProjections.map((projection: string) => (
             <option key={projection} value={projection}>
               {projection}
             </option>
@@ -249,6 +253,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
         </select>
       </div>
 
+      {/* Rescale */}
       <div className="form-group">
         <label htmlFor="rescale-input">Rescale</label>
         <div className="rescale-container">
@@ -267,8 +272,8 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
           >
             <TbMathMaxMin />
           </button>
-          <Tooltip id="histogram-button" />
 
+          <Tooltip id="histogram-button" />
           <button
             data-tooltip-content="See histogram"
             data-tooltip-id="histogram-button"
@@ -299,6 +304,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
         </div>
       )}
 
+      {/* Colormap */}
       <div className="form-group">
         <label htmlFor="colormap-select">Colormap</label>
         <select
@@ -307,7 +313,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
           onChange={(e) => setColormapName(e.target.value)}
         >
           <option value="">None</option>
-          {availableColourMaps.map((colormap) => (
+          {availableColourMaps.map((colormap: string) => (
             <option key={colormap} value={colormap}>
               {colormap}
             </option>
@@ -321,10 +327,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       <div className="preview-url">
         <button
           className="preview-button"
-          onClick={() => {
-            console.log('Opening preview URL:', generatedPreviewUrl);
-            window.open(generatedPreviewUrl, '_blank');
-          }}
+          onClick={() => window.open(generatedPreviewUrl, '_blank')}
         >
           Preview
         </button>
@@ -336,8 +339,8 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
       <div className="generated-url">
         <label htmlFor="tile-url">Tile URL</label>
         <small className="information">
-          This URL follows the standard XYZ tile format {'{z}/{x}/{y}'} and is compatible with most
-          mapping libraries. For technical details, see the{' '}
+          This URL uses the standard XYZ tile format <code>{'{z}/{x}/{y}'}</code>. It should be
+          compatible with most mapping libraries. For details, see the{' '}
           <a
             href="https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification"
             rel="noreferrer"
@@ -345,6 +348,7 @@ export const TiTilerCustomisationPanel = ({ asset }: TiTilerCustomisationPanelPr
           >
             OGC Tile Map Service specification
           </a>
+          .
         </small>
         <div className="url-container">
           <input readOnly id="tile-url" type="text" value={generatedUrl} />
