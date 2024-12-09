@@ -17,11 +17,14 @@ export const addCatalogueToPath = (name: string) => {
 
 export const getCatalogueFromURL = (): string | undefined => {
   const path = location.pathname;
-
-  const match = path.match(/\/catalogs\/([^/]+)\/([^/]+)\//);
-  if (match) return `${match[1]}/${match[2]}`;
-
-  return undefined;
+  if (!path.includes('catalogs')) return;
+  const postCataloguePath = path.split('/catalogs')[1];
+  if (postCataloguePath.includes('/collections')) {
+    return postCataloguePath.split('/collections')[0];
+  }
+  const pathArray = postCataloguePath.split('/');
+  const slicedArray = pathArray.slice(0, pathArray.length - 1);
+  return slicedArray.join('/');
 };
 
 export const getCollectionFromURL = (): string | undefined => {
@@ -91,7 +94,7 @@ export const updateUrl = (node: TreeCatalog | Collection) => {
   if (url) {
     const path = url.split('catalogs/')[1];
     const currentPath = window.location.pathname;
-    const suffixMatch = currentPath.match(/\/(map|list)$/);
+    const suffixMatch = currentPath.match(/\/(map|list|dataset|qa)$/);
     const suffix = suffixMatch ? suffixMatch[0] : '';
     const newPath = `${import.meta.env.VITE_BASE_PATH || ''}/catalogs/${path}${suffix}`;
     window.history.pushState({}, '', newPath);
