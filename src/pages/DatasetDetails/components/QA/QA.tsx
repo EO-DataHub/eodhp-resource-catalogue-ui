@@ -84,7 +84,7 @@ const Qa = () => {
       });
       return a;
     })[0];
-    return valueAttr.object;
+    return valueAttr?.object;
   };
 
   useEffect(() => {
@@ -97,21 +97,26 @@ const Qa = () => {
         `${prefixes['rdf']}type`,
         `${prefixes['dqv']}QualityMeasurement`,
       );
-      const attrs = getAttributesForSubject(filteredQuads[0].id, trigQuads);
-      const value = extractValue(attrs, 'value');
-      const computedOn = extractValue(attrs, 'isMeasurementOf');
-      const computedAttrs = getAttributesForSubject(computedOn, ontologyQuads);
-      const prefLabel = extractValue(computedAttrs, 'prefLabel');
 
-      const data: PerformanceSpecRow[] = [
-        {
+      const data: PerformanceSpecRow[] = [];
+      filteredQuads.forEach((quad) => {
+        const attrs = getAttributesForSubject(quad.id, trigQuads);
+        const value = extractValue(attrs, 'value');
+        const isMeasurementOf = extractValue(attrs, 'isMeasurementOf');
+        const computedAttrs = getAttributesForSubject(isMeasurementOf, ontologyQuads);
+        if (!computedAttrs) return;
+        const prefLabel = extractValue(computedAttrs, 'prefLabel');
+        if (!prefLabel) return;
+
+        // TODO: Remove hard coded values
+        data.push({
           metric: prefLabel,
-          lastChecked: formatDate(new Date()),
-          result: 'yes',
-          value: value,
+          lastChecked: formatDate('2024-07-26'),
+          value: value + 'dB',
           verified: 'true',
-        },
-      ];
+        });
+      });
+
       setData(data);
     };
     func();

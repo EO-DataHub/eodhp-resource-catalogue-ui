@@ -10,7 +10,6 @@ const headers = [
   { externalName: 'Metric', internalName: 'metric' },
   { externalName: 'Value', internalName: 'value' },
   { externalName: 'Verified', internalName: 'verified' },
-  { externalName: 'Result', internalName: 'result' },
   { externalName: 'Last Checked', internalName: 'lastChecked' },
 ];
 
