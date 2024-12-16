@@ -67,7 +67,7 @@ _:author
     :snrCheck1
         a                           dqv:QualityMeasurement ;
         sdmx-attribute:unitMeasure  <http://www.ontology-of-units-of-measure.org/resource/om-2/decibel> ;
-        dqv:isMeasurementOf         :snrMetric ;
+        dqv:isMeasurementOf         eodhqa:snr ;
         dqv:computedOn              <https://dev.eodatahub.org.uk/api/catalogue/stac/catalogs/supported-datasets/ceda-stac-fastapi/collections/sentinel1_l1c> ;
         qb:dataSet                  :checkRun ;
         dqv:value                   100

@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import './styles.scss';
 
-import * as $rdf from 'rdflib';
+import n3 from 'n3';
+
+import { formatDate } from '@/utils/date';
 
 import PerformanceSpec from './PerformanceSpec';
 import ontology from './qa-ontology.ttl?raw';
+import trig from './qa-output-1.trig?raw';
+import { PerformanceSpecRow, QuadAttribute } from './types';
 
-const QA = () => {
-  const [headers, setHeaders] = useState<string[]>([]);
+const Qa = () => {
+  const [data, setData] = useState<PerformanceSpecRow[]>();
+  const [prefixes, setPrefixes] = useState<{ [key: string]: string }>();
 
-  const parsePrefixes = () => {
+  useEffect(() => {
     const prefixRegex = /@prefix\s+(\w+):\s+<([^>]+)>/g;
     const prefixes: { [key: string]: string } = {};
     let match;
@@ -19,40 +24,105 @@ const QA = () => {
       const [_, prefix, uri] = match;
       prefixes[prefix] = uri;
     }
+    while ((match = prefixRegex.exec(trig)) !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [_, prefix, uri] = match;
+      prefixes[prefix] = uri;
+    }
 
-    return prefixes;
+    setPrefixes(prefixes);
+  }, []);
+
+  const getQuadsFromRawData = async (data: string): Promise<n3.Quad[]> => {
+    return new Promise((resolve) => {
+      const parser = new n3.Parser();
+      const quads = [];
+
+      parser.parse(data, (error, quad) => {
+        if (error) {
+          console.error('Parsing error:', error);
+        } else if (quad) {
+          quads.push(quad);
+        } else {
+          resolve(quads);
+        }
+      });
+    });
+  };
+
+  const filterQuads = (
+    quads: n3.Quad[],
+    predicate: string,
+    object: string,
+  ): n3.DataFactory.namedNode[] => {
+    const rdfType = n3.DataFactory.namedNode(predicate);
+    const dqvQualityMeasurement = n3.DataFactory.namedNode(object);
+
+    return quads
+      .filter((quad) => quad.predicate.equals(rdfType) && quad.object.equals(dqvQualityMeasurement))
+      .map((quad) => quad.subject);
+  };
+
+  const getAttributesForSubject = (subjectUri: string, quads: n3.Quad[]): QuadAttribute[] => {
+    const subjectNode = n3.DataFactory.namedNode(subjectUri);
+
+    const attributes = quads.filter((quad) => quad.subject.equals(subjectNode));
+
+    return attributes.map((quad) => ({
+      predicate: quad.predicate.value,
+      object: quad.object.value,
+    }));
+  };
+
+  const extractValue = (attributes: QuadAttribute[], value: string) => {
+    const valueAttr = attributes.filter((attr) => {
+      let a = '';
+      Object.values(prefixes).forEach((prefix) => {
+        if (attr.predicate === `${prefix}${value}`) {
+          a = attr.object;
+        }
+      });
+      return a;
+    })[0];
+    return valueAttr.object;
   };
 
   useEffect(() => {
-    const prefixes = parsePrefixes();
-    const store = $rdf.graph();
-    $rdf.parse(ontology, store, 'file://./qa-ontology.ttl', 'text/turtle');
+    if (!prefixes) return;
+    const func = async () => {
+      const ontologyQuads = await getQuadsFromRawData(ontology);
+      const trigQuads = await getQuadsFromRawData(trig);
+      const filteredQuads = filterQuads(
+        trigQuads,
+        `${prefixes['rdf']}type`,
+        `${prefixes['dqv']}QualityMeasurement`,
+      );
+      const attrs = getAttributesForSubject(filteredQuads[0].id, trigQuads);
+      const value = extractValue(attrs, 'value');
+      const computedOn = extractValue(attrs, 'isMeasurementOf');
+      const computedAttrs = getAttributesForSubject(computedOn, ontologyQuads);
+      const prefLabel = extractValue(computedAttrs, 'prefLabel');
 
-    const RDF = $rdf.Namespace(prefixes['rdf']);
-    const DQV = $rdf.Namespace(prefixes['dqv']);
-
-    // Query all entities of type dqv:Metric
-    const metrics = store.match(null, RDF('type'), DQV('Metric'));
-
-    const _headers = metrics.map((metric) => {
-      const fullUri = metric.subject.value;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const [_, uri] of Object.entries(prefixes)) {
-        if (fullUri.startsWith(uri)) {
-          return fullUri.replace(uri, ``);
-        }
-      }
-      return fullUri;
-    });
-
-    setHeaders(_headers);
-  }, []);
+      const data: PerformanceSpecRow[] = [
+        {
+          metric: prefLabel,
+          lastChecked: formatDate(new Date()),
+          result: 'yes',
+          value: value,
+          verified: 'true',
+        },
+      ];
+      setData(data);
+    };
+    func();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefixes]);
 
   return (
     <div>
-      <PerformanceSpec data={[{ header: 'Wow' }]} />
+      <PerformanceSpec data={data} />
     </div>
   );
 };
 
-export default QA;
+export default Qa;
