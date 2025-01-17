@@ -68,7 +68,7 @@ export const getStacItems = async (
   endDate: string,
 ): Promise<ExtendedFeatureCollection> => {
   const itemsUrl = privateCatalog
-    ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs/${privateCatalog}/search`
+    ? `${import.meta.env.VITE_STAC_ENDPOINT}/catalogs${privateCatalog}/search`
     : `${import.meta.env.VITE_STAC_ENDPOINT}/search`;
 
   const data = {
