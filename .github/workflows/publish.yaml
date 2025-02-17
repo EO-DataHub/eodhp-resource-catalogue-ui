@@ -1,0 +1,80 @@
+name: Publish to S3 bucket
+
+on:
+  workflow_call:
+  push:
+    tags:
+      - v[0-9]+*
+    branches:
+      - "**"
+
+jobs:
+  prechecks:
+    name: Prechecks
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          RETURN_CODE=0
+          if [ -z "${{ vars.S3_PATH }}" ]; then
+            echo "Github vars.S3_PATH required for publish"
+            RETURN_CODE=1
+          fi
+          if [ -z "${{ vars.AWS_REGION }}" ]; then
+            echo "Github vars.AWS_REGION required for publish"
+            RETURN_CODE=1
+          fi
+          if [ -z "${{ vars.AWS_ROLE_ARN }}" ]; then
+            echo "Github vars.AWS_ROLE_ARN required for publish"
+            RETURN_CODE=1
+          fi
+          exit $RETURN_CODE
+  tag:
+    uses: EO-DataHub/github-actions/.github/workflows/get-version-tag.yaml@main
+    with:
+      github-ref: ${{ github.ref_name}}
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build Node files
+        run: |
+          npm install mini-css-extract-plugin 
+          npm install css-loader 
+          npm install crypto-browserify
+          npm install stream-browserify
+          npm install browserify-zlib
+          npm run build
+          cd dist/assets
+          for ext in js css; do
+              for file in index-*.$ext; do
+                  mv "$file" "index.$ext"
+                  echo "Renamed $file to index.$ext"
+              done
+          done
+      - name: Upload app to github artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eodh-resource-catalogue-ui
+          path: dist/
+          retention-days: 1
+  publish:
+    name: Publish to S3 bucket
+    needs: [prechecks, tag, build]
+    uses: EO-DataHub/github-actions/.github/workflows/s3-publish.yaml@main
+    with:
+      app_artifact: eodh-resource-catalogue-ui
+      s3_path: ${{ vars.S3_PATH }}/${{ needs.tag.outputs.version }}
+      aws_region: ${{ vars.AWS_REGION }}
+      aws_role_arn: ${{ vars.AWS_ROLE_ARN }}
+    permissions:
+      id-token: write
+      contents: read
+
+      
