@@ -44,62 +44,66 @@ const filterBySpatial = (node: Collection, activeFilters: FilterActiveFilters) =
 export const filterTree = (
   node: TreeCatalog | Collection,
   activeFilters: FilterActiveFilters,
+  visited = new Set<string>()
 ): TreeCatalog | Collection | null => {
-  if (node) {
-    const label = node?.title?.trim() !== '' ? node?.title : node?.id;
-    const matchesTextFilter = filterByText(label, activeFilters.textQuery);
+  if (visited.has(node.id)) {
+    return null;
+  }
+  visited.add(node.id);
 
-    let matchesTemporalFilter = true;
-    if (node.type === COLLECTION && activeFilters.temporal) {
-      matchesTemporalFilter = filterByTemporal(node, activeFilters);
-    }
+  const label = node?.title?.trim() !== '' ? node.title : node?.id;
+  const matchesTextFilter = filterByText(label, activeFilters.textQuery);
 
-    let matchesSpatialFilter = true;
-    if (node.type === COLLECTION && activeFilters.aoi) {
-      matchesSpatialFilter = filterBySpatial(node, activeFilters);
-    }
+  let matchesTemporalFilter = true;
+  if (node.type === COLLECTION && activeFilters.temporal) {
+    matchesTemporalFilter = filterByTemporal(node, activeFilters);
+  }
 
-    if (node.type === CATALOG) {
-      const filteredSubCatalogs = node.catalogs
-        ?.map((subCatalog) => filterTree(subCatalog, activeFilters))
-        .filter((subCatalog) => subCatalog !== null) as TreeCatalog[];
-      const filteredCollections = node.collections?.filter((collection) => {
-        const collectionLabel =
-          collection?.title?.trim() !== '' ? collection?.title : collection?.id;
-        const matchesCollectionTextFilter = filterByText(collectionLabel, activeFilters.textQuery);
+  let matchesSpatialFilter = true;
+  if (node.type === COLLECTION && activeFilters.aoi) {
+    matchesSpatialFilter = filterBySpatial(node, activeFilters);
+  }
 
-        let matchesCollectionTemporalFilter = true;
-        if (activeFilters.temporal) {
-          matchesCollectionTemporalFilter = filterByTemporal(collection, activeFilters);
-        }
+  if (node.type === CATALOG) {
+    const filteredSubCatalogs = node.catalogs
+      ?.map((subCatalog) => filterTree(subCatalog, activeFilters, new Set(visited)))
+      .filter((subCatalog) => subCatalog !== null) as TreeCatalog[];
+    const filteredCollections = node.collections?.filter((collection) => {
+      const collectionLabel = collection?.title?.trim() !== '' ? collection.title : collection?.id;
+      const matchesCollectionTextFilter = filterByText(collectionLabel, activeFilters.textQuery);
 
-        let matchesCollectionSpatialFilter = true;
-        if (activeFilters.aoi) {
-          matchesCollectionSpatialFilter = filterBySpatial(collection, activeFilters);
-        }
-
-        return (
-          matchesCollectionTextFilter &&
-          matchesCollectionTemporalFilter &&
-          matchesCollectionSpatialFilter
-        );
-      });
-
-      if (matchesTextFilter || filteredSubCatalogs.length > 0 || filteredCollections.length > 0) {
-        return {
-          ...node,
-          catalogs: filteredSubCatalogs,
-          collections: filteredCollections,
-        };
+      let matchesCollectionTemporalFilter = true;
+      if (activeFilters.temporal) {
+        matchesCollectionTemporalFilter = filterByTemporal(collection, activeFilters);
       }
-    } else if (node.type === COLLECTION) {
-      if (matchesTextFilter && matchesTemporalFilter && matchesSpatialFilter) {
-        return node;
+
+      let matchesCollectionSpatialFilter = true;
+      if (activeFilters.aoi) {
+        matchesCollectionSpatialFilter = filterBySpatial(collection, activeFilters);
       }
+
+      return (
+        matchesCollectionTextFilter &&
+        matchesCollectionTemporalFilter &&
+        matchesCollectionSpatialFilter
+      );
+    });
+
+    if (matchesTextFilter || filteredSubCatalogs.length > 0 || filteredCollections.length > 0) {
+      return {
+        ...node,
+        catalogs: filteredSubCatalogs,
+        collections: filteredCollections,
+      };
+    }
+  } else if (node.type === COLLECTION) {
+    if (matchesTextFilter && matchesTemporalFilter && matchesSpatialFilter) {
+      return node;
     }
   }
   return null;
 };
+
 
 export const getParentId = (catalog: TreeCatalog): string | null => {
   const parentLink = catalog.links.find((link) => link.rel === 'parent');
