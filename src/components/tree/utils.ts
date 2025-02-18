@@ -44,7 +44,7 @@ const filterBySpatial = (node: Collection, activeFilters: FilterActiveFilters) =
 export const filterTree = (
   node: TreeCatalog | Collection,
   activeFilters: FilterActiveFilters,
-  visited = new Set<string>()
+  visited = new Set<string>(),
 ): TreeCatalog | Collection | null => {
   if (visited.has(node.id)) {
     return null;
@@ -103,7 +103,6 @@ export const filterTree = (
   }
   return null;
 };
-
 
 export const getParentId = (catalog: TreeCatalog): string | null => {
   const parentLink = catalog.links.find((link) => link.rel === 'parent');
